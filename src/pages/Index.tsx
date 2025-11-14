@@ -122,14 +122,14 @@ const Index = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
-            backgroundImage: `linear-gradient(rgba(26, 31, 44, 0.7), rgba(26, 31, 44, 0.7)), url('https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/files/23b57e0b-df27-4e5d-aa06-c6a47f008196.jpg')` 
+            backgroundImage: `linear-gradient(rgba(26, 31, 44, 0.3), rgba(26, 31, 44, 0.6)), url('https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg')` 
           }}
         />
         <div className="relative z-10 text-center px-6 animate-fade-in">
-          <h2 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+          <h2 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-2xl">
             NARGIZA
           </h2>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-light">
+          <p className="text-xl md:text-2xl text-white mb-8 font-light drop-shadow-lg">
             Автор и исполнитель
           </p>
           <Button size="lg" className="group" onClick={() => scrollToSection('music')}>
