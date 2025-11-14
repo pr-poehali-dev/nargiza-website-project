@@ -203,7 +203,7 @@ const Index = () => {
                           ))}
                           <div className="flex gap-2 pt-3">
                             <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
-                              <a href="https://music.yandex.ru/album/ALBUM_ID" target="_blank" rel="noopener noreferrer">
+                              <a href="https://music.yandex.ru/album/38836368" target="_blank" rel="noopener noreferrer">
                                 <Icon name="Music" size={14} />
                                 Яндекс
                               </a>
