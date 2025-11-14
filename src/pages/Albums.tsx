@@ -3,10 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import AudioPlayer from '@/components/AudioPlayer';
+
+interface Track {
+  name: string;
+  previewUrl?: string;
+}
 
 const Albums = () => {
   const navigate = useNavigate();
   const [expandedAlbum, setExpandedAlbum] = useState<string | null>(null);
+  const [playingTrack, setPlayingTrack] = useState<string | null>(null);
 
   const albums = [
     {
@@ -16,22 +23,22 @@ const Albums = () => {
       cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
       description: 'Первый полноценный альбом NARGIZA, отражающий глубокие личные переживания и философские размышления о жизни, одиночестве и современном обществе.',
       tracks: [
-        'Когда ты один',
-        'Пустой экран',
-        'Никто не ждёт (Сл. A.Nevskiy)',
-        'Никчёмная жизнь',
-        'Когда никто не ищет',
-        'Всё проходит (Сл. Ю.Левитанский)',
-        'Мы тратим время',
-        'Забудешь',
-        'Мне нечем заняться',
-        'Одно и то же',
-        'Вся суть',
-        'Молодо зелено',
-        'Земной путь',
-        'Смартфон',
-        'Это другая я'
-      ],
+        { name: 'Когда ты один', previewUrl: '' },
+        { name: 'Пустой экран', previewUrl: '' },
+        { name: 'Никто не ждёт (Сл. A.Nevskiy)', previewUrl: '' },
+        { name: 'Никчёмная жизнь', previewUrl: '' },
+        { name: 'Когда никто не ищет', previewUrl: '' },
+        { name: 'Всё проходит (Сл. Ю.Левитанский)', previewUrl: '' },
+        { name: 'Мы тратим время', previewUrl: '' },
+        { name: 'Забудешь', previewUrl: '' },
+        { name: 'Мне нечем заняться', previewUrl: '' },
+        { name: 'Одно и то же', previewUrl: '' },
+        { name: 'Вся суть', previewUrl: '' },
+        { name: 'Молодо зелено', previewUrl: '' },
+        { name: 'Земной путь', previewUrl: '' },
+        { name: 'Смартфон', previewUrl: '' },
+        { name: 'Это другая я', previewUrl: '' }
+      ] as Track[],
       links: {
         yandex: 'https://music.yandex.ru/album/ALBUM_ID',
         apple: 'https://music.apple.com/album/ALBUM_ID',
@@ -44,7 +51,7 @@ const Albums = () => {
       year: 2024,
       cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg',
       description: 'Альбом, посвящённый военной теме и поддержке России. Создан исполнительницей как личный вклад в поддержку страны в трудное время.',
-      tracks: [],
+      tracks: [] as Track[],
       links: {
         yandex: 'https://music.yandex.ru/album/ALBUM_ID',
         apple: 'https://music.apple.com/album/ALBUM_ID',
@@ -121,15 +128,31 @@ const Albums = () => {
                         <Icon name="ListMusic" size={18} />
                         Треклист ({album.tracks.length})
                       </h4>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {album.tracks.map((track, i) => (
-                          <div 
-                            key={i} 
-                            className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors p-2 rounded hover:bg-accent"
-                          >
-                            <span className="text-xs font-mono w-6 text-right">{i + 1}.</span>
-                            <Icon name="Music" size={14} className="text-secondary" />
-                            <span>{track}</span>
+                          <div key={i}>
+                            {playingTrack === `${album.id}-${i}` ? (
+                              <AudioPlayer 
+                                trackName={`${i + 1}. ${track.name}`}
+                                previewUrl={track.previewUrl}
+                              />
+                            ) : (
+                              <div 
+                                className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors p-3 rounded hover:bg-accent cursor-pointer"
+                                onClick={() => setPlayingTrack(`${album.id}-${i}`)}
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 flex-shrink-0"
+                                >
+                                  <Icon name="Play" size={16} />
+                                </Button>
+                                <span className="text-xs font-mono w-6 text-right">{i + 1}.</span>
+                                <Icon name="Music" size={14} className="text-secondary" />
+                                <span>{track.name}</span>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
