@@ -215,7 +215,7 @@ const Index = () => {
                               </a>
                             </Button>
                             <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
-                              <a href="https://open.spotify.com/album/ALBUM_ID" target="_blank" rel="noopener noreferrer">
+                              <a href="https://open.spotify.com/album/2LhOw0UIUtiSxa5DVOpJ7e" target="_blank" rel="noopener noreferrer">
                                 <Icon name="Music" size={14} />
                                 Spotify
                               </a>

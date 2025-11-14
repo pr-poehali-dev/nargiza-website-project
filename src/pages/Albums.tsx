@@ -42,7 +42,7 @@ const Albums = () => {
       links: {
         yandex: 'https://music.yandex.ru/album/38836368',
         apple: 'https://music.apple.com/tr/album/%D0%BD%D0%B8%D0%BA%D1%87%D1%91%D0%BC%D0%BD%D0%B0%D1%8F-%D0%B6%D0%B8%D0%B7%D0%BD%D1%8C/1848552571',
-        spotify: 'https://open.spotify.com/album/ALBUM_ID'
+        spotify: 'https://open.spotify.com/album/2LhOw0UIUtiSxa5DVOpJ7e'
       }
     },
     {
