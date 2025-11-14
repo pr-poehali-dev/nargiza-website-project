@@ -124,6 +124,60 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-24 px-6 bg-card/30">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="animate-fade-in">
+              <h3 className="text-5xl font-bold mb-8">О себе</h3>
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                NARGIZA — современная исполнительница, активно развивающаяся на российской музыкальной сцене с 2025 года.
+              </p>
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                Музыкальный стиль сочетает лирические композиции с социально значимыми произведениями. Работаю как с русскоязычными, так и с англоязычными треками.
+              </p>
+              <div className="flex gap-4 mt-8">
+                <Button variant="outline" size="lg" className="gap-2">
+                  <Icon name="Music" size={20} />
+                  Яндекс Музыка
+                </Button>
+                <Button variant="outline" size="lg" className="gap-2">
+                  <Icon name="Music" size={20} />
+                  Apple Music
+                </Button>
+              </div>
+            </div>
+
+            <div className="animate-scale-in">
+              <Card>
+                <CardContent className="p-8">
+                  <h4 className="text-2xl font-bold mb-6">Дискография</h4>
+                  
+                  <div className="mb-6">
+                    <h5 className="text-lg font-semibold mb-3 text-primary">Альбом</h5>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Icon name="Disc3" size={20} className="text-secondary" />
+                      <span className="text-muted-foreground">«Украина»</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="text-lg font-semibold mb-3 text-primary">Синглы</h5>
+                    <div className="grid grid-cols-1 gap-2 text-sm text-muted-foreground">
+                      {['Я волонтёр', 'Земля', 'Ты мне врёшь', 'Он занят', 'Похоронка', 'Сижу на работе', 'Immortal Regiment', 'Ты изменил мне', 'Мы вернёмся', 'Crimson Dream'].map((single, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <Icon name="Music" size={14} className="text-secondary" />
+                          <span>{single}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="gallery" className="py-24 px-6">
         <div className="container mx-auto max-w-6xl">
           <h3 className="text-5xl font-bold mb-12 animate-slide-up">Галерея</h3>
