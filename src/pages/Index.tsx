@@ -137,11 +137,17 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="animate-fade-in">
               <h3 className="text-5xl font-bold mb-8">О себе</h3>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                NARGIZA — современная исполнительница, активно развивающаяся на российской музыкальной сцене с 2025 года.
+              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+                NARGIZA — современная Казахская исполнительница, активно развивающаяся на российской музыкальной сцене с 2025 года.
+              </p>
+              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+                Музыкальный стиль сочетает лирические композиции с социально значимыми произведениями.
+              </p>
+              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+                Проект создавался самой исполнительницей для поддержки России в трудное военное время. Самой исполнительницей написано много песен на военную тему.
               </p>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Музыкальный стиль сочетает лирические композиции с социально значимыми произведениями. Работаю как с русскоязычными, так и с англоязычными треками.
+                Последнее время после знакомства и совместной работе с музыкантом Calla Vivid часто применяется в исполнении стиль хип хоп и музыкальный стиль инди. Этот совместный творческий союз принёс положительный результат в новых композициях, которые стали более изящными и индивидуальными.
               </p>
               <div className="flex gap-4 mt-8">
                 <Button variant="outline" size="lg" className="gap-2">
