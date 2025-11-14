@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MailSidebar from '@/components/mail/MailSidebar';
 import EmailList from '@/components/mail/EmailList';
 import EmailViewer from '@/components/mail/EmailViewer';
 import ComposeEmail from '@/components/mail/ComposeEmail';
 import AuthForm from '@/components/mail/AuthForm';
+import Icon from '@/components/ui/icon';
+import { Button } from '@/components/ui/button';
 
 interface Email {
   id: number;
@@ -30,6 +33,7 @@ const MAIL_SEND_URL = 'https://functions.poehali.dev/b0676639-547e-4ae9-9838-9a9
 const MAIL_UPLOAD_URL = 'https://functions.poehali.dev/d836b8ef-9632-4717-b97d-d766255f2600';
 
 const Mail = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
@@ -271,12 +275,25 @@ const Mail = () => {
           <h1 className="text-2xl font-bold">Почта</h1>
           <span className="text-muted-foreground">— {user.email}</span>
         </div>
-        <button
-          onClick={handleLogout}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          Выйти
-        </button>
+        <div className="flex items-center gap-3">
+          {user.is_admin && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/mail/admin')}
+              className="gap-2"
+            >
+              <Icon name="Settings" size={16} />
+              Админ-панель
+            </Button>
+          )}
+          <button
+            onClick={handleLogout}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Выйти
+          </button>
+        </div>
       </header>
 
       <div className="flex-1 flex overflow-hidden">

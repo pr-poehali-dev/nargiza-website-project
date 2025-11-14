@@ -1,0 +1,1 @@
+UPDATE mail_users SET is_admin = true WHERE id = 1;
