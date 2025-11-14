@@ -59,6 +59,11 @@ const Index = () => {
               ))}
             </div>
             <div className="flex gap-4">
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Send" size={20} />
+                </a>
+              </Button>
               <Button variant="ghost" size="icon">
                 <Icon name="Instagram" size={20} />
               </Button>
@@ -88,6 +93,11 @@ const Index = () => {
                 </button>
               ))}
               <div className="flex gap-4 pt-4 border-t border-border">
+                <Button variant="ghost" size="icon" asChild>
+                  <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Send" size={20} />
+                  </a>
+                </Button>
                 <Button variant="ghost" size="icon">
                   <Icon name="Instagram" size={20} />
                 </Button>
@@ -205,6 +215,11 @@ const Index = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-muted-foreground">© 2024 NARGIZA. Все права защищены.</p>
             <div className="flex gap-6">
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Send" size={24} />
+                </a>
+              </Button>
               <Button variant="ghost" size="icon">
                 <Icon name="Instagram" size={24} />
               </Button>
@@ -213,9 +228,6 @@ const Index = () => {
               </Button>
               <Button variant="ghost" size="icon">
                 <Icon name="Music" size={24} />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Twitter" size={24} />
               </Button>
             </div>
           </div>
