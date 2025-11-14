@@ -101,7 +101,7 @@ Email: {contact_req.email}
     msg.attach(MIMEText(html_content, 'html', 'utf-8'))
     
     try:
-        with smtplib.SMTP(smtp_host, smtp_port) as server:
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
             server.starttls()
             server.login(smtp_user, smtp_password)
             server.send_message(msg)
@@ -113,6 +113,24 @@ Email: {contact_req.email}
                 'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps({'message': 'Email sent successfully'})
+        }
+    except smtplib.SMTPAuthenticationError:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'SMTP authentication failed. Check SMTP_USER and SMTP_PASSWORD'})
+        }
+    except smtplib.SMTPException as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': f'SMTP error: {str(e)}'})
         }
     except Exception as e:
         return {
