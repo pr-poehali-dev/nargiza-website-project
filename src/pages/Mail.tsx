@@ -36,13 +36,27 @@ const Mail = () => {
   const [activeMailbox, setActiveMailbox] = useState('Inbox');
   const [isComposing, setIsComposing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mailDomain, setMailDomain] = useState('mail.local');
 
   useEffect(() => {
     const storedUser = localStorage.getItem('mail_user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    fetchMailDomain();
   }, []);
+
+  const fetchMailDomain = async () => {
+    try {
+      const response = await fetch(`${MAIL_AUTH_URL}?action=get_domain`);
+      if (response.ok) {
+        const data = await response.json();
+        setMailDomain(data.domain || 'mail.local');
+      }
+    } catch (error) {
+      console.error('Error fetching mail domain:', error);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -93,14 +107,14 @@ const Mail = () => {
     }
   };
 
-  const handleRegister = async (email: string, password: string, fullName: string) => {
+  const handleRegister = async (username: string, password: string, fullName: string) => {
     try {
       const response = await fetch(MAIL_AUTH_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           action: 'register', 
-          email, 
+          username, 
           password, 
           full_name: fullName 
         }),
@@ -247,7 +261,7 @@ const Mail = () => {
   };
 
   if (!user) {
-    return <AuthForm onLogin={handleLogin} onRegister={handleRegister} />;
+    return <AuthForm onLogin={handleLogin} onRegister={handleRegister} mailDomain={mailDomain} />;
   }
 
   return (

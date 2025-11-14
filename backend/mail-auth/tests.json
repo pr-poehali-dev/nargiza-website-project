@@ -6,7 +6,7 @@
       "path": "/",
       "body": {
         "action": "register",
-        "email": "test@example.com",
+        "username": "testuser2025",
         "password": "testpass123",
         "full_name": "Test User"
       },

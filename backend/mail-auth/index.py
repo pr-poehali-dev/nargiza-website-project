@@ -26,6 +26,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         }
     
     database_url = os.environ.get('DATABASE_URL')
+    mail_domain = os.environ.get('MAIL_DOMAIN', 'mail.local')
+    
     if not database_url:
         return {
             'statusCode': 500,
@@ -37,20 +39,47 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cursor = conn.cursor()
     
     try:
+        if method == 'GET':
+            action = event.get('queryStringParameters', {}).get('action')
+            if action == 'get_domain':
+                return {
+                    'statusCode': 200,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'domain': mail_domain})
+                }
+        
         if method == 'POST':
             body_data = json.loads(event.get('body', '{}'))
             action = body_data.get('action')
             
             if action == 'register':
-                email = body_data.get('email')
+                username = body_data.get('username')
                 password = body_data.get('password')
                 full_name = body_data.get('full_name')
                 
-                if not email or not password:
+                if not username or not password:
                     return {
                         'statusCode': 400,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                        'body': json.dumps({'error': 'Email and password required'})
+                        'body': json.dumps({'error': 'Username and password required'})
+                    }
+                
+                username = username.lower().strip()
+                if '@' in username:
+                    return {
+                        'statusCode': 400,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'Username should not contain @'})
+                    }
+                
+                email = f"{username}@{mail_domain}"
+                
+                cursor.execute("SELECT id FROM mail_users WHERE email = %s", (email,))
+                if cursor.fetchone():
+                    return {
+                        'statusCode': 409,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'Username already taken'})
                     }
                 
                 password_hash = hashlib.sha256(password.encode()).hexdigest()

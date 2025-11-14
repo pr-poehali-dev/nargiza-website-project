@@ -6,12 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface AuthFormProps {
   onLogin: (email: string, password: string) => void;
-  onRegister: (email: string, password: string, fullName: string) => void;
+  onRegister: (username: string, password: string, fullName: string) => void;
+  mailDomain?: string;
 }
 
-const AuthForm = ({ onLogin, onRegister }: AuthFormProps) => {
+const AuthForm = ({ onLogin, onRegister, mailDomain = 'mail.local' }: AuthFormProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
 
@@ -20,7 +22,7 @@ const AuthForm = ({ onLogin, onRegister }: AuthFormProps) => {
     if (isLogin) {
       onLogin(email, password);
     } else {
-      onRegister(email, password, fullName);
+      onRegister(username, password, fullName);
     }
   };
 
@@ -51,16 +53,36 @@ const AuthForm = ({ onLogin, onRegister }: AuthFormProps) => {
               </div>
             )}
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">Email</label>
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@example.com"
-                required
-              />
-            </div>
+            {isLogin ? (
+              <div>
+                <label className="text-sm font-medium mb-2 block">Email</label>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@example.com"
+                  required
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="text-sm font-medium mb-2 block">Имя пользователя</label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, ''))}
+                    placeholder="username"
+                    required
+                    className="flex-1"
+                  />
+                  <span className="text-muted-foreground text-sm">@{mailDomain}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Ваш email-адрес: {username || 'username'}@{mailDomain}
+                </p>
+              </div>
+            )}
 
             <div>
               <label className="text-sm font-medium mb-2 block">Пароль</label>
