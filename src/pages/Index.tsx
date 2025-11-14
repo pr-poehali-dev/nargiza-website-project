@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import ContactForm from '@/components/ContactForm';
+
 
 const Index = () => {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const Index = () => {
             </button>
 
             <div className="hidden md:flex gap-8">
-              {['home', 'gallery', 'contact'].map((section) => (
+              {['home', 'gallery'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -56,7 +56,6 @@ const Index = () => {
                 >
                   {section === 'home' && 'Главная'}
                   {section === 'gallery' && 'Галерея'}
-                  {section === 'contact' && 'Контакты'}
                 </button>
               ))}
             </div>
@@ -82,7 +81,7 @@ const Index = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-background border-t border-border animate-fade-in">
             <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
-              {['home', 'gallery', 'contact'].map((section) => (
+              {['home', 'gallery'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -92,7 +91,6 @@ const Index = () => {
                 >
                   {section === 'home' && 'Главная'}
                   {section === 'gallery' && 'Галерея'}
-                  {section === 'contact' && 'Контакты'}
                 </button>
               ))}
               <div className="flex gap-4 pt-4 border-t border-border">
@@ -279,13 +277,6 @@ const Index = () => {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section id="contact" className="py-24 px-6 bg-accent/20">
-        <div className="container mx-auto max-w-6xl">
-          <h3 className="text-5xl font-bold mb-12 text-center animate-slide-up">Связаться</h3>
-          <ContactForm />
         </div>
       </section>
 
