@@ -18,7 +18,7 @@ const ContactForm = () => {
     setStatus('sending');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://functions.poehali.dev/8d9df3f6-786c-4ddc-a4ce-2d4c86953f32', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
