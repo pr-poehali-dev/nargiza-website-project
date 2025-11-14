@@ -148,9 +148,11 @@ const Index = () => {
                   <Icon name="Music" size={20} />
                   Яндекс Музыка
                 </Button>
-                <Button variant="outline" size="lg" className="gap-2">
-                  <Icon name="Music" size={20} />
-                  Apple Music
+                <Button variant="outline" size="lg" className="gap-2" asChild>
+                  <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Music" size={20} />
+                    Apple Music
+                  </a>
                 </Button>
               </div>
             </div>
