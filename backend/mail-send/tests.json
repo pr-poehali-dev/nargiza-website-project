@@ -1,0 +1,23 @@
+{
+  "tests": [
+    {
+      "name": "Send email via SMTP",
+      "method": "POST",
+      "path": "/",
+      "headers": {
+        "X-User-Id": "1"
+      },
+      "body": {
+        "to": "test@example.com",
+        "subject": "Test email",
+        "body": "This is a test email",
+        "attachments": []
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": "boolean"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

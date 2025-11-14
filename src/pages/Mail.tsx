@@ -26,6 +26,8 @@ interface User {
 
 const MAIL_AUTH_URL = 'https://functions.poehali.dev/1614ce0b-4b18-44e3-b023-d49b7c1ec5eb';
 const MAIL_API_URL = 'https://functions.poehali.dev/59c1f232-2c99-4baa-bea6-70b46dadc4b0';
+const MAIL_SEND_URL = 'https://functions.poehali.dev/b0676639-547e-4ae9-9838-9a9950973c46';
+const MAIL_UPLOAD_URL = 'https://functions.poehali.dev/d836b8ef-9632-4717-b97d-d766255f2600';
 
 const Mail = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -118,21 +120,56 @@ const Mail = () => {
     }
   };
 
-  const handleSendEmail = async (to: string, subject: string, body: string) => {
+  const handleSendEmail = async (to: string, subject: string, body: string, attachments: File[]) => {
     if (!user) return;
 
     try {
-      const response = await fetch(MAIL_API_URL, {
+      let uploadedAttachments: any[] = [];
+      
+      if (attachments.length > 0) {
+        const filesData = await Promise.all(
+          attachments.map(async (file) => {
+            const reader = new FileReader();
+            return new Promise<any>((resolve) => {
+              reader.onload = () => {
+                const base64 = reader.result?.toString().split(',')[1];
+                resolve({
+                  filename: file.name,
+                  content: base64,
+                  mime_type: file.type,
+                });
+              };
+              reader.readAsDataURL(file);
+            });
+          })
+        );
+
+        const uploadResponse = await fetch(MAIL_UPLOAD_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-User-Id': user.user_id.toString(),
+          },
+          body: JSON.stringify({ files: filesData }),
+        });
+
+        if (uploadResponse.ok) {
+          const uploadData = await uploadResponse.json();
+          uploadedAttachments = uploadData.files || [];
+        }
+      }
+
+      const response = await fetch(MAIL_SEND_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-User-Id': user.user_id.toString(),
         },
         body: JSON.stringify({
-          action: 'send',
           to,
           subject,
           body,
+          attachments: uploadedAttachments,
         }),
       });
 
@@ -141,7 +178,8 @@ const Mail = () => {
         alert('Письмо отправлено!');
         fetchEmails();
       } else {
-        alert('Ошибка отправки письма');
+        const error = await response.json();
+        alert(error.error || 'Ошибка отправки письма');
       }
     } catch (error) {
       console.error('Send email error:', error);

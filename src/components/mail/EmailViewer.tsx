@@ -71,6 +71,18 @@ const EmailViewer = ({ email, onReply, onForward }: EmailViewerProps) => {
         <div className="prose max-w-none">
           <p className="whitespace-pre-wrap">{email.body}</p>
         </div>
+        
+        {email.attachment_count > 0 && (
+          <div className="mt-6 border-t border-border pt-4">
+            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <Icon name="Paperclip" size={16} />
+              Вложения ({email.attachment_count})
+            </h3>
+            <div className="text-sm text-muted-foreground">
+              Загрузка вложений...
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
