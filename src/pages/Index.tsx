@@ -5,9 +5,11 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
+    setMobileMenuOpen(false);
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -42,6 +44,15 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold tracking-tight">NARGIZA</h1>
+            
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden text-foreground"
+              aria-label="Toggle menu"
+            >
+              <Icon name={mobileMenuOpen ? 'X' : 'Menu'} size={24} />
+            </button>
+
             <div className="hidden md:flex gap-8">
               {['home', 'music', 'videos', 'gallery', 'news'].map((section) => (
                 <button
@@ -72,6 +83,39 @@ const Index = () => {
             </div>
           </div>
         </div>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background border-t border-border animate-fade-in">
+            <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
+              {['home', 'music', 'videos', 'gallery', 'news'].map((section) => (
+                <button
+                  key={section}
+                  onClick={() => scrollToSection(section)}
+                  className={`text-left text-lg font-medium transition-colors hover:text-primary py-2 ${
+                    activeSection === section ? 'text-primary' : 'text-muted-foreground'
+                  }`}
+                >
+                  {section === 'home' && 'Главная'}
+                  {section === 'music' && 'Музыка'}
+                  {section === 'videos' && 'Видео'}
+                  {section === 'gallery' && 'Галерея'}
+                  {section === 'news' && 'Новости'}
+                </button>
+              ))}
+              <div className="flex gap-4 pt-4 border-t border-border">
+                <Button variant="ghost" size="icon">
+                  <Icon name="Instagram" size={20} />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Icon name="Youtube" size={20} />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Icon name="Music" size={20} />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
