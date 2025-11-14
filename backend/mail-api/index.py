@@ -49,6 +49,64 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if method == 'GET':
             params = event.get('queryStringParameters') or {}
             mailbox = params.get('mailbox', 'Inbox')
+            email_id = params.get('email_id')
+            
+            if email_id:
+                cursor.execute(
+                    """
+                    SELECT e.id, e.from_address, e.to_address, e.subject, 
+                           e.body, e.is_read, e.is_starred, e.received_at
+                    FROM emails e
+                    JOIN mailboxes m ON e.mailbox_id = m.id
+                    WHERE e.id = %s AND m.user_id = %s
+                    """,
+                    (int(email_id), int(user_id))
+                )
+                email_row = cursor.fetchone()
+                
+                if not email_row:
+                    return {
+                        'statusCode': 404,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'Email not found'})
+                    }
+                
+                cursor.execute(
+                    """
+                    SELECT id, filename, file_url, file_size, mime_type
+                    FROM attachments
+                    WHERE email_id = %s
+                    """,
+                    (int(email_id),)
+                )
+                
+                attachments = []
+                for att_row in cursor.fetchall():
+                    attachments.append({
+                        'id': att_row[0],
+                        'filename': att_row[1],
+                        'url': att_row[2],
+                        'size': att_row[3],
+                        'mime_type': att_row[4]
+                    })
+                
+                return {
+                    'statusCode': 200,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({
+                        'email': {
+                            'id': email_row[0],
+                            'from': email_row[1],
+                            'to': email_row[2],
+                            'subject': email_row[3],
+                            'body': email_row[4],
+                            'is_read': email_row[5],
+                            'is_starred': email_row[6],
+                            'received_at': email_row[7].isoformat() if email_row[7] else None
+                        },
+                        'attachments': attachments
+                    })
+                }
             
             cursor.execute(
                 """
@@ -112,6 +170,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 to_address = body_data.get('to')
                 subject = body_data.get('subject', '')
                 body_text = body_data.get('body', '')
+                attachments = body_data.get('attachments', [])
                 
                 cursor.execute(
                     "SELECT id FROM mailboxes WHERE user_id = %s AND name = 'Sent'",
@@ -134,6 +193,22 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         (sent_mailbox[0], from_email, to_address, subject, body_text)
                     )
                     email_id = cursor.fetchone()[0]
+                    
+                    for attachment in attachments:
+                        cursor.execute(
+                            """
+                            INSERT INTO attachments (email_id, filename, file_url, file_size, mime_type)
+                            VALUES (%s, %s, %s, %s, %s)
+                            """,
+                            (
+                                email_id,
+                                attachment.get('filename'),
+                                attachment.get('url'),
+                                attachment.get('size'),
+                                attachment.get('mime_type')
+                            )
+                        )
+                    
                     conn.commit()
                     
                     return {
