@@ -169,7 +169,39 @@ const Index = () => {
                   <h4 className="text-2xl font-bold mb-6">Дискография</h4>
                   
                   <div className="mb-6">
-                    <h5 className="text-lg font-semibold mb-3 text-primary">Альбом</h5>
+                    <h5 className="text-lg font-semibold mb-3 text-primary">Альбомы</h5>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Icon name="Disc3" size={20} className="text-secondary" />
+                      <details className="cursor-pointer group">
+                        <summary className="list-none text-muted-foreground hover:text-foreground transition-colors">
+                          «Никчёмная жизнь»
+                          <Icon name="ChevronDown" size={16} className="inline ml-1 group-open:rotate-180 transition-transform" />
+                        </summary>
+                        <div className="pl-8 mt-3 space-y-1 text-sm">
+                          {[
+                            'Когда ты один',
+                            'Пустой экран',
+                            'Никто не ждёт (Сл. A.Nevskiy)',
+                            'Никчёмная жизнь',
+                            'Когда никто не ищет',
+                            'Всё проходит (Сл. Ю.Левитанский)',
+                            'Мы тратим время',
+                            'Забудешь',
+                            'Мне нечем заняться',
+                            'Одно и то же',
+                            'Вся суть',
+                            'Молодо зелено',
+                            'Земной путь',
+                            'Смартфон',
+                            'Это другая я'
+                          ].map((track, i) => (
+                            <div key={i} className="text-muted-foreground/80">
+                              {i + 1}. {track}
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    </div>
                     <div className="flex items-center gap-3 mb-4">
                       <Icon name="Disc3" size={20} className="text-secondary" />
                       <span className="text-muted-foreground">«Украина»</span>
