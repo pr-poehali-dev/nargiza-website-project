@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -228,7 +230,7 @@ const Index = () => {
                     </div>
                   </div>
 
-                  <div>
+                  <div className="mb-6">
                     <h5 className="text-lg font-semibold mb-3 text-primary">Синглы</h5>
                     <div className="grid grid-cols-1 gap-2 text-sm text-muted-foreground">
                       {['Я волонтёр', 'Земля', 'Ты мне врёшь', 'Он занят', 'Похоронка', 'Сижу на работе', 'Immortal Regiment', 'Ты изменил мне', 'Мы вернёмся', 'Crimson Dream'].map((single, i) => (
@@ -239,6 +241,15 @@ const Index = () => {
                       ))}
                     </div>
                   </div>
+
+                  <Button 
+                    variant="default" 
+                    className="w-full gap-2"
+                    onClick={() => navigate('/albums')}
+                  >
+                    <Icon name="Disc3" size={18} />
+                    Все альбомы
+                  </Button>
                 </CardContent>
               </Card>
             </div>
