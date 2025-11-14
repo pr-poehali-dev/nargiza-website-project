@@ -177,7 +177,7 @@ const Index = () => {
                           «Никчёмная жизнь»
                           <Icon name="ChevronDown" size={16} className="inline ml-1 group-open:rotate-180 transition-transform" />
                         </summary>
-                        <div className="pl-8 mt-3 space-y-1 text-sm">
+                        <div className="pl-8 mt-3 space-y-2 text-sm">
                           {[
                             'Когда ты один',
                             'Пустой экран',
@@ -199,6 +199,26 @@ const Index = () => {
                               {i + 1}. {track}
                             </div>
                           ))}
+                          <div className="flex gap-2 pt-3">
+                            <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
+                              <a href="https://music.yandex.ru/album/ALBUM_ID" target="_blank" rel="noopener noreferrer">
+                                <Icon name="Music" size={14} />
+                                Яндекс
+                              </a>
+                            </Button>
+                            <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
+                              <a href="https://music.apple.com/album/ALBUM_ID" target="_blank" rel="noopener noreferrer">
+                                <Icon name="Music" size={14} />
+                                Apple
+                              </a>
+                            </Button>
+                            <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
+                              <a href="https://open.spotify.com/album/ALBUM_ID" target="_blank" rel="noopener noreferrer">
+                                <Icon name="Music" size={14} />
+                                Spotify
+                              </a>
+                            </Button>
+                          </div>
                         </div>
                       </details>
                     </div>
