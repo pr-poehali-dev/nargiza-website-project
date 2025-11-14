@@ -26,13 +26,18 @@ const ContactForm = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error('Failed to send');
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response error:', response.status, errorText);
+        throw new Error('Failed to send');
+      }
 
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
       
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
+      console.error('Send error:', error);
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
     }
