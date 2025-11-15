@@ -1,15 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 
+interface YouTubeVideo {
+  videoId: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  publishedAt: string;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const [isLoadingVideos, setIsLoadingVideos] = useState(true);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/915b3177-6247-4286-bd88-972b6325759a?channelHandle=@nargizamuz&maxResults=12');
+        const data = await response.json();
+        setVideos(data.videos || []);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      } finally {
+        setIsLoadingVideos(false);
+      }
+    };
+    fetchVideos();
+  }, []);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
@@ -289,68 +314,31 @@ const Index = () => {
       <section id="videos" className="py-24 px-6 bg-card/30">
         <div className="container mx-auto max-w-6xl">
           <h3 className="text-5xl font-bold mb-12 text-center animate-slide-up">Клипы</h3>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in">
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/oySwALmUCiQ"
-                title="Клип 1"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+          {isLoadingVideos ? (
+            <div className="text-center text-muted-foreground">
+              <Icon name="Loader2" size={48} className="animate-spin mx-auto mb-4" />
+              Загрузка видео...
             </div>
-            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in" style={{ animationDelay: '100ms' }}>
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/M_IXeeC9ur0"
-                title="Клип 2"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {videos.map((video, index) => (
+                <div 
+                  key={video.videoId} 
+                  className="aspect-video rounded-lg overflow-hidden animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${video.videoId}`}
+                    title={video.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ))}
             </div>
-            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Клип 3"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Клип 4"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in" style={{ animationDelay: '400ms' }}>
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Клип 5"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in" style={{ animationDelay: '500ms' }}>
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Клип 6"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
+          )}
         </div>
       </section>
 

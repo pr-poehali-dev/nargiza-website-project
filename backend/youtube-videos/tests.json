@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Get videos from channel",
+      "method": "GET",
+      "path": "/?channelHandle=@nargizamuz&maxResults=12",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "videos": "array",
+        "channelHandle": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Handle OPTIONS request",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}
