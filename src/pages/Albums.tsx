@@ -78,6 +78,25 @@ const Albums = () => {
       }
     },
     {
+      id: 'vojna',
+      title: 'Война',
+      year: 2025,
+      cover: 'https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/files/9a397d00-12dc-48a1-aa91-aca32f1969a2.jpg',
+      description: 'Новый альбом NARGIZA, посвящённый военной теме и патриотизму. Глубокие размышления о судьбе страны и народа в трудное время.',
+      tracks: [
+        { name: 'Война (feat. SHAMAN)', previewUrl: '' },
+        { name: 'Россия', previewUrl: '' },
+        { name: 'Война 2', previewUrl: '' },
+        { name: 'Украина', previewUrl: '' },
+        { name: 'Азов', previewUrl: '' }
+      ] as Track[],
+      links: {
+        yandex: 'https://music.yandex.ru/album/38802888',
+        apple: 'https://music.apple.com/album/ALBUM_ID',
+        spotify: 'https://open.spotify.com/album/ALBUM_ID'
+      }
+    },
+    {
       id: 'ukraina',
       title: 'Украина',
       year: 2024,
