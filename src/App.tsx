@@ -7,8 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Albums from "./pages/Albums";
 import TestContact from "./pages/TestContact";
-import Mail from "./pages/Mail";
-import MailAdmin from "./pages/MailAdmin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,8 +21,6 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/albums" element={<Albums />} />
           <Route path="/test-contact" element={<TestContact />} />
-          <Route path="/mail" element={<Mail />} />
-          <Route path="/mail/admin" element={<MailAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
