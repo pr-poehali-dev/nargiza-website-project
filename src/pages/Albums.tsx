@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,38 @@ const Albums = () => {
   const navigate = useNavigate();
   const [expandedAlbum, setExpandedAlbum] = useState<string | null>(null);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'albums-schema';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "MusicGroup",
+      "name": "NARGIZA",
+      "url": "https://nargiza.poehali.dev/albums",
+      "album": albums.map(album => ({
+        "@type": "MusicAlbum",
+        "name": album.title,
+        "datePublished": album.year.toString(),
+        "image": album.cover,
+        "description": album.description,
+        "numTracks": album.tracks.length,
+        "byArtist": {
+          "@type": "MusicGroup",
+          "name": "NARGIZA"
+        }
+      }))
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      const existingScript = document.getElementById('albums-schema');
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, []);
 
   const albums = [
     {
@@ -62,6 +94,8 @@ const Albums = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <title>Альбомы NARGIZA — Слушать онлайн | Официальный сайт</title>
+      <meta name="description" content="Все альбомы NARGIZA: Никчёмная жизнь, Calla Vivid, Украина. Слушайте полные треки на Яндекс.Музыке, Apple Music, Spotify." />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">

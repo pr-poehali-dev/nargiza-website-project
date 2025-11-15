@@ -31,8 +31,51 @@ const Videos = () => {
     fetchVideos();
   }, []);
 
+  useEffect(() => {
+    if (videos.length > 0) {
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'video-schema';
+      script.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": videos.map((video, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "VideoObject",
+            "name": video.title,
+            "description": video.description || `Клип ${video.title} от NARGIZA`,
+            "thumbnailUrl": video.thumbnail,
+            "uploadDate": video.publishedAt,
+            "contentUrl": `https://www.youtube.com/watch?v=${video.videoId}`,
+            "embedUrl": `https://www.youtube.com/embed/${video.videoId}`,
+            "publisher": {
+              "@type": "Organization",
+              "name": "NARGIZA",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
+              }
+            }
+          }
+        }))
+      });
+      document.head.appendChild(script);
+
+      return () => {
+        const existingScript = document.getElementById('video-schema');
+        if (existingScript) {
+          existingScript.remove();
+        }
+      };
+    }
+  }, [videos]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <title>Клипы NARGIZA — Смотреть все видео онлайн | Официальный сайт</title>
+      <meta name="description" content="Смотрите все клипы NARGIZA онлайн. Последние видео с YouTube канала @nargizamuz — новые релизы, хиты и эксклюзивные премьеры." />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border animate-fade-in">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
