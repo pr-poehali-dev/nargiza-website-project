@@ -47,7 +47,7 @@ const Index = () => {
             </button>
 
             <div className="hidden md:flex gap-8">
-              {['home', 'gallery'].map((section) => (
+              {['home', 'videos', 'gallery'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -56,6 +56,7 @@ const Index = () => {
                   }`}
                 >
                   {section === 'home' && 'Главная'}
+                  {section === 'videos' && 'Клипы'}
                   {section === 'gallery' && 'Галерея'}
                 </button>
               ))}
@@ -82,7 +83,7 @@ const Index = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-background border-t border-border animate-fade-in">
             <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
-              {['home', 'gallery'].map((section) => (
+              {['home', 'videos', 'gallery'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -91,6 +92,7 @@ const Index = () => {
                   }`}
                 >
                   {section === 'home' && 'Главная'}
+                  {section === 'videos' && 'Клипы'}
                   {section === 'gallery' && 'Галерея'}
                 </button>
               ))}
@@ -279,6 +281,34 @@ const Index = () => {
                   </Button>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="videos" className="py-24 px-6 bg-card/30">
+        <div className="container mx-auto max-w-6xl">
+          <h3 className="text-5xl font-bold mb-12 text-center animate-slide-up">Клипы</h3>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/oySwALmUCiQ"
+                title="Клип 1"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="aspect-video rounded-lg overflow-hidden animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/M_IXeeC9ur0"
+                title="Клип 2"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
         </div>
