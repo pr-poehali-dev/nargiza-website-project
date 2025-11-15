@@ -323,7 +323,7 @@ const Index = () => {
       <footer className="py-12 px-6 border-t border-border">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-muted-foreground">© 2024 NARGIZA. Все права защищены.</p>
+            <p className="text-muted-foreground">© 2025 NARGIZA. Все права защищены.</p>
             <div className="flex gap-6">
               <Button variant="ghost" size="icon" asChild>
                 <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
