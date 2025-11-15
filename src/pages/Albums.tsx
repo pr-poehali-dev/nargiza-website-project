@@ -81,7 +81,7 @@ const Albums = () => {
       id: 'vojna',
       title: 'Война',
       year: 2025,
-      cover: 'https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/files/9a397d00-12dc-48a1-aa91-aca32f1969a2.jpg',
+      cover: 'https://cdn.poehali.dev/files/62f9edc7-7584-4b56-a28d-1a06c9006ac9.jpg',
       description: 'Новый альбом NARGIZA, посвящённый военной теме и патриотизму. Глубокие размышления о судьбе страны и народа в трудное время.',
       tracks: [
         { name: 'Война (feat. SHAMAN)', previewUrl: '' },
