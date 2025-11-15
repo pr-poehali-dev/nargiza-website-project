@@ -19,6 +19,7 @@ const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });
+  const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -54,6 +55,31 @@ const Index = () => {
     };
     trackAndFetchStats();
   }, []);
+
+  useEffect(() => {
+    const duration = 2000;
+    const steps = 60;
+    const stepDuration = duration / steps;
+    
+    let currentStep = 0;
+    
+    const interval = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+      
+      setAnimatedStats({
+        total: Math.floor(visitorStats.total * progress),
+        last24h: Math.floor(visitorStats.last24h * progress)
+      });
+      
+      if (currentStep >= steps) {
+        clearInterval(interval);
+        setAnimatedStats(visitorStats);
+      }
+    }, stepDuration);
+    
+    return () => clearInterval(interval);
+  }, [visitorStats]);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
@@ -448,12 +474,12 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4 border-t border-border/50">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon name="Users" size={16} className="text-primary" />
-                <span>За 24 часа: <strong className="text-foreground">{visitorStats.last24h}</strong></span>
+                <span>За 24 часа: <strong className="text-foreground tabular-nums transition-all duration-300">{animatedStats.last24h}</strong></span>
               </div>
               <div className="hidden sm:block text-muted-foreground/50">•</div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon name="TrendingUp" size={16} className="text-primary" />
-                <span>Всего посетителей: <strong className="text-foreground">{visitorStats.total}</strong></span>
+                <span>Всего посетителей: <strong className="text-foreground tabular-nums transition-all duration-300">{animatedStats.total}</strong></span>
               </div>
             </div>
           </div>
