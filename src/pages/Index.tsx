@@ -115,12 +115,18 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ 
-            backgroundImage: `linear-gradient(rgba(26, 31, 44, 0.3), rgba(26, 31, 44, 0.6)), url('https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg')` 
+        <iframe
+          className="absolute inset-0 w-full h-full object-cover"
+          src="https://www.youtube.com/embed/df-ah9akclY?autoplay=1&mute=1&loop=1&playlist=df-ah9akclY&controls=0&showinfo=0&rel=0&modestbranding=1"
+          title="Background video"
+          frameBorder="0"
+          allow="autoplay; encrypted-media"
+          style={{
+            pointerEvents: 'none',
+            transform: 'scale(1.5)',
           }}
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60" />
         <div className="relative z-10 text-center px-6 animate-fade-in">
           <h2 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-2xl">
             NARGIZA
