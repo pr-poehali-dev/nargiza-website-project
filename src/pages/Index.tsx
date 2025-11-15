@@ -17,7 +17,6 @@ const Index = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
 
@@ -153,34 +152,12 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <iframe
-          id="bg-video"
+        <img
+          src="https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
+          alt="NARGIZA"
           className="absolute inset-0 w-full h-full object-cover"
-          src={`https://www.youtube.com/embed/oySwALmUCiQ?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=oySwALmUCiQ&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`}
-          title="Background video"
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          style={{
-            pointerEvents: 'none',
-            transform: 'scale(1.5)',
-          }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60" />
-        
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-24 right-6 z-20 bg-black/50 hover:bg-black/70 text-white"
-          onClick={() => {
-            setIsMuted(!isMuted);
-            const iframe = document.getElementById('bg-video') as HTMLIFrameElement;
-            if (iframe?.contentWindow) {
-              iframe.src = `https://www.youtube.com/embed/oySwALmUCiQ?autoplay=1&mute=${!isMuted ? 1 : 0}&loop=1&playlist=oySwALmUCiQ&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
-            }
-          }}
-        >
-          <Icon name={isMuted ? 'VolumeX' : 'Volume2'} size={24} />
-        </Button>
 
         <div className="relative z-10 text-center px-6 animate-fade-in">
           <h2 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-2xl">
