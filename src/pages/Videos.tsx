@@ -33,29 +33,29 @@ const Videos = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border animate-fade-in">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/')}>
+            <h1 className="text-2xl font-bold tracking-tight cursor-pointer hover:text-primary transition-colors" onClick={() => navigate('/')}>
               NARGIZA
             </h1>
             
             <div className="flex gap-4 items-center">
-              <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="hover:scale-105 transition-transform">
                 Главная
               </Button>
-              <Button variant="ghost" size="icon" asChild>
+              <Button variant="ghost" size="icon" asChild className="hover:scale-110 transition-transform">
                 <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
                   <Icon name="Send" size={20} />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:scale-110 transition-transform">
                 <Icon name="Instagram" size={20} />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:scale-110 transition-transform">
                 <Icon name="Youtube" size={20} />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:scale-110 transition-transform">
                 <Icon name="Music" size={20} />
               </Button>
             </div>
@@ -65,13 +65,17 @@ const Videos = () => {
 
       <section className="pt-32 pb-24 px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="mb-12">
-            <h1 className="text-5xl font-bold mb-4 animate-slide-up">Клипы</h1>
-            <p className="text-muted-foreground text-lg">Последние видео с YouTube канала @nargizamuz</p>
+          <div className="mb-12 animate-slide-up">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Клипы
+            </h1>
+            <p className="text-muted-foreground text-lg animate-fade-in" style={{ animationDelay: '200ms' }}>
+              Последние видео с YouTube канала @nargizamuz
+            </p>
           </div>
           
           {isLoadingVideos ? (
-            <div className="text-center text-muted-foreground py-24">
+            <div className="text-center text-muted-foreground py-24 animate-pulse">
               <Icon name="Loader2" size={48} className="animate-spin mx-auto mb-4" />
               Загрузка видео...
             </div>
@@ -80,7 +84,7 @@ const Videos = () => {
               {videos.map((video, index) => (
                 <div 
                   key={video.videoId} 
-                  className="aspect-video rounded-lg overflow-hidden animate-fade-in shadow-lg"
+                  className="group aspect-video rounded-lg overflow-hidden animate-scale-in shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <iframe
