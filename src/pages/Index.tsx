@@ -177,9 +177,11 @@ const Index = () => {
                 Последнее время после знакомства и совместной работе с музыкантом Calla Vivid часто применяется в исполнении стиль хип хоп и музыкальный стиль инди. Этот совместный творческий союз принёс положительный результат в новых композициях, которые стали более изящными и индивидуальными.
               </p>
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" size="lg" className="gap-2">
-                  <Icon name="Music" size={20} />
-                  Яндекс Музыка
+                <Button variant="outline" size="lg" className="gap-2" asChild>
+                  <a href="https://music.yandex.ru/artist/9639626?utm_source=web&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Music" size={20} />
+                    Яндекс Музыка
+                  </a>
                 </Button>
                 <Button variant="outline" size="lg" className="gap-2" asChild>
                   <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
