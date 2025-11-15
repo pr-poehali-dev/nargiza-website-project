@@ -75,15 +75,23 @@ const Index = () => {
   };
 
   useEffect(() => {
+    if (!lightboxOpen) return;
+    
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lightboxOpen) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') nextImage();
-      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'Escape') {
+        setLightboxOpen(false);
+      }
+      if (e.key === 'ArrowRight') {
+        setCurrentImageIndex((prev) => (prev + 1) % gallery.length);
+      }
+      if (e.key === 'ArrowLeft') {
+        setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+      }
     };
+    
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen]);
+  }, [lightboxOpen, gallery.length]);
 
 
 
