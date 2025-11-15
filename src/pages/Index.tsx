@@ -72,7 +72,7 @@ const Index = () => {
             </button>
 
             <div className="hidden md:flex gap-8">
-              {['home', 'videos', 'gallery'].map((section) => (
+              {['home', 'gallery'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -81,10 +81,15 @@ const Index = () => {
                   }`}
                 >
                   {section === 'home' && 'Главная'}
-                  {section === 'videos' && 'Клипы'}
                   {section === 'gallery' && 'Галерея'}
                 </button>
               ))}
+              <button
+                onClick={() => navigate('/videos')}
+                className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+              >
+                Клипы
+              </button>
             </div>
             <div className="flex gap-4">
               <Button variant="ghost" size="icon" asChild>
@@ -108,7 +113,7 @@ const Index = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-background border-t border-border animate-fade-in">
             <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
-              {['home', 'videos', 'gallery'].map((section) => (
+              {['home', 'gallery'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -117,10 +122,15 @@ const Index = () => {
                   }`}
                 >
                   {section === 'home' && 'Главная'}
-                  {section === 'videos' && 'Клипы'}
                   {section === 'gallery' && 'Галерея'}
                 </button>
               ))}
+              <button
+                onClick={() => navigate('/videos')}
+                className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
+              >
+                Клипы
+              </button>
               <div className="flex gap-4 pt-4 border-t border-border">
                 <Button variant="ghost" size="icon" asChild>
                   <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
@@ -308,37 +318,6 @@ const Index = () => {
               </Card>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section id="videos" className="py-24 px-6 bg-card/30">
-        <div className="container mx-auto max-w-6xl">
-          <h3 className="text-5xl font-bold mb-12 text-center animate-slide-up">Клипы</h3>
-          {isLoadingVideos ? (
-            <div className="text-center text-muted-foreground">
-              <Icon name="Loader2" size={48} className="animate-spin mx-auto mb-4" />
-              Загрузка видео...
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-8">
-              {videos.map((video, index) => (
-                <div 
-                  key={video.videoId} 
-                  className="aspect-video rounded-lg overflow-hidden animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <iframe
-                    className="w-full h-full"
-                    src={`https://www.youtube.com/embed/${video.videoId}`}
-                    title={video.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </section>
 
