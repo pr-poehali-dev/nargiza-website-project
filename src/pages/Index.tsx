@@ -18,6 +18,7 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -35,6 +36,23 @@ const Index = () => {
       }
     };
     fetchVideos();
+  }, []);
+
+  useEffect(() => {
+    const trackAndFetchStats = async () => {
+      try {
+        await fetch('https://functions.poehali.dev/7fd3cff1-99f4-4cfc-a78b-6a518c6f06d8', {
+          method: 'POST'
+        });
+        
+        const response = await fetch('https://functions.poehali.dev/7fd3cff1-99f4-4cfc-a78b-6a518c6f06d8');
+        const data = await response.json();
+        setVisitorStats(data);
+      } catch (error) {
+        console.error('Error tracking visitor:', error);
+      }
+    };
+    trackAndFetchStats();
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -401,28 +419,42 @@ const Index = () => {
 
       <footer className="py-12 px-6 border-t border-border">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex flex-col gap-2 text-center md:text-left">
-              <p className="text-muted-foreground">© 2025 NARGIZA. Все права защищены.</p>
-              <a href="mailto:bodma@mail.ru" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                bodma@mail.ru
-              </a>
-            </div>
-            <div className="flex gap-6">
-              <Button variant="ghost" size="icon" asChild>
-                <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
-                  <Icon name="Send" size={24} />
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex flex-col gap-2 text-center md:text-left">
+                <p className="text-muted-foreground">© 2025 NARGIZA. Все права защищены.</p>
+                <a href="mailto:bodma@mail.ru" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  bodma@mail.ru
                 </a>
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Instagram" size={24} />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Youtube" size={24} />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Music" size={24} />
-              </Button>
+              </div>
+              <div className="flex gap-6">
+                <Button variant="ghost" size="icon" asChild>
+                  <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Send" size={24} />
+                  </a>
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Icon name="Instagram" size={24} />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Icon name="Youtube" size={24} />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Icon name="Music" size={24} />
+                </Button>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4 border-t border-border/50">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Icon name="Users" size={16} className="text-primary" />
+                <span>За 24 часа: <strong className="text-foreground">{visitorStats.last24h}</strong></span>
+              </div>
+              <div className="hidden sm:block text-muted-foreground/50">•</div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Icon name="TrendingUp" size={16} className="text-primary" />
+                <span>Всего посетителей: <strong className="text-foreground">{visitorStats.total}</strong></span>
+              </div>
             </div>
           </div>
         </div>
