@@ -323,7 +323,12 @@ const Index = () => {
       <footer className="py-12 px-6 border-t border-border">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-muted-foreground">© 2025 NARGIZA. Все права защищены.</p>
+            <div className="flex flex-col gap-2 text-center md:text-left">
+              <p className="text-muted-foreground">© 2025 NARGIZA. Все права защищены.</p>
+              <a href="mailto:bodma@mail.ru" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                bodma@mail.ru
+              </a>
+            </div>
             <div className="flex gap-6">
               <Button variant="ghost" size="icon" asChild>
                 <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
