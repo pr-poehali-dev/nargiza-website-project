@@ -119,7 +119,7 @@ const Index = () => {
         <iframe
           id="bg-video"
           className="absolute inset-0 w-full h-full object-cover"
-          src={`https://www.youtube.com/embed/M_IXeeC9ur0?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=M_IXeeC9ur0&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`}
+          src={`https://www.youtube.com/embed/oySwALmUCiQ?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=oySwALmUCiQ&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`}
           title="Background video"
           frameBorder="0"
           allow="autoplay; encrypted-media"
@@ -138,7 +138,7 @@ const Index = () => {
             setIsMuted(!isMuted);
             const iframe = document.getElementById('bg-video') as HTMLIFrameElement;
             if (iframe?.contentWindow) {
-              iframe.src = `https://www.youtube.com/embed/M_IXeeC9ur0?autoplay=1&mute=${!isMuted ? 1 : 0}&loop=1&playlist=M_IXeeC9ur0&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
+              iframe.src = `https://www.youtube.com/embed/oySwALmUCiQ?autoplay=1&mute=${!isMuted ? 1 : 0}&loop=1&playlist=oySwALmUCiQ&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
             }
           }}
         >
