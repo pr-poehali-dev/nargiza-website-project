@@ -84,11 +84,22 @@ const Albums = () => {
       cover: 'https://cdn.poehali.dev/files/62f9edc7-7584-4b56-a28d-1a06c9006ac9.jpg',
       description: 'Новый альбом NARGIZA, посвящённый военной теме и патриотизму. Глубокие размышления о судьбе страны и народа в трудное время.',
       tracks: [
-        { name: 'Война (feat. SHAMAN)', previewUrl: '' },
-        { name: 'Россия', previewUrl: '' },
-        { name: 'Война 2', previewUrl: '' },
-        { name: 'Украина', previewUrl: '' },
-        { name: 'Азов', previewUrl: '' }
+        { name: 'Вступление (Война)', previewUrl: '' },
+        { name: 'Живым вернуться (Сл. Е.Сараевой)', previewUrl: '' },
+        { name: 'Родина (Сл. В. Своеволина)', previewUrl: '' },
+        { name: 'СВО начало (Сл. С.Анищенко)', previewUrl: '' },
+        { name: 'Брат (Сл. О. Расуловой)', previewUrl: '' },
+        { name: 'Непокорный Донбасс (Сл. Ю. Неупокоева)', previewUrl: '' },
+        { name: 'Я убит (Сл. NARGIZA)', previewUrl: '' },
+        { name: 'Сапёр (Сл. С. Шешукова)', previewUrl: '' },
+        { name: 'Вставай рать (Сл. Р. Симаника)', previewUrl: '' },
+        { name: 'На рассвете (Сл. NARGIZA)', previewUrl: '' },
+        { name: 'Катится мир куда-то (Сл. С. Шешукова)', previewUrl: '' },
+        { name: 'Не могу (Сл. Aleksandr Nevskiy)', previewUrl: '' },
+        { name: 'Возвращайся братишка (Сл. О.Расуловой)', previewUrl: '' },
+        { name: 'Мы будем ждать (Сл. Е. Ревякиной)', previewUrl: '' },
+        { name: 'Вставай народ (Сл. NARGIZA)', previewUrl: '' },
+        { name: 'Нас нет в живых (Сл. NARGIZA)', previewUrl: '' }
       ] as Track[],
       links: {
         yandex: 'https://music.yandex.ru/album/38802888',
