@@ -19,6 +19,8 @@ const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -51,7 +53,37 @@ const Index = () => {
     'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg',
     'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg',
     'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg',
+    'https://cdn.poehali.dev/files/6e664d2a-d6bb-4e1a-884f-6fe844889d2c.jpg',
+    'https://cdn.poehali.dev/files/7cfb1c54-5be8-486f-b126-6039752e5677.jpg',
   ];
+
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % gallery.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxOpen]);
 
 
 
@@ -307,6 +339,7 @@ const Index = () => {
                 key={index} 
                 className="relative aspect-square overflow-hidden rounded-lg group cursor-pointer animate-scale-in"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => openLightbox(index)}
               >
                 <img 
                   src={image} 
@@ -317,6 +350,44 @@ const Index = () => {
               </div>
             ))}
           </div>
+
+          {lightboxOpen && (
+            <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade-in">
+              <button
+                onClick={closeLightbox}
+                className="absolute top-6 right-6 text-white hover:text-primary transition-colors z-10"
+                aria-label="Закрыть"
+              >
+                <Icon name="X" size={32} />
+              </button>
+              
+              <button
+                onClick={prevImage}
+                className="absolute left-6 text-white hover:text-primary transition-colors z-10"
+                aria-label="Предыдущее фото"
+              >
+                <Icon name="ChevronLeft" size={48} />
+              </button>
+              
+              <button
+                onClick={nextImage}
+                className="absolute right-6 text-white hover:text-primary transition-colors z-10"
+                aria-label="Следующее фото"
+              >
+                <Icon name="ChevronRight" size={48} />
+              </button>
+
+              <img
+                src={gallery[currentImageIndex]}
+                alt={`Gallery ${currentImageIndex + 1}`}
+                className="max-w-[90vw] max-h-[90vh] object-contain"
+              />
+              
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm">
+                {currentImageIndex + 1} / {gallery.length}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
