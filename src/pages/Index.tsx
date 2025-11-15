@@ -58,12 +58,6 @@ const Index = () => {
                   {section === 'gallery' && 'Галерея'}
                 </button>
               ))}
-              <button
-                onClick={() => navigate('/mail')}
-                className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
-              >
-                Почта
-              </button>
             </div>
             <div className="flex gap-4">
               <Button variant="ghost" size="icon" asChild>
@@ -99,12 +93,6 @@ const Index = () => {
                   {section === 'gallery' && 'Галерея'}
                 </button>
               ))}
-              <button
-                onClick={() => navigate('/mail')}
-                className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
-              >
-                Почта
-              </button>
               <div className="flex gap-4 pt-4 border-t border-border">
                 <Button variant="ghost" size="icon" asChild>
                   <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
