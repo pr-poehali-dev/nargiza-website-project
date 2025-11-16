@@ -161,6 +161,31 @@ const Albums = () => {
         apple: 'https://music.apple.com/us/album/%D0%BA%D1%83%D1%80%D1%81%D0%BA/1843294959?l=ru',
         spotify: 'https://open.spotify.com/album/3GwTzsH0oU86UE5OcplXyW'
       }
+    },
+    {
+      id: 'russia-i-sila',
+      title: 'Россия и Сила',
+      year: 2025,
+      cover: 'https://cdn.poehali.dev/files/486199a3-efae-4aa9-864a-e3468118227c.jpg',
+      description: 'Новый альбом NARGIZA, продолжающий военно-патриотическую тематику. Мощные композиции о силе духа и любви к Родине.',
+      tracks: [
+        { name: 'Начало', previewUrl: '' },
+        { name: 'Россия', previewUrl: '' },
+        { name: 'ЧВК Вагнер', previewUrl: '' },
+        { name: 'Бахмут', previewUrl: '' },
+        { name: 'Родина в огне', previewUrl: '' },
+        { name: 'Штурмовик Вагнера', previewUrl: '' },
+        { name: 'Граната', previewUrl: '' },
+        { name: 'Первомайское', previewUrl: '' },
+        { name: 'Ещё не осень', previewUrl: '' },
+        { name: 'Бой в рукопашную', previewUrl: '' },
+        { name: 'Последняя роль', previewUrl: '' }
+      ] as Track[],
+      links: {
+        yandex: '',
+        apple: '',
+        spotify: ''
+      }
     }
   ];
 
