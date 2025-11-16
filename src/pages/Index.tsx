@@ -2,84 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-
-
-interface YouTubeVideo {
-  videoId: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  publishedAt: string;
-}
 
 const Index = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [videos, setVideos] = useState<YouTubeVideo[]>([]);
-  const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });
-  const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
-  const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/915b3177-6247-4286-bd88-972b6325759a?channelHandle=@nargizamuz&maxResults=12');
-        const data = await response.json();
-        setVideos(data.videos || []);
-      } catch (error) {
-        console.error('Error fetching videos:', error);
-      } finally {
-        setIsLoadingVideos(false);
-      }
-    };
-    fetchVideos();
-  }, []);
-
-  useEffect(() => {
-    const trackAndFetchStats = async () => {
-      try {
-        await fetch('https://functions.poehali.dev/7fd3cff1-99f4-4cfc-a78b-6a518c6f06d8', {
-          method: 'POST'
-        });
-        
-        const response = await fetch('https://functions.poehali.dev/7fd3cff1-99f4-4cfc-a78b-6a518c6f06d8');
-        const data = await response.json();
-        setVisitorStats(data);
-      } catch (error) {
-        console.error('Error tracking visitor:', error);
-      }
-    };
-    trackAndFetchStats();
-  }, []);
-
-  useEffect(() => {
-    const duration = 2000;
-    const steps = 60;
-    const stepDuration = duration / steps;
-    
-    let currentStep = 0;
-    
-    const interval = setInterval(() => {
-      currentStep++;
-      const progress = currentStep / steps;
-      
-      setAnimatedStats({
-        total: Math.floor(visitorStats.total * progress),
-        last24h: Math.floor(visitorStats.last24h * progress)
-      });
-      
-      if (currentStep >= steps) {
-        clearInterval(interval);
-        setAnimatedStats(visitorStats);
-      }
-    }, stepDuration);
-    
-    return () => clearInterval(interval);
-  }, [visitorStats]);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
@@ -87,8 +16,6 @@ const Index = () => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
   };
-
-
 
   const gallery = [
     'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
@@ -138,8 +65,6 @@ const Index = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxOpen, gallery.length]);
-
-
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -251,26 +176,14 @@ const Index = () => {
           alt="Nargiza"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background"></div>
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background"></div>
+        <div className="relative z-10 text-center px-6">
           <h2 className="text-7xl md:text-9xl font-black mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-slide-up">
             NARGIZA
           </h2>
           <p className="text-xl md:text-2xl text-white/90 mb-8 font-light tracking-wide animate-fade-in">
             Российская певица и композитор
           </p>
-          
-          <div className="grid grid-cols-2 gap-6 max-w-md mx-auto mb-12 animate-scale-in">
-            <div className="bg-background/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-primary mb-2">{animatedStats.total.toLocaleString()}</div>
-              <div className="text-sm text-white/70">Всего посещений</div>
-            </div>
-            <div className="bg-background/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-secondary mb-2">{animatedStats.last24h.toLocaleString()}</div>
-              <div className="text-sm text-white/70">За последний день</div>
-            </div>
-          </div>
-
           <div className="flex gap-6 justify-center">
             <Button variant="default" size="lg" className="gap-2 text-lg px-8 py-6 shadow-2xl shadow-primary/50 hover:shadow-primary/70 transition-all" asChild>
               <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
