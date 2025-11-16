@@ -140,7 +140,7 @@ const Albums = () => {
       id: 'kursk',
       title: 'Курск',
       year: 2025,
-      cover: 'https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/files/c897ba4e-d5f1-4030-9b0f-2fab810dad6e.jpg',
+      cover: 'https://cdn.poehali.dev/files/486199a3-efae-4aa9-864a-e3468118227c.jpg',
       description: 'Новый альбом NARGIZA, посвящённый памяти и мужеству. Глубокие эмоциональные композиции о событиях и людях.',
       tracks: [
         { name: 'Трек 1', previewUrl: '' },
