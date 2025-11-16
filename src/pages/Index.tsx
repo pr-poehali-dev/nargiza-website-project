@@ -183,8 +183,10 @@ const Index = () => {
               <Button variant="ghost" size="icon">
                 <Icon name="Instagram" size={20} />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Youtube" size={20} />
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Youtube" size={20} />
+                </a>
               </Button>
               <Button variant="ghost" size="icon">
                 <Icon name="Music" size={20} />
@@ -223,8 +225,10 @@ const Index = () => {
                 <Button variant="ghost" size="icon">
                   <Icon name="Instagram" size={20} />
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Icon name="Youtube" size={20} />
+                <Button variant="ghost" size="icon" asChild>
+                  <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Youtube" size={20} />
+                  </a>
                 </Button>
                 <Button variant="ghost" size="icon">
                   <Icon name="Music" size={20} />
