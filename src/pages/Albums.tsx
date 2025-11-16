@@ -182,7 +182,7 @@ const Albums = () => {
         { name: 'Последняя роль', previewUrl: '' }
       ] as Track[],
       links: {
-        yandex: '',
+        yandex: 'https://music.yandex.ru/album/37929631',
         apple: '',
         spotify: ''
       }
