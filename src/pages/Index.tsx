@@ -246,10 +246,9 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <img
-          src="https://cdn.poehali.dev/files/05bfe7e6-f1fa-4ae6-833a-39cca4ceb2e2.jpg"
-          alt="Nargiza"
-          className="absolute inset-0 w-full h-full object-cover"
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{ backgroundImage: 'url(https://cdn.poehali.dev/files/05bfe7e6-f1fa-4ae6-833a-39cca4ceb2e2.jpg)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background"></div>
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -271,7 +270,7 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="flex gap-6 justify-center mb-16">
+          <div className="flex gap-6 justify-center">
             <Button variant="default" size="lg" className="gap-2 text-lg px-8 py-6 shadow-2xl shadow-primary/50 hover:shadow-primary/70 transition-all" asChild>
               <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
                 <Icon name="Youtube" size={24} />
@@ -285,8 +284,12 @@ const Index = () => {
               </a>
             </Button>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24">
+      <section className="py-32 px-6 bg-background">
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="bg-background/40 backdrop-blur-md border-white/10 overflow-hidden shadow-2xl hover:shadow-primary/30 transition-all duration-500 hover:scale-105">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-6">
