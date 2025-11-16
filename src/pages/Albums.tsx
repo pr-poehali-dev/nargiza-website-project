@@ -111,7 +111,7 @@ const Albums = () => {
       id: 'ukraina',
       title: 'Украина',
       year: 2024,
-      cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg',
+      cover: 'https://cdn.poehali.dev/files/997e91e7-bf77-4ecd-9ef7-c7dc49e57b6c.jpg',
       description: 'Альбом, посвящённый военной теме и поддержке России. Создан исполнительницей как личный вклад в поддержку страны в трудное время.',
       tracks: [] as Track[],
       links: {
