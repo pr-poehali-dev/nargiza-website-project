@@ -133,7 +133,29 @@ const Albums = () => {
       links: {
         yandex: 'https://music.yandex.ru/album/34508644',
         apple: 'https://music.apple.com/us/album/%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0-ep/1782424780',
-        spotify: 'https://open.spotify.com/album/3yxSUITLKbKNPJസസ8pzWIbOE'
+        spotify: 'https://open.spotify.com/album/3yxSUITLKbKNPJHTML8pzWIbOE'
+      }
+    },
+    {
+      id: 'kursk',
+      title: 'Курск',
+      year: 2025,
+      cover: 'https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/files/c897ba4e-d5f1-4030-9b0f-2fab810dad6e.jpg',
+      description: 'Новый альбом NARGIZA, посвящённый памяти и мужеству. Глубокие эмоциональные композиции о событиях и людях.',
+      tracks: [
+        { name: 'Трек 1', previewUrl: '' },
+        { name: 'Трек 2', previewUrl: '' },
+        { name: 'Трек 3', previewUrl: '' },
+        { name: 'Трек 4', previewUrl: '' },
+        { name: 'Трек 5', previewUrl: '' },
+        { name: 'Трек 6', previewUrl: '' },
+        { name: 'Трек 7', previewUrl: '' },
+        { name: 'Трек 8', previewUrl: '' }
+      ] as Track[],
+      links: {
+        yandex: '',
+        apple: '',
+        spotify: ''
       }
     }
   ];
