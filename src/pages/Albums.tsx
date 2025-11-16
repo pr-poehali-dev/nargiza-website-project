@@ -114,11 +114,21 @@ const Albums = () => {
       cover: 'https://cdn.poehali.dev/files/997e91e7-bf77-4ecd-9ef7-c7dc49e57b6c.jpg',
       description: 'Альбом, посвящённый военной теме и поддержке России. Создан исполнительницей как личный вклад в поддержку страны в трудное время.',
       tracks: [
-        { name: 'Украина', previewUrl: '' },
-        { name: 'Я волонтёр', previewUrl: '' },
-        { name: 'Новый враг', previewUrl: '' },
-        { name: 'Ты держись Украина', previewUrl: '' },
-        { name: 'Мы вернёмся', previewUrl: '' }
+        { name: 'Вступление', previewUrl: '' },
+        { name: 'Майдан', previewUrl: '' },
+        { name: 'Западенцы', previewUrl: '' },
+        { name: 'Под Славянском', previewUrl: '' },
+        { name: 'Ополченец', previewUrl: '' },
+        { name: 'Гражданская война', previewUrl: '' },
+        { name: 'Олесь Бузина (Не люблю)', previewUrl: '' },
+        { name: 'Не добили', previewUrl: '' },
+        { name: 'Мама (И. Самарина)', previewUrl: '' },
+        { name: 'Донбасс', previewUrl: '' },
+        { name: 'Ночь над Донбассом', previewUrl: '' },
+        { name: 'В окопе (С. Ведринцев)', previewUrl: '' },
+        { name: 'Не добили (remix)', previewUrl: '' },
+        { name: 'Доброта', previewUrl: '' },
+        { name: 'Заключение', previewUrl: '' }
       ] as Track[],
       links: {
         yandex: 'https://music.yandex.ru/album/34508644',
