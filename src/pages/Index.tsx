@@ -424,26 +424,38 @@ const Index = () => {
           </div>
 
           {lightboxOpen && (
-            <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade-in">
+            <div 
+              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade-in"
+              onClick={closeLightbox}
+            >
               <button
-                onClick={closeLightbox}
-                className="absolute top-6 right-6 text-white hover:text-primary transition-colors z-10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeLightbox();
+                }}
+                className="absolute top-6 right-6 text-white hover:text-primary transition-colors z-50 bg-black/50 rounded-full p-2"
                 aria-label="Закрыть"
               >
                 <Icon name="X" size={32} />
               </button>
               
               <button
-                onClick={prevImage}
-                className="absolute left-6 text-white hover:text-primary transition-colors z-10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
+                className="absolute left-6 text-white hover:text-primary transition-colors z-50"
                 aria-label="Предыдущее фото"
               >
                 <Icon name="ChevronLeft" size={48} />
               </button>
               
               <button
-                onClick={nextImage}
-                className="absolute right-6 text-white hover:text-primary transition-colors z-10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
+                className="absolute right-6 text-white hover:text-primary transition-colors z-50"
                 aria-label="Следующее фото"
               >
                 <Icon name="ChevronRight" size={48} />
@@ -453,9 +465,10 @@ const Index = () => {
                 src={gallery[currentImageIndex]}
                 alt={`Gallery ${currentImageIndex + 1}`}
                 className="max-w-[90vw] max-h-[90vh] object-contain"
+                onClick={(e) => e.stopPropagation()}
               />
               
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm">
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm z-50">
                 {currentImageIndex + 1} / {gallery.length}
               </div>
             </div>
