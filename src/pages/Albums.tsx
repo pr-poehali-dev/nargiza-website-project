@@ -132,7 +132,7 @@ const Albums = () => {
       ] as Track[],
       links: {
         yandex: 'https://music.yandex.ru/album/34508644',
-        apple: 'https://music.apple.com/us/album/%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0-ep/1782424780',
+        apple: 'https://music.apple.com/us/album/%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0/1837641653?l=ru',
         spotify: 'https://open.spotify.com/album/3yxSUITLKbKNPJHTML8pzWIbOE'
       }
     },
