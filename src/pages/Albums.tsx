@@ -143,14 +143,18 @@ const Albums = () => {
       cover: 'https://cdn.poehali.dev/files/486199a3-efae-4aa9-864a-e3468118227c.jpg',
       description: 'Новый альбом NARGIZA, посвящённый памяти и мужеству. Глубокие эмоциональные композиции о событиях и людях.',
       tracks: [
-        { name: 'Трек 1', previewUrl: '' },
-        { name: 'Трек 2', previewUrl: '' },
-        { name: 'Трек 3', previewUrl: '' },
-        { name: 'Трек 4', previewUrl: '' },
-        { name: 'Трек 5', previewUrl: '' },
-        { name: 'Трек 6', previewUrl: '' },
-        { name: 'Трек 7', previewUrl: '' },
-        { name: 'Трек 8', previewUrl: '' }
+        { name: 'Курск - начало', previewUrl: '' },
+        { name: 'Вторжение', previewUrl: '' },
+        { name: 'Пограничник', previewUrl: '' },
+        { name: 'Недобитки', previewUrl: '' },
+        { name: 'На балконе', previewUrl: '' },
+        { name: 'Расскажи солдат', previewUrl: '' },
+        { name: 'Слова на стене', previewUrl: '' },
+        { name: 'Посёлок', previewUrl: '' },
+        { name: 'Курск', previewUrl: '' },
+        { name: 'Украинский солдат', previewUrl: '' },
+        { name: 'Я солдат России', previewUrl: '' },
+        { name: 'Поклон тебе, солдат России', previewUrl: '' }
       ] as Track[],
       links: {
         yandex: '',
