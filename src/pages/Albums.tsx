@@ -52,7 +52,7 @@ const Albums = () => {
       id: 'nikchemnaya-zhizn',
       title: 'Никчёмная жизнь',
       year: 2025,
-      cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
+      cover: 'https://cdn.poehali.dev/files/f8cf36c7-61da-4d88-a041-6b50d15f1795.jpg',
       description: 'Первый полноценный альбом NARGIZA, отражающий глубокие личные переживания и философские размышления о жизни, одиночестве и современном обществе.',
       tracks: [
         { name: 'Когда ты один', previewUrl: '' },
