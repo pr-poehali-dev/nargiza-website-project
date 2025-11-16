@@ -258,7 +258,7 @@ const Index = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
 
         <div className="relative z-10 text-center px-6 animate-fade-in">
-          <h2 className="text-8xl md:text-[12rem] font-black mb-8 bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent drop-shadow-2xl tracking-tighter animate-fade-in">
+          <h2 className="text-7xl md:text-9xl font-black mb-8 bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent drop-shadow-2xl tracking-tighter animate-fade-in">
             NARGIZA
           </h2>
           <p className="text-2xl md:text-3xl text-white mb-12 font-light drop-shadow-2xl tracking-wide">
