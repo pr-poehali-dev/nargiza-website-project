@@ -110,14 +110,20 @@ const Albums = () => {
     {
       id: 'ukraina',
       title: 'Украина',
-      year: 2024,
+      year: 2025,
       cover: 'https://cdn.poehali.dev/files/997e91e7-bf77-4ecd-9ef7-c7dc49e57b6c.jpg',
       description: 'Альбом, посвящённый военной теме и поддержке России. Создан исполнительницей как личный вклад в поддержку страны в трудное время.',
-      tracks: [] as Track[],
+      tracks: [
+        { name: 'Украина', previewUrl: '' },
+        { name: 'Я волонтёр', previewUrl: '' },
+        { name: 'Новый враг', previewUrl: '' },
+        { name: 'Ты держись Украина', previewUrl: '' },
+        { name: 'Мы вернёмся', previewUrl: '' }
+      ] as Track[],
       links: {
-        yandex: 'https://music.yandex.ru/album/ALBUM_ID',
-        apple: 'https://music.apple.com/album/ALBUM_ID',
-        spotify: 'https://open.spotify.com/album/ALBUM_ID'
+        yandex: 'https://music.yandex.ru/album/34508644',
+        apple: 'https://music.apple.com/us/album/%D1%83%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0-ep/1782424780',
+        spotify: 'https://open.spotify.com/album/3yxSUITLKbKNPJസസ8pzWIbOE'
       }
     }
   ];
