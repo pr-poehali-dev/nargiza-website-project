@@ -246,11 +246,12 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: 'url(https://cdn.poehali.dev/files/05bfe7e6-f1fa-4ae6-833a-39cca4ceb2e2.jpg)' }}
+        <img
+          src="https://cdn.poehali.dev/files/05bfe7e6-f1fa-4ae6-833a-39cca4ceb2e2.jpg"
+          alt="Nargiza"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background"></div>
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h2 className="text-7xl md:text-9xl font-black mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-slide-up">
             NARGIZA
