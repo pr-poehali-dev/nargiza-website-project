@@ -166,7 +166,7 @@ const Albums = () => {
       id: 'russia-i-sila',
       title: 'Россия и Сила',
       year: 2025,
-      cover: 'https://cdn.poehali.dev/files/486199a3-efae-4aa9-864a-e3468118227c.jpg',
+      cover: 'https://cdn.poehali.dev/files/9d266639-3b22-41f7-ad15-bb485bc0ed3d.jpg',
       description: 'Новый альбом NARGIZA, продолжающий военно-патриотическую тематику. Мощные композиции о силе духа и любви к Родине.',
       tracks: [
         { name: 'Начало', previewUrl: '' },
