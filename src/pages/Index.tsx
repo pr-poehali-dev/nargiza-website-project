@@ -247,20 +247,24 @@ const Index = () => {
         <img
           src="https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
           alt="NARGIZA"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover scale-105 animate-slow-zoom"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-purple-900/30 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20" />
+        
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
 
         <div className="relative z-10 text-center px-6 animate-fade-in">
-          <h2 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-2xl">
+          <h2 className="text-8xl md:text-[12rem] font-black mb-8 bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent drop-shadow-2xl tracking-tighter animate-fade-in">
             NARGIZA
           </h2>
-          <p className="text-xl md:text-2xl text-white mb-8 font-light drop-shadow-lg">
+          <p className="text-2xl md:text-3xl text-white mb-12 font-light drop-shadow-2xl tracking-wide">
             Автор и исполнитель
           </p>
-          <Button size="lg" className="group" onClick={() => scrollToSection('gallery')}>
+          <Button size="lg" className="group rounded-full px-8 py-6 text-lg shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-110" onClick={() => scrollToSection('gallery')}>
             Смотреть галерею
-            <Icon name="Image" size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+            <Icon name="Image" size={22} className="ml-2 transition-transform group-hover:translate-x-2" />
           </Button>
         </div>
       </section>
@@ -390,23 +394,29 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="gallery" className="py-24 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <h3 className="text-5xl font-bold mb-12 animate-slide-up">Галерея</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <section id="gallery" className="py-32 px-6 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none"></div>
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="text-center mb-16">
+            <h3 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-slide-up">Галерея</h3>
+            <p className="text-xl text-muted-foreground">Моменты из моей творческой жизни</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {gallery.map((image, index) => (
               <div 
                 key={index} 
-                className="relative aspect-square overflow-hidden rounded-lg group cursor-pointer animate-scale-in"
+                className="relative aspect-square overflow-hidden rounded-2xl group cursor-pointer animate-scale-in shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500"
                 style={{ animationDelay: `${index * 100}ms` }}
                 onClick={() => openLightbox(index)}
               >
                 <img 
                   src={image} 
                   alt={`Gallery ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-125"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <Icon name="ZoomIn" size={48} className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110" />
+                </div>
               </div>
             ))}
           </div>
@@ -451,29 +461,36 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex flex-col gap-2 text-center md:text-left">
-                <p className="text-muted-foreground">© 2025 NARGIZA. Все права защищены.</p>
-                <a href="mailto:bodma@mail.ru" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+      <footer className="py-16 px-6 border-t border-border/50 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="flex flex-col gap-3 text-center md:text-left">
+                <h4 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">NARGIZA</h4>
+                <p className="text-muted-foreground font-medium">© 2025 Все права защищены.</p>
+                <a href="mailto:bodma@mail.ru" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 justify-center md:justify-start">
+                  <Icon name="Mail" size={18} />
                   bodma@mail.ru
                 </a>
               </div>
-              <div className="flex gap-6">
-                <Button variant="ghost" size="icon" asChild>
+              <div className="flex gap-4">
+                <Button variant="ghost" size="icon" className="hover:scale-110 transition-all hover:bg-primary/10" asChild>
                   <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
                     <Icon name="Send" size={24} />
                   </a>
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Icon name="Instagram" size={24} />
+                <Button variant="ghost" size="icon" className="hover:scale-110 transition-all hover:bg-primary/10" asChild>
+                  <a href="https://www.instagram.com/nargizamuz?igsh=MThzaDNsYmF0cHdqdg==" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Instagram" size={24} />
+                  </a>
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Icon name="Youtube" size={24} />
+                <Button variant="ghost" size="icon" className="hover:scale-110 transition-all hover:bg-primary/10" asChild>
+                  <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Youtube" size={24} />
+                  </a>
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="hover:scale-110 transition-all hover:bg-primary/10">
                   <Icon name="Music" size={24} />
                 </Button>
               </div>
