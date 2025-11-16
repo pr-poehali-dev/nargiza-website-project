@@ -180,8 +180,10 @@ const Index = () => {
                   <Icon name="Send" size={20} />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Instagram" size={20} />
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://www.instagram.com/nargizamuz?igsh=MThzaDNsYmF0cHdqdg==" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Instagram" size={20} />
+                </a>
               </Button>
               <Button variant="ghost" size="icon" asChild>
                 <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
@@ -222,8 +224,10 @@ const Index = () => {
                     <Icon name="Send" size={20} />
                   </a>
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Icon name="Instagram" size={20} />
+                <Button variant="ghost" size="icon" asChild>
+                  <a href="https://www.instagram.com/nargizamuz?igsh=MThzaDNsYmF0cHdqdg==" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Instagram" size={20} />
+                  </a>
                 </Button>
                 <Button variant="ghost" size="icon" asChild>
                   <a href="https://youtube.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
