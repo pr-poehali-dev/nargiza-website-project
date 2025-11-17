@@ -182,8 +182,9 @@ const Index = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
-                className="text-xs font-medium"
+                className="text-xs font-medium gap-2"
               >
+                <span className="text-base">{language === 'ru' ? '🇬🇧' : '🇷🇺'}</span>
                 {language === 'ru' ? 'EN' : 'RU'}
               </Button>
               <Button variant="ghost" size="icon" asChild>
@@ -232,8 +233,9 @@ const Index = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
-                className="text-xs font-medium w-fit mt-2"
+                className="text-xs font-medium w-fit mt-2 gap-2"
               >
+                <span className="text-base">{language === 'ru' ? '🇬🇧' : '🇷🇺'}</span>
                 {language === 'ru' ? 'EN' : 'RU'}
               </Button>
               <div className="flex gap-4 pt-4 border-t border-border">

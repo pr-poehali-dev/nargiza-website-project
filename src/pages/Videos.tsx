@@ -90,8 +90,9 @@ const Videos = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
-                className="text-xs font-medium"
+                className="text-xs font-medium gap-2"
               >
+                <span className="text-base">{language === 'ru' ? '🇬🇧' : '🇷🇺'}</span>
                 {language === 'ru' ? 'EN' : 'RU'}
               </Button>
               <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="hover:scale-105 transition-transform">
