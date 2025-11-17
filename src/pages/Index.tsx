@@ -181,6 +181,12 @@ const Index = () => {
                 </button>
               ))}
               <button
+                onClick={() => navigate('/albums')}
+                className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+              >
+                {t('nav.albums')}
+              </button>
+              <button
                 onClick={() => navigate('/videos')}
                 className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
               >
@@ -233,6 +239,12 @@ const Index = () => {
                   {t(`nav.${section}`)}
                 </button>
               ))}
+              <button
+                onClick={() => navigate('/albums')}
+                className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
+              >
+                {t('nav.albums')}
+              </button>
               <button
                 onClick={() => navigate('/videos')}
                 className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
@@ -300,125 +312,38 @@ const Index = () => {
       </section>
 
       <section className="py-24 px-6 bg-card/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="animate-fade-in">
-              <h3 className="text-5xl font-bold mb-8">{t('about.title')}</h3>
-              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                {t('about.p1')}
-              </p>
-              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                {t('about.p2')}
-              </p>
-              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                {t('about.p3')}
-              </p>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                {t('about.p4')}
-              </p>
-              <div className="flex gap-4 mt-8">
-                <Button variant="outline" size="lg" className="gap-2" asChild>
-                  <a href="https://music.yandex.ru/artist/9639626?utm_source=web&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
-                    <Icon name="Music" size={20} />
-                    Яндекс Музыка
-                  </a>
-                </Button>
-                <Button variant="outline" size="lg" className="gap-2" asChild>
-                  <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
-                    <Icon name="Music" size={20} />
-                    Apple Music
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            <div className="animate-scale-in">
-              <Card>
-                <CardContent className="p-8">
-                  <h4 className="text-2xl font-bold mb-6">{t('discography.title')}</h4>
-                  
-                  <div className="mb-6">
-                    <h5 className="text-lg font-semibold mb-3 text-primary">{t('discography.albums')}</h5>
-                    <div className="flex items-center gap-3 mb-4">
-                      <Icon name="Disc3" size={20} className="text-secondary" />
-                      <details className="cursor-pointer group">
-                        <summary className="list-none text-muted-foreground hover:text-foreground transition-colors">
-                          «{t('album.worthless')}»
-                          <Icon name="ChevronDown" size={16} className="inline ml-1 group-open:rotate-180 transition-transform" />
-                        </summary>
-                        <div className="pl-8 mt-3 space-y-2 text-sm">
-                          {[
-                            'Когда ты один',
-                            'Пустой экран',
-                            'Никто не ждёт (Сл. A.Nevskiy)',
-                            'Никчёмная жизнь',
-                            'Когда никто не ищет',
-                            'Всё проходит (Сл. Ю.Левитанский)',
-                            'Мы тратим время',
-                            'Забудешь',
-                            'Мне нечем заняться',
-                            'Одно и то же',
-                            'Вся суть',
-                            'Молодо зелено',
-                            'Земной путь',
-                            'Смартфон',
-                            'Это другая я'
-                          ].map((track, i) => (
-                            <div key={i} className="text-muted-foreground/80">
-                              {i + 1}. {track}
-                            </div>
-                          ))}
-                          <div className="flex gap-2 pt-3">
-                            <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
-                              <a href="https://music.yandex.ru/album/38836368" target="_blank" rel="noopener noreferrer">
-                                <Icon name="Music" size={14} />
-                                Яндекс
-                              </a>
-                            </Button>
-                            <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
-                              <a href="https://music.apple.com/tr/album/%D0%BD%D0%B8%D0%BA%D1%87%D1%91%D0%BC%D0%BD%D0%B0%D1%8F-%D0%B6%D0%B8%D0%B7%D0%BD%D1%8C/1848552571" target="_blank" rel="noopener noreferrer">
-                                <Icon name="Music" size={14} />
-                                Apple
-                              </a>
-                            </Button>
-                            <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
-                              <a href="https://open.spotify.com/album/2LhOw0UIUtiSxa5DVOpJ7e" target="_blank" rel="noopener noreferrer">
-                                <Icon name="Music" size={14} />
-                                Spotify
-                              </a>
-                            </Button>
-                          </div>
-                        </div>
-                      </details>
-                    </div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <Icon name="Disc3" size={20} className="text-secondary" />
-                      <span className="text-muted-foreground">«Украина»</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-6">
-                    <h5 className="text-lg font-semibold mb-3 text-primary">{t('discography.singles')}</h5>
-                    <div className="grid grid-cols-1 gap-2 text-sm text-muted-foreground">
-                      {['Я волонтёр', 'Земля', 'Ты мне врёшь', 'Он занят', 'Похоронка', 'Сижу на работе', 'Immortal Regiment', 'Ты изменил мне', 'Мы вернёмся', 'Crimson Dream'].map((single, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <Icon name="Music" size={14} className="text-secondary" />
-                          <span>{single}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button 
-                    variant="default" 
-                    className="w-full gap-2"
-                    onClick={() => navigate('/albums')}
-                  >
-                    <Icon name="Disc3" size={18} />
-                    Все альбомы
-                  </Button>
-                </CardContent>
-              </Card>
+        <div className="container mx-auto max-w-4xl">
+          <div className="animate-fade-in text-center">
+            <h3 className="text-5xl font-bold mb-8">{t('about.title')}</h3>
+            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+              {t('about.p1')}
+            </p>
+            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+              {t('about.p2')}
+            </p>
+            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+              {t('about.p3')}
+            </p>
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+              {t('about.p4')}
+            </p>
+            <div className="flex flex-wrap gap-4 mt-8 justify-center">
+              <Button variant="outline" size="lg" className="gap-2" asChild>
+                <a href="https://music.yandex.ru/artist/9639626?utm_source=web&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Music" size={20} />
+                  Яндекс Музыка
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" className="gap-2" asChild>
+                <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Music" size={20} />
+                  Apple Music
+                </a>
+              </Button>
+              <Button size="lg" className="gap-2" onClick={() => navigate('/albums')}>
+                <Icon name="Disc3" size={20} />
+                {t('discography.title')}
+              </Button>
             </div>
           </div>
         </div>

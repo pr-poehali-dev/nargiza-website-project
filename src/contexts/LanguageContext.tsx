@@ -12,6 +12,7 @@ const translations: Record<Language, Record<string, string>> = {
   ru: {
     'nav.home': 'Главная',
     'nav.gallery': 'Галерея',
+    'nav.albums': 'Альбомы',
     'nav.videos': 'Клипы',
     'hero.subtitle': 'Певица | Композитор | Исполнитель',
     'hero.cta': 'Смотреть галерею',
@@ -47,6 +48,7 @@ const translations: Record<Language, Record<string, string>> = {
   en: {
     'nav.home': 'Home',
     'nav.gallery': 'Gallery',
+    'nav.albums': 'Albums',
     'nav.videos': 'Videos',
     'hero.subtitle': 'Singer | Composer | Performer',
     'hero.cta': 'View Gallery',
