@@ -63,6 +63,7 @@ const Index = () => {
       try {
         const response = await fetch('https://functions.poehali.dev/3b9d2cc1-ed66-4169-bad3-770a54d857b1?artistId=9639626&maxResults=6');
         const data = await response.json();
+        console.log('Tracks loaded:', data.tracks);
         setTracks(data.tracks || []);
       } catch (error) {
         console.error('Error fetching tracks:', error);

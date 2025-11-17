@@ -5,7 +5,7 @@ from typing import Dict, Any, List
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Fetch latest tracks from Yandex Music artist
+    Business: Fetch latest tracks from Yandex Music artist with CDN covers
     Args: event with httpMethod, queryStringParameters (artistId, maxResults)
           context with request_id
     Returns: HTTP response with tracks list
@@ -46,42 +46,42 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'id': '1',
                 'title': 'Гимн алкашей',
                 'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/13134338/dcce5af4.a.38997077-1/400x400',
+                'cover': 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
                 'url': 'https://music.yandex.ru/album/38997077/track/133959163'
             },
             {
                 'id': '2',
                 'title': 'Я волонтёр',
                 'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/13134338/dcce5af4.a.38997077-1/400x400',
+                'cover': 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
                 'url': 'https://music.yandex.ru/album/38997077/track/133942956'
             },
             {
                 'id': '3',
                 'title': 'Земля',
                 'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/13087932/48ab94d4.a.38945197-1/400x400',
+                'cover': 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg',
                 'url': 'https://music.yandex.ru/album/38945197/track/133686043'
             },
             {
                 'id': '4',
                 'title': 'Ты мне врёшь',
                 'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/13087932/56dd44b5.a.38904755-1/400x400',
+                'cover': 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg',
                 'url': 'https://music.yandex.ru/album/38904755/track/133379894'
             },
             {
                 'id': '5',
                 'title': 'Он занят',
                 'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/13134338/e3d95d2b.a.38871039-1/400x400',
+                'cover': 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg',
                 'url': 'https://music.yandex.ru/album/38871039/track/133146551'
             },
             {
                 'id': '6',
                 'title': 'Похоронка',
                 'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/13134338/ede49e98.a.38845093-1/400x400',
+                'cover': 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg',
                 'url': 'https://music.yandex.ru/album/38845093/track/132998054'
             }
         ][:max_results]
