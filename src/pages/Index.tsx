@@ -487,7 +487,7 @@ const Index = () => {
               className="gap-2"
               asChild
             >
-              <a href="https://open.spotify.com/artist/3xVbomiGbYZ1lYhHvQd7O9" target="_blank" rel="noopener noreferrer">
+              <a href="https://open.spotify.com/artist/7anXMqM1b8Sf3ML56oMCrb?si=15jGLKPnSZq5g7ROovMz8w" target="_blank" rel="noopener noreferrer">
                 <Icon name="Music" size={20} />
                 {t('tracks.listen')}
               </a>
