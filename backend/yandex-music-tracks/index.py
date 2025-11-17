@@ -45,15 +45,26 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         client = Client()
         client.init()
         
-        artist = client.artists_tracks(artist_id, page_size=max_results)
+        tracks_list: List[Dict[str, Any]] = [
+            {
+                'id': '133959163',
+                'title': 'Гимн алкашей',
+                'artist': 'NARGIZA',
+                'cover': 'https://avatars.yandex.net/get-music-content/12367043/ebe1c3e0.a.38997077-1/400x400',
+                'url': 'https://music.yandex.ru/album/38997077/track/133959163'
+            }
+        ]
         
-        tracks_list: List[Dict[str, Any]] = []
+        artist_tracks = client.artists_tracks(artist_id, page_size=max_results)
         
-        if artist and artist.tracks:
-            for track in artist.tracks[:max_results]:
+        if artist_tracks and artist_tracks.tracks:
+            for track in artist_tracks.tracks[:max_results - 1]:
                 track_id = str(track.id)
-                title = track.title or 'Без названия'
                 
+                if track_id == '133959163':
+                    continue
+                
+                title = track.title or 'Без названия'
                 artist_name = track.artists[0].name if track.artists else 'NARGIZA'
                 
                 album_id = track.albums[0].id if track.albums else ''
@@ -69,6 +80,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'cover': cover_url,
                     'url': track_url
                 })
+                
+                if len(tracks_list) >= max_results:
+                    break
         
         now = datetime.now()
         update_time = now.strftime('%H:%M')
