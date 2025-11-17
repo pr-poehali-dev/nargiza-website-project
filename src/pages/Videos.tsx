@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YouTubeVideo {
   videoId: string;
@@ -13,6 +14,7 @@ interface YouTubeVideo {
 
 const Videos = () => {
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useLanguage();
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
 
@@ -84,8 +86,16 @@ const Videos = () => {
             </h1>
             
             <div className="flex gap-4 items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
+                className="text-xs font-medium"
+              >
+                {language === 'ru' ? 'EN' : 'RU'}
+              </Button>
               <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="hover:scale-105 transition-transform">
-                Главная
+                {t('videos.back')}
               </Button>
               <Button variant="ghost" size="icon" asChild className="hover:scale-110 transition-transform">
                 <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
@@ -110,17 +120,14 @@ const Videos = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="mb-12 animate-slide-up">
             <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Клипы
+              {t('videos.title')}
             </h1>
-            <p className="text-muted-foreground text-lg animate-fade-in" style={{ animationDelay: '200ms' }}>
-              Последние видео с YouTube канала @nargizamuz
-            </p>
           </div>
           
           {isLoadingVideos ? (
             <div className="text-center text-muted-foreground py-24 animate-pulse">
               <Icon name="Loader2" size={48} className="animate-spin mx-auto mb-4" />
-              Загрузка видео...
+              {t('videos.loading')}
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-8">

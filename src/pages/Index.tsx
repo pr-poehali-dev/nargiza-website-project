@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 
 interface YouTubeVideo {
@@ -15,6 +16,7 @@ interface YouTubeVideo {
 
 const Index = () => {
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useLanguage();
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
@@ -165,18 +167,25 @@ const Index = () => {
                     activeSection === section ? 'text-primary' : 'text-muted-foreground'
                   }`}
                 >
-                  {section === 'home' && 'Главная'}
-                  {section === 'gallery' && 'Галерея'}
+                  {t(`nav.${section}`)}
                 </button>
               ))}
               <button
                 onClick={() => navigate('/videos')}
                 className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
               >
-                Клипы
+                {t('nav.videos')}
               </button>
             </div>
             <div className="flex gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
+                className="text-xs font-medium"
+              >
+                {language === 'ru' ? 'EN' : 'RU'}
+              </Button>
               <Button variant="ghost" size="icon" asChild>
                 <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
                   <Icon name="Send" size={20} />
@@ -210,16 +219,23 @@ const Index = () => {
                     activeSection === section ? 'text-primary' : 'text-muted-foreground'
                   }`}
                 >
-                  {section === 'home' && 'Главная'}
-                  {section === 'gallery' && 'Галерея'}
+                  {t(`nav.${section}`)}
                 </button>
               ))}
               <button
                 onClick={() => navigate('/videos')}
                 className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
               >
-                Клипы
+                {t('nav.videos')}
               </button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
+                className="text-xs font-medium w-fit mt-2"
+              >
+                {language === 'ru' ? 'EN' : 'RU'}
+              </Button>
               <div className="flex gap-4 pt-4 border-t border-border">
                 <Button variant="ghost" size="icon" asChild>
                   <a href="https://t.me/+S_nWXyBTkcI0MzQy" target="_blank" rel="noopener noreferrer">
@@ -262,10 +278,10 @@ const Index = () => {
             NARGIZA
           </h2>
           <p className="text-2xl md:text-3xl text-white mb-12 font-light drop-shadow-2xl tracking-wide">
-            Автор и исполнитель
+            {t('hero.subtitle')}
           </p>
           <Button size="lg" className="group rounded-full px-8 py-6 text-lg shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-110" onClick={() => scrollToSection('gallery')}>
-            Смотреть галерею
+            {t('hero.cta')}
             <Icon name="Image" size={22} className="ml-2 transition-transform group-hover:translate-x-2" />
           </Button>
         </div>
@@ -400,8 +416,7 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none"></div>
         <div className="container mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-16">
-            <h3 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-slide-up">Галерея</h3>
-            <p className="text-xl text-muted-foreground">Моменты из моей творческой жизни</p>
+            <h3 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-slide-up">{t('gallery.title')}</h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {gallery.map((image, index) => (
@@ -470,7 +485,7 @@ const Index = () => {
             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex flex-col gap-3 text-center md:text-left">
                 <h4 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">NARGIZA</h4>
-                <p className="text-muted-foreground font-medium">© 2025 Все права защищены.</p>
+                <p className="text-muted-foreground font-medium">{t('footer.copyright')}</p>
                 <a href="mailto:bodma@mail.ru" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 justify-center md:justify-start">
                   <Icon name="Mail" size={18} />
                   bodma@mail.ru
@@ -501,12 +516,12 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4 border-t border-border/50">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon name="Users" size={16} className="text-primary" />
-                <span>За 24 часа: <strong className="text-foreground tabular-nums transition-all duration-300">{animatedStats.last24h}</strong></span>
+                <span>{t('stats.today')}: <strong className="text-foreground tabular-nums transition-all duration-300">{animatedStats.last24h}</strong></span>
               </div>
               <div className="hidden sm:block text-muted-foreground/50">•</div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon name="TrendingUp" size={16} className="text-primary" />
-                <span>Всего посетителей: <strong className="text-foreground tabular-nums transition-all duration-300">{animatedStats.total}</strong></span>
+                <span>{t('stats.total')}: <strong className="text-foreground tabular-nums transition-all duration-300">{animatedStats.total}</strong></span>
               </div>
             </div>
           </div>
