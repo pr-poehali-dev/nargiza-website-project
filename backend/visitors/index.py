@@ -39,22 +39,20 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     if method == 'POST':
         request_context = event.get('requestContext', {})
         identity = request_context.get('identity', {})
-        visitor_ip = identity.get('sourceIp', 'unknown')
-        user_agent = identity.get('userAgent', 'unknown')
+        visitor_ip = identity.get('sourceIp', 'unknown').replace("'", "''")
+        user_agent = identity.get('userAgent', 'unknown').replace("'", "''")
         
         cur.execute(
-            "INSERT INTO visitors (visitor_ip, user_agent) VALUES (%s, %s)",
-            (visitor_ip, user_agent)
+            f"INSERT INTO visitors (visitor_ip, user_agent) VALUES ('{visitor_ip}', '{user_agent}')"
         )
         conn.commit()
     
     cur.execute("SELECT COUNT(*) FROM visitors")
     total = cur.fetchone()[0]
     
-    twenty_four_hours_ago = datetime.now() - timedelta(hours=24)
+    twenty_four_hours_ago = (datetime.now() - timedelta(hours=24)).isoformat()
     cur.execute(
-        "SELECT COUNT(*) FROM visitors WHERE visited_at >= %s",
-        (twenty_four_hours_ago,)
+        f"SELECT COUNT(*) FROM visitors WHERE visited_at >= '{twenty_four_hours_ago}'"
     )
     last_24h = cur.fetchone()[0]
     
