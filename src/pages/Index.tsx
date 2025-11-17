@@ -372,7 +372,6 @@ const Index = () => {
               ))}
             </div>
           )}
-          </div>
 
           <div className="text-center mt-12">
             <Button 
