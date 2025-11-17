@@ -480,6 +480,23 @@ const Index = () => {
             ))}
           </div>
 
+          <div className="mt-16 max-w-4xl mx-auto">
+            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-border/50">
+              <h4 className="text-2xl font-bold mb-6 text-center">{t('tracks.player')}</h4>
+              <iframe
+                style={{ borderRadius: '12px' }}
+                src="https://open.spotify.com/embed/artist/7anXMqM1b8Sf3ML56oMCrb?utm_source=generator&theme=0"
+                width="100%"
+                height="380"
+                frameBorder="0"
+                allowFullScreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                title="Spotify Player"
+              ></iframe>
+            </div>
+          </div>
+
           <div className="text-center mt-12">
             <Button 
               variant="outline" 

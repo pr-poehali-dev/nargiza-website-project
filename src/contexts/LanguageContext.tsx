@@ -42,6 +42,7 @@ const translations: Record<Language, Record<string, string>> = {
     'tracks.title': 'Новые треки',
     'tracks.subtitle': 'Последние музыкальные релизы',
     'tracks.listen': 'Слушать на Spotify',
+    'tracks.player': 'Слушать онлайн',
   },
   en: {
     'nav.home': 'Home',
@@ -76,6 +77,7 @@ const translations: Record<Language, Record<string, string>> = {
     'tracks.title': 'New Tracks',
     'tracks.subtitle': 'Latest music releases',
     'tracks.listen': 'Listen on Spotify',
+    'tracks.player': 'Listen Online',
   },
 };
 
