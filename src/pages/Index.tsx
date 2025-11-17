@@ -359,14 +359,11 @@ const Index = () => {
                   className="block group"
                 >
                   <Card className="overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer">
-                    <div className="flex items-center justify-between gap-4 p-4">
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
-                          {track.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">{track.artist}</p>
-                      </div>
-                      <Icon name="ExternalLink" size={20} className="text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                    <div className="p-4">
+                      <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
+                        {track.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">{track.artist}</p>
                     </div>
                   </Card>
                 </a>
