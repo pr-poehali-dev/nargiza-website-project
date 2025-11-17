@@ -14,6 +14,14 @@ interface YouTubeVideo {
   publishedAt: string;
 }
 
+interface Track {
+  id: string;
+  title: string;
+  artist: string;
+  cover: string;
+  url: string;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
@@ -29,9 +37,11 @@ const Index = () => {
   }, [language, t]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });
   const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
+  const [isLoadingTracks, setIsLoadingTracks] = useState(true);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -46,6 +56,21 @@ const Index = () => {
       }
     };
     fetchVideos();
+  }, []);
+
+  useEffect(() => {
+    const fetchTracks = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/3b9d2cc1-ed66-4169-bad3-770a54d857b1?artistId=9639626&maxResults=6');
+        const data = await response.json();
+        setTracks(data.tracks || []);
+      } catch (error) {
+        console.error('Error fetching tracks:', error);
+      } finally {
+        setIsLoadingTracks(false);
+      }
+    };
+    fetchTracks();
   }, []);
 
   useEffect(() => {
@@ -310,33 +335,43 @@ const Index = () => {
             <p className="text-lg text-muted-foreground">{t('tracks.subtitle')}</p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {[
-              { title: 'Гимн алкашей', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg' },
-              { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg' },
-              { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg' },
-              { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg' },
-              { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg' },
-              { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg' },
-            ].map((track, index) => (
-              <Card key={index} className="overflow-hidden">
-                <div className="flex items-center gap-4 p-4">
-                  <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
-                    <img
-                      src={track.cover}
-                      alt={track.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-lg mb-1 truncate">
-                      {track.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">NARGIZA</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
+          {isLoadingTracks ? (
+            <div className="text-center text-muted-foreground py-12 animate-pulse">
+              <Icon name="Loader2" size={32} className="animate-spin mx-auto mb-2" />
+              Загрузка треков...
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {tracks.map((track, index) => (
+                <a 
+                  key={track.id} 
+                  href={track.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                    <div className="flex items-center gap-4 p-4">
+                      <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                        <img
+                          src={track.cover}
+                          alt={track.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-lg mb-1 truncate">
+                          {track.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">{track.artist}</p>
+                      </div>
+                      <Icon name="ExternalLink" size={20} className="text-muted-foreground" />
+                    </div>
+                  </Card>
+                </a>
+              ))}
+            </div>
+          )}
           </div>
 
           <div className="text-center mt-12">

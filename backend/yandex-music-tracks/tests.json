@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Fetch tracks with default parameters",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "tracks": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Fetch tracks with custom artistId",
+      "method": "GET",
+      "path": "/?artistId=9639626&maxResults=3",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "tracks": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Handle OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}
