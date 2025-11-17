@@ -60,7 +60,7 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const fetchTracks = async () => {
+    const fetchTracks = async (isAutoUpdate = false) => {
       try {
         const response = await fetch('https://functions.poehali.dev/3b9d2cc1-ed66-4169-bad3-770a54d857b1?artistId=9639626&maxResults=6');
         const data = await response.json();
@@ -69,10 +69,12 @@ const Index = () => {
         if (data.tracks && data.tracks.length > 0) {
           setTracks(data.tracks);
           
-          const now = new Date();
-          const hours = now.getHours().toString().padStart(2, '0');
-          const minutes = now.getMinutes().toString().padStart(2, '0');
-          setLastUpdate(`${hours}:${minutes}`);
+          if (isAutoUpdate) {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            setLastUpdate(`${hours}:${minutes}`);
+          }
         }
       } catch (error) {
         console.error('Error fetching tracks:', error);
@@ -81,10 +83,10 @@ const Index = () => {
       }
     };
     
-    fetchTracks();
+    fetchTracks(false);
     
     const interval = setInterval(() => {
-      fetchTracks();
+      fetchTracks(true);
     }, 60 * 60 * 1000);
     
     return () => {
