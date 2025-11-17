@@ -289,12 +289,10 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-32">
-        <iframe
-          src="https://streamable.com/e/ugj5fv?autoplay=1&loop=1&muted=1"
-          frameBorder="0"
-          allow="autoplay; fullscreen"
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          style={{ transform: 'scale(1.5)', minWidth: '177.77vh', minHeight: '56.25vw' }}
+        <img
+          src="https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
+          alt="NARGIZA"
+          className="absolute inset-0 w-full h-full object-cover scale-105 animate-slow-zoom"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-purple-900/30 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20" />
