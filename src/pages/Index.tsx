@@ -350,20 +350,34 @@ const Index = () => {
             </div>
           ) : (
             <div className="max-w-2xl mx-auto space-y-3">
-              {tracks.map((track) => (
+              {tracks.map((track, index) => (
                 <a 
                   key={track.id} 
                   href={track.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="block group"
+                  className="block group animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <Card className="overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer">
-                    <div className="p-4">
-                      <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
-                        {track.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground">{track.artist}</p>
+                  <Card className="overflow-hidden hover:shadow-xl transition-all hover:scale-[1.02] cursor-pointer border-l-4 border-l-primary/50 hover:border-l-primary">
+                    <div className="flex items-center gap-4 p-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
+                        <Icon name="Music" size={20} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
+                          {track.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground flex items-center gap-2">
+                          <Icon name="Mic2" size={14} className="flex-shrink-0" />
+                          {track.artist}
+                        </p>
+                      </div>
+                      <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Icon name="Play" size={20} className="text-primary" />
+                        </div>
+                      </div>
                     </div>
                   </Card>
                 </a>
