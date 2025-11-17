@@ -18,6 +18,15 @@ const Index = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
   const [activeSection, setActiveSection] = useState('home');
+
+  useEffect(() => {
+    document.title = t('meta.home.title');
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', t('meta.home.description'));
+    }
+    document.documentElement.lang = language;
+  }, [language, t]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });

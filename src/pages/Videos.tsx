@@ -19,6 +19,15 @@ const Videos = () => {
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
 
   useEffect(() => {
+    document.title = t('meta.videos.title');
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', t('meta.videos.description'));
+    }
+    document.documentElement.lang = language;
+  }, [language, t]);
+
+  useEffect(() => {
     const fetchVideos = async () => {
       try {
         const response = await fetch('https://functions.poehali.dev/915b3177-6247-4286-bd88-972b6325759a?channelHandle=@nargizamuz&maxResults=12');
