@@ -66,7 +66,6 @@ const Index = () => {
         const data = await response.json();
         console.log('Tracks loaded:', data.tracks);
         setTracks(data.tracks || []);
-        setNextUpdate(60);
       } catch (error) {
         console.error('Error fetching tracks:', error);
       } finally {
@@ -78,6 +77,7 @@ const Index = () => {
     
     const interval = setInterval(() => {
       fetchTracks();
+      setNextUpdate(60);
     }, 60 * 60 * 1000);
     
     const countdown = setInterval(() => {
@@ -402,15 +402,12 @@ const Index = () => {
           ) : (
             <div className="max-w-2xl mx-auto space-y-3">
               {tracks.map((track, index) => (
-                <a 
-                  key={track.id} 
-                  href={track.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <div
+                  key={track.id}
                   className="block group animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <Card className="overflow-hidden hover:shadow-xl transition-all hover:scale-[1.02] cursor-pointer border-l-4 border-l-primary/50 hover:border-l-primary">
+                  <Card className="overflow-hidden hover:shadow-xl transition-all hover:scale-[1.02] border-l-4 border-l-primary/50 hover:border-l-primary">
                     <div className="flex items-center gap-4 p-4">
                       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
                         <Icon name="Music" size={20} />
@@ -431,7 +428,7 @@ const Index = () => {
                       </div>
                     </div>
                   </Card>
-                </a>
+                </div>
               ))}
             </div>
           )}
