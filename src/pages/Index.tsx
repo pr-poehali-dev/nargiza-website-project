@@ -241,7 +241,7 @@ const Index = () => {
         )}
       </nav>
 
-      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-32">
         <img
           src="https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
           alt="NARGIZA"
