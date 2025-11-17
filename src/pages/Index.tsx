@@ -435,12 +435,12 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
-              { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969555' },
-              { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969556' },
-              { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969557' },
-              { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969558' },
-              { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969559' },
-              { title: 'Сижу на работе', cover: 'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969560' },
+              { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg', url: 'https://open.spotify.com/track/7lZQPq5CQGSl9xvgjYr8ED' },
+              { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg', url: 'https://open.spotify.com/track/5wdS8L0vVXvXEVvNzRQOwV' },
+              { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg', url: 'https://open.spotify.com/track/3AQmQUlh7PRPj9yqXEeGYM' },
+              { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg', url: 'https://open.spotify.com/track/1bCHqcQn4fXgNxYFLWpYGo' },
+              { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg', url: 'https://open.spotify.com/track/7nDJRWqGK9RpQqQnW8k9mL' },
+              { title: 'Сижу на работе', cover: 'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg', url: 'https://open.spotify.com/track/0HM1YGBvXdFG3m0V7b9f3m' },
             ].map((track, index) => (
               <Card key={index} className="overflow-hidden group hover:shadow-xl transition-all duration-300 hover:scale-105">
                 <div className="flex items-center gap-4 p-4">
@@ -487,7 +487,7 @@ const Index = () => {
               className="gap-2"
               asChild
             >
-              <a href="https://music.yandex.ru/artist/9639626" target="_blank" rel="noopener noreferrer">
+              <a href="https://open.spotify.com/artist/3xVbomiGbYZ1lYhHvQd7O9" target="_blank" rel="noopener noreferrer">
                 <Icon name="Music" size={20} />
                 {t('tracks.listen')}
               </a>
