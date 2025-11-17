@@ -343,6 +343,39 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 animate-pulse"></div>
+        <div className="container mx-auto max-w-4xl relative z-10">
+          <a 
+            href="https://t.me/+S_nWXyBTkcI0MzQy" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block group"
+          >
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-secondary to-primary p-1 hover:scale-[1.02] transition-all duration-300 shadow-2xl hover:shadow-primary/50">
+              <div className="bg-background rounded-[22px] p-12 md:p-16 text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-primary/5 group-hover:from-primary/10 group-hover:via-secondary/10 group-hover:to-primary/10 transition-all"></div>
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                    <Icon name="Send" size={36} className="text-white" />
+                  </div>
+                  <h3 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    Присоединяйся к каналу
+                  </h3>
+                  <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
+                    Эксклюзивный контент, новости и общение с фанатами
+                  </p>
+                  <div className="inline-flex items-center gap-3 text-lg font-semibold text-primary group-hover:gap-5 transition-all">
+                    <span>Открыть Telegram</span>
+                    <Icon name="ArrowRight" size={24} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
       <section className="py-24 px-6 bg-gradient-to-b from-background via-primary/5 to-background">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
