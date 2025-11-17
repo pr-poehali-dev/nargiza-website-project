@@ -71,7 +71,14 @@ const Index = () => {
         setIsLoadingTracks(false);
       }
     };
+    
     fetchTracks();
+    
+    const interval = setInterval(() => {
+      fetchTracks();
+    }, 60 * 60 * 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -342,31 +349,24 @@ const Index = () => {
               Загрузка треков...
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {tracks.map((track, index) => (
+            <div className="max-w-2xl mx-auto space-y-3">
+              {tracks.map((track) => (
                 <a 
                   key={track.id} 
                   href={track.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="block"
+                  className="block group"
                 >
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                    <div className="flex items-center gap-4 p-4">
-                      <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
-                        <img
-                          src={track.cover}
-                          alt={track.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+                  <Card className="overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer">
+                    <div className="flex items-center justify-between gap-4 p-4">
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-lg mb-1 truncate">
+                        <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
                           {track.title}
                         </h4>
                         <p className="text-sm text-muted-foreground">{track.artist}</p>
                       </div>
-                      <Icon name="ExternalLink" size={20} className="text-muted-foreground" />
+                      <Icon name="ExternalLink" size={20} className="text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
                     </div>
                   </Card>
                 </a>
