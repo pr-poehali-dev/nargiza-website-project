@@ -18,6 +18,7 @@ const Index = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
   const [activeSection, setActiveSection] = useState('home');
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = t('meta.home.title');
@@ -435,14 +436,18 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
-              { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg', url: 'https://open.spotify.com/track/7lZQPq5CQGSl9xvgjYr8ED' },
-              { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg', url: 'https://open.spotify.com/track/5wdS8L0vVXvXEVvNzRQOwV' },
-              { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg', url: 'https://open.spotify.com/track/3AQmQUlh7PRPj9yqXEeGYM' },
-              { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg', url: 'https://open.spotify.com/track/1bCHqcQn4fXgNxYFLWpYGo' },
-              { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg', url: 'https://open.spotify.com/track/7nDJRWqGK9RpQqQnW8k9mL' },
-              { title: 'Сижу на работе', cover: 'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg', url: 'https://open.spotify.com/track/0HM1YGBvXdFG3m0V7b9f3m' },
+              { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg', trackId: '7lZQPq5CQGSl9xvgjYr8ED' },
+              { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg', trackId: '5wdS8L0vVXvXEVvNzRQOwV' },
+              { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg', trackId: '3AQmQUlh7PRPj9yqXEeGYM' },
+              { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg', trackId: '1bCHqcQn4fXgNxYFLWpYGo' },
+              { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg', trackId: '7nDJRWqGK9RpQqQnW8k9mL' },
+              { title: 'Сижу на работе', cover: 'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg', trackId: '0HM1YGBvXdFG3m0V7b9f3m' },
             ].map((track, index) => (
-              <Card key={index} className="overflow-hidden group hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <Card 
+                key={index} 
+                className="overflow-hidden group hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+                onClick={() => setSelectedTrack(track.trackId)}
+              >
                 <div className="flex items-center gap-4 p-4">
                   <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     <img
@@ -460,42 +465,39 @@ const Index = () => {
                     </h4>
                     <p className="text-sm text-muted-foreground">NARGIZA</p>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="flex-shrink-0"
-                    asChild
-                  >
-                    <a 
-                      href={track.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={t('tracks.listen')}
-                    >
-                      <Icon name="Music" size={20} />
-                    </a>
-                  </Button>
+                  <div className="flex-shrink-0">
+                    <Icon name="Play" size={20} className="text-primary" />
+                  </div>
                 </div>
               </Card>
             ))}
           </div>
 
-          <div className="mt-16 max-w-4xl mx-auto">
-            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-border/50">
-              <h4 className="text-2xl font-bold mb-6 text-center">{t('tracks.player')}</h4>
-              <iframe
-                style={{ borderRadius: '12px' }}
-                src="https://open.spotify.com/embed/artist/7anXMqM1b8Sf3ML56oMCrb?utm_source=generator&theme=0"
-                width="100%"
-                height="380"
-                frameBorder="0"
-                allowFullScreen
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                title="Spotify Player"
-              ></iframe>
+          {selectedTrack && (
+            <div className="mt-16 max-w-4xl mx-auto animate-fade-in">
+              <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-border/50 relative">
+                <button
+                  onClick={() => setSelectedTrack(null)}
+                  className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Закрыть плеер"
+                >
+                  <Icon name="X" size={24} />
+                </button>
+                <h4 className="text-2xl font-bold mb-6 text-center">{t('tracks.player')}</h4>
+                <iframe
+                  style={{ borderRadius: '12px' }}
+                  src={`https://open.spotify.com/embed/track/${selectedTrack}?utm_source=generator&theme=0`}
+                  width="100%"
+                  height="152"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  title="Spotify Player"
+                ></iframe>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="text-center mt-12">
             <Button 
