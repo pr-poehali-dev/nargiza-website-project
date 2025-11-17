@@ -1,14 +1,15 @@
 import json
 import requests
 from typing import Dict, Any, List
+from datetime import datetime
 
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Fetch latest tracks from Yandex Music artist with CDN covers
+    Business: Fetch latest tracks from Yandex Music artist with CDN covers and update time
     Args: event with httpMethod, queryStringParameters (artistId, maxResults)
           context with request_id
-    Returns: HTTP response with tracks list
+    Returns: HTTP response with tracks list and lastUpdate timestamp
     '''
     method: str = event.get('httpMethod', 'GET')
     
@@ -86,13 +87,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         ][:max_results]
         
+        now = datetime.now()
+        update_time = now.strftime('%H:%M')
+        
         return {
             'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            'body': json.dumps({'tracks': tracks_list}),
+            'body': json.dumps({
+                'tracks': tracks_list,
+                'lastUpdate': update_time
+            }),
             'isBase64Encoded': False
         }
     

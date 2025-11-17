@@ -6,7 +6,8 @@
       "path": "/",
       "expectedStatus": 200,
       "expectedBody": {
-        "tracks": "array"
+        "tracks": "array",
+        "lastUpdate": "string"
       },
       "bodyMatcher": "partial"
     },
@@ -16,7 +17,8 @@
       "path": "/?artistId=9639626&maxResults=3",
       "expectedStatus": 200,
       "expectedBody": {
-        "tracks": "array"
+        "tracks": "array",
+        "lastUpdate": "string"
       },
       "bodyMatcher": "partial"
     },
