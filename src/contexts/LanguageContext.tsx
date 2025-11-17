@@ -41,7 +41,7 @@ const translations: Record<Language, Record<string, string>> = {
     'meta.videos.description': 'Смотрите все клипы NARGIZA онлайн. Последние видео с YouTube канала @nargizamuz — новые релизы, хиты и эксклюзивные премьеры.',
     'tracks.title': 'Новые треки',
     'tracks.subtitle': 'Последние музыкальные релизы',
-    'tracks.listen': 'Слушать на Spotify',
+    'tracks.listen': 'Слушать на Яндекс Музыке',
     'tracks.player': 'Слушать онлайн',
   },
   en: {
@@ -76,7 +76,7 @@ const translations: Record<Language, Record<string, string>> = {
     'meta.videos.description': 'Watch all NARGIZA music videos online. Latest videos from YouTube channel @nargizamuz — new releases, hits and exclusive premieres.',
     'tracks.title': 'New Tracks',
     'tracks.subtitle': 'Latest music releases',
-    'tracks.listen': 'Listen on Spotify',
+    'tracks.listen': 'Listen on Yandex Music',
     'tracks.player': 'Listen Online',
   },
 };
