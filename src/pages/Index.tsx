@@ -433,68 +433,66 @@ const Index = () => {
             <p className="text-lg text-muted-foreground">{t('tracks.subtitle')}</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {isLoadingVideos ? (
-              Array.from({ length: 6 }).map((_, i) => (
-                <Card key={i} className="overflow-hidden animate-pulse">
-                  <div className="aspect-video bg-muted"></div>
-                  <CardContent className="p-4">
-                    <div className="h-5 bg-muted rounded mb-2"></div>
-                    <div className="h-4 bg-muted rounded w-3/4"></div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              videos.slice(0, 6).map((video) => (
-                <Card key={video.videoId} className="overflow-hidden group hover:shadow-lg transition-shadow cursor-pointer">
-                  <div className="relative aspect-video overflow-hidden">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {[
+              { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969555' },
+              { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969556' },
+              { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969557' },
+              { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969558' },
+              { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969559' },
+              { title: 'Сижу на работе', cover: 'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg', url: 'https://music.yandex.ru/album/38836368/track/135969560' },
+            ].map((track, index) => (
+              <Card key={index} className="overflow-hidden group hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <div className="flex items-center gap-4 p-4">
+                  <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     <img
-                      src={video.thumbnail}
-                      alt={video.title}
+                      src={track.cover}
+                      alt={track.title}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Icon name="Play" size={48} className="text-white" />
+                      <Icon name="Play" size={24} className="text-white" />
                     </div>
                   </div>
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                      {video.title}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
+                      {track.title}
                     </h4>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-full gap-2 mt-2"
-                      asChild
+                    <p className="text-sm text-muted-foreground">NARGIZA</p>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="flex-shrink-0"
+                    asChild
+                  >
+                    <a 
+                      href={track.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={t('tracks.listen')}
                     >
-                      <a 
-                        href={`https://www.youtube.com/watch?v=${video.videoId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Icon name="Youtube" size={18} />
-                        {t('videos.watch')}
-                      </a>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))
-            )}
+                      <Icon name="Music" size={20} />
+                    </a>
+                  </Button>
+                </div>
+              </Card>
+            ))}
           </div>
 
-          {!isLoadingVideos && videos.length > 6 && (
-            <div className="text-center mt-12">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="gap-2"
-                onClick={() => navigate('/videos')}
-              >
-                <Icon name="Youtube" size={20} />
-                {t('nav.videos')}
-              </Button>
-            </div>
-          )}
+          <div className="text-center mt-12">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="gap-2"
+              asChild
+            >
+              <a href="https://music.yandex.ru/artist/9639626" target="_blank" rel="noopener noreferrer">
+                <Icon name="Music" size={20} />
+                {t('tracks.listen')}
+              </a>
+            </Button>
+          </div>
         </div>
       </section>
 
