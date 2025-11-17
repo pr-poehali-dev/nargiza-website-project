@@ -289,15 +289,13 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-32">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="https://disk.yandex.ru/i/RHi8UTfTCTu60A" type="video/mp4" />
-        </video>
+        <iframe
+          src="https://streamable.com/e/ugj5fv?autoplay=1&loop=1&muted=1"
+          frameBorder="0"
+          allow="autoplay; fullscreen"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          style={{ transform: 'scale(1.5)', minWidth: '177.77vh', minHeight: '56.25vw' }}
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-purple-900/30 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20" />
         
