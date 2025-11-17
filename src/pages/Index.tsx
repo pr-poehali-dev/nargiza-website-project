@@ -291,18 +291,18 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="animate-fade-in">
-              <h3 className="text-5xl font-bold mb-8">О себе</h3>
+              <h3 className="text-5xl font-bold mb-8">{t('about.title')}</h3>
               <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                NARGIZA — современная Казахская исполнительница, активно развивающаяся на российской музыкальной сцене с 2025 года.
+                {t('about.p1')}
               </p>
               <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                Музыкальный стиль сочетает лирические композиции с социально значимыми произведениями.
+                {t('about.p2')}
               </p>
               <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                Проект создавался самой исполнительницей для поддержки России в трудное военное время. Самой исполнительницей написано много песен на военную тему.
+                {t('about.p3')}
               </p>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Последнее время после знакомства и совместной работе с музыкантом Calla Vivid часто применяется в исполнении стиль хип хоп и музыкальный стиль инди. Этот совместный творческий союз принёс положительный результат в новых композициях, которые стали более изящными и индивидуальными.
+                {t('about.p4')}
               </p>
               <div className="flex gap-4 mt-8">
                 <Button variant="outline" size="lg" className="gap-2" asChild>
@@ -323,15 +323,15 @@ const Index = () => {
             <div className="animate-scale-in">
               <Card>
                 <CardContent className="p-8">
-                  <h4 className="text-2xl font-bold mb-6">Дискография</h4>
+                  <h4 className="text-2xl font-bold mb-6">{t('discography.title')}</h4>
                   
                   <div className="mb-6">
-                    <h5 className="text-lg font-semibold mb-3 text-primary">Альбомы</h5>
+                    <h5 className="text-lg font-semibold mb-3 text-primary">{t('discography.albums')}</h5>
                     <div className="flex items-center gap-3 mb-4">
                       <Icon name="Disc3" size={20} className="text-secondary" />
                       <details className="cursor-pointer group">
                         <summary className="list-none text-muted-foreground hover:text-foreground transition-colors">
-                          «Никчёмная жизнь»
+                          «{t('album.worthless')}»
                           <Icon name="ChevronDown" size={16} className="inline ml-1 group-open:rotate-180 transition-transform" />
                         </summary>
                         <div className="pl-8 mt-3 space-y-2 text-sm">
@@ -386,7 +386,7 @@ const Index = () => {
                   </div>
 
                   <div className="mb-6">
-                    <h5 className="text-lg font-semibold mb-3 text-primary">Синглы</h5>
+                    <h5 className="text-lg font-semibold mb-3 text-primary">{t('discography.singles')}</h5>
                     <div className="grid grid-cols-1 gap-2 text-sm text-muted-foreground">
                       {['Я волонтёр', 'Земля', 'Ты мне врёшь', 'Он занят', 'Похоронка', 'Сижу на работе', 'Immortal Regiment', 'Ты изменил мне', 'Мы вернёмся', 'Crimson Dream'].map((single, i) => (
                         <div key={i} className="flex items-center gap-2">
