@@ -296,10 +296,6 @@ const Index = () => {
                   Apple Music
                 </a>
               </Button>
-              <Button size="lg" className="gap-2" onClick={() => navigate('/albums')}>
-                <Icon name="Disc3" size={20} />
-                {t('discography.title')}
-              </Button>
             </div>
           </div>
         </div>
