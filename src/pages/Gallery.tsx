@@ -6,7 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const Gallery = () => {
   const navigate = useNavigate();
-  const { language, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -74,11 +74,22 @@ const Gallery = () => {
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight">NARGIZA</h1>
-            <Button variant="ghost" onClick={() => navigate('/')} className="gap-2">
-              <Icon name="ArrowLeft" size={20} />
-              {t('videos.back')}
-            </Button>
+            <h1 className="text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/')}>NARGIZA</h1>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
+                className="text-xs font-medium gap-2"
+              >
+                <span className="text-base">{language === 'ru' ? '🇬🇧' : '🇷🇺'}</span>
+                {language === 'ru' ? 'EN' : 'RU'}
+              </Button>
+              <Button variant="ghost" onClick={() => navigate('/')} className="gap-2">
+                <Icon name="ArrowLeft" size={20} />
+                {t('videos.back')}
+              </Button>
+            </div>
           </div>
         </div>
       </nav>

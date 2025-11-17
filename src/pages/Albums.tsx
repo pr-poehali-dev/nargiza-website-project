@@ -13,7 +13,7 @@ interface Track {
 
 const Albums = () => {
   const navigate = useNavigate();
-  const { language, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [expandedAlbum, setExpandedAlbum] = useState<string | null>(null);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
 
@@ -211,10 +211,21 @@ const Albums = () => {
             >
               NARGIZA
             </h1>
-            <Button variant="ghost" onClick={() => navigate('/')}>
-              <Icon name="ArrowLeft" size={20} className="mr-2" />
-              {t('albums.back')}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
+                className="text-xs font-medium gap-2"
+              >
+                <span className="text-base">{language === 'ru' ? '🇬🇧' : '🇷🇺'}</span>
+                {language === 'ru' ? 'EN' : 'RU'}
+              </Button>
+              <Button variant="ghost" onClick={() => navigate('/')}>
+                <Icon name="ArrowLeft" size={20} className="mr-2" />
+                {t('albums.back')}
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
