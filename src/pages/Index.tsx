@@ -257,40 +257,40 @@ const Index = () => {
           <h2 className="text-7xl md:text-9xl font-black mb-8 bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent drop-shadow-2xl tracking-tighter animate-fade-in">
             NARGIZA
           </h2>
-          <p className="text-2xl md:text-3xl text-white mb-12 font-light drop-shadow-2xl tracking-wide">
+          <p className="text-2xl md:text-3xl text-white font-light drop-shadow-2xl tracking-wide">
             {t('hero.subtitle')}
           </p>
-          <Button size="lg" className="group rounded-full px-8 py-6 text-lg shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-110" onClick={() => navigate('/gallery')}>
-            {t('hero.cta')}
-            <Icon name="Image" size={22} className="ml-2 transition-transform group-hover:translate-x-2" />
-          </Button>
         </div>
       </section>
 
-      <section className="py-24 px-6 bg-card/30">
-        <div className="container mx-auto max-w-4xl">
-          <div className="animate-fade-in text-center">
-            <h3 className="text-5xl font-bold mb-8">{t('about.title')}</h3>
-            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-              {t('about.p1')}
-            </p>
-            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-              {t('about.p2')}
-            </p>
-            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-              {t('about.p3')}
-            </p>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              {t('about.p4')}
-            </p>
-            <div className="flex flex-wrap gap-4 mt-8 justify-center">
-              <Button variant="outline" size="lg" className="gap-2" asChild>
+      <section className="py-32 px-6 bg-gradient-to-b from-background via-card/50 to-background">
+        <div className="container mx-auto max-w-5xl">
+          <div className="animate-fade-in">
+            <h3 className="text-5xl md:text-6xl font-black mb-16 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{t('about.title')}</h3>
+            
+            <div className="space-y-8 text-center max-w-3xl mx-auto">
+              <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                {t('about.p1')}
+              </p>
+              <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                {t('about.p2')}
+              </p>
+              <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                {t('about.p3')}
+              </p>
+              <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                {t('about.p4')}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-4 mt-16 justify-center">
+              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
                 <a href="https://music.yandex.ru/artist/9639626?utm_source=web&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
                   <Icon name="Music" size={20} />
                   Яндекс Музыка
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="gap-2" asChild>
+              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
                 <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
                   <Icon name="Music" size={20} />
                   Apple Music
