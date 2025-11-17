@@ -39,6 +39,8 @@ const translations: Record<Language, Record<string, string>> = {
     'meta.home.description': 'NARGIZA — современная казахская исполнительница. Слушайте новые песни, смотрите клипы, читайте о творчестве и следите за новостями.',
     'meta.videos.title': 'Клипы NARGIZA — Смотреть все видео онлайн | Официальный сайт',
     'meta.videos.description': 'Смотрите все клипы NARGIZA онлайн. Последние видео с YouTube канала @nargizamuz — новые релизы, хиты и эксклюзивные премьеры.',
+    'tracks.title': 'Новые треки',
+    'tracks.subtitle': 'Последние музыкальные релизы на YouTube',
   },
   en: {
     'nav.home': 'Home',
@@ -70,6 +72,8 @@ const translations: Record<Language, Record<string, string>> = {
     'meta.home.description': 'NARGIZA is a modern Kazakh artist. Listen to new songs, watch music videos, learn about her work and follow the latest news.',
     'meta.videos.title': 'NARGIZA Music Videos — Watch All Videos Online | Official Website',
     'meta.videos.description': 'Watch all NARGIZA music videos online. Latest videos from YouTube channel @nargizamuz — new releases, hits and exclusive premieres.',
+    'tracks.title': 'New Tracks',
+    'tracks.subtitle': 'Latest music releases on YouTube',
   },
 };
 

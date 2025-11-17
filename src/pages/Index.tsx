@@ -424,6 +424,80 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-24 px-6 bg-gradient-to-b from-background via-primary/5 to-background">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h3 className="text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {t('tracks.title')}
+            </h3>
+            <p className="text-lg text-muted-foreground">{t('tracks.subtitle')}</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {isLoadingVideos ? (
+              Array.from({ length: 6 }).map((_, i) => (
+                <Card key={i} className="overflow-hidden animate-pulse">
+                  <div className="aspect-video bg-muted"></div>
+                  <CardContent className="p-4">
+                    <div className="h-5 bg-muted rounded mb-2"></div>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              videos.slice(0, 6).map((video) => (
+                <Card key={video.videoId} className="overflow-hidden group hover:shadow-lg transition-shadow cursor-pointer">
+                  <div className="relative aspect-video overflow-hidden">
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Icon name="Play" size={48} className="text-white" />
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                      {video.title}
+                    </h4>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-full gap-2 mt-2"
+                      asChild
+                    >
+                      <a 
+                        href={`https://www.youtube.com/watch?v=${video.videoId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Icon name="Youtube" size={18} />
+                        {t('videos.watch')}
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+
+          {!isLoadingVideos && videos.length > 6 && (
+            <div className="text-center mt-12">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="gap-2"
+                onClick={() => navigate('/videos')}
+              >
+                <Icon name="Youtube" size={20} />
+                {t('nav.videos')}
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
       <section id="gallery" className="py-32 px-6 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none"></div>
         <div className="container mx-auto max-w-7xl relative z-10">
