@@ -4,6 +4,7 @@ import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AudioPlayer from '@/components/AudioPlayer';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Track {
   name: string;
@@ -12,6 +13,7 @@ interface Track {
 
 const Albums = () => {
   const navigate = useNavigate();
+  const { language, t } = useLanguage();
   const [expandedAlbum, setExpandedAlbum] = useState<string | null>(null);
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
 
@@ -189,10 +191,17 @@ const Albums = () => {
     }
   ];
 
+  useEffect(() => {
+    document.title = t('meta.albums.title');
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', t('meta.albums.description'));
+    }
+    document.documentElement.lang = language;
+  }, [language, t]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <title>Альбомы NARGIZA — Слушать онлайн | Официальный сайт</title>
-      <meta name="description" content="Все альбомы NARGIZA: Никчёмная жизнь, Calla Vivid, Украина. Слушайте полные треки на Яндекс.Музыке, Apple Music, Spotify." />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -204,7 +213,7 @@ const Albums = () => {
             </h1>
             <Button variant="ghost" onClick={() => navigate('/')}>
               <Icon name="ArrowLeft" size={20} className="mr-2" />
-              Назад
+              {t('albums.back')}
             </Button>
           </div>
         </div>
@@ -212,7 +221,7 @@ const Albums = () => {
 
       <div className="pt-24 pb-16 px-6">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-5xl font-bold mb-12 animate-slide-up">Альбомы</h2>
+          <h2 className="text-5xl font-bold mb-12 animate-slide-up">{t('albums.title')}</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
             {albums.map((album) => (
@@ -234,7 +243,7 @@ const Albums = () => {
                 
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    <span>О альбоме</span>
+                    <span>{t('albums.about')}</span>
                     <Button 
                       variant="ghost" 
                       size="sm"
@@ -257,7 +266,7 @@ const Albums = () => {
                     <div className="mb-6 animate-fade-in">
                       <h4 className="font-semibold mb-3 flex items-center gap-2">
                         <Icon name="ListMusic" size={18} />
-                        Треклист ({album.tracks.length})
+                        {t('albums.tracklist')} ({album.tracks.length})
                       </h4>
                       <div className="space-y-3">
                         {album.tracks.map((track, i) => (
@@ -294,19 +303,19 @@ const Albums = () => {
                     <Button variant="outline" size="sm" className="gap-2" asChild>
                       <a href={album.links.yandex} target="_blank" rel="noopener noreferrer">
                         <Icon name="Music" size={16} />
-                        Яндекс Музыка
+                        {t('albums.listenOn')} Яндекс.Музыке
                       </a>
                     </Button>
                     <Button variant="outline" size="sm" className="gap-2" asChild>
                       <a href={album.links.apple} target="_blank" rel="noopener noreferrer">
                         <Icon name="Music" size={16} />
-                        Apple Music
+                        {t('albums.listenOn')} Apple Music
                       </a>
                     </Button>
                     <Button variant="outline" size="sm" className="gap-2" asChild>
                       <a href={album.links.spotify} target="_blank" rel="noopener noreferrer">
                         <Icon name="Music" size={16} />
-                        Spotify
+                        {t('albums.listenOn')} Spotify
                       </a>
                     </Button>
                   </div>
