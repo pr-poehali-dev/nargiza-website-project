@@ -42,7 +42,6 @@ const Index = () => {
   const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState<string>('');
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -68,10 +67,6 @@ const Index = () => {
         
         if (data.tracks && data.tracks.length > 0) {
           setTracks(data.tracks);
-          
-          if (data.lastUpdate) {
-            setLastUpdate(data.lastUpdate);
-          }
         }
       } catch (error) {
         console.error('Error fetching tracks:', error);
@@ -384,12 +379,6 @@ const Index = () => {
               {t('tracks.title')}
             </h3>
             <p className="text-lg text-muted-foreground">{t('tracks.subtitle')}</p>
-            {lastUpdate && (
-              <div className="flex items-center justify-center gap-2 mt-4 text-sm text-muted-foreground">
-                <Icon name="Clock" size={16} className="text-primary" />
-                <span>Последнее обновление: {lastUpdate}</span>
-              </div>
-            )}
           </div>
           
           {isLoadingTracks ? (
