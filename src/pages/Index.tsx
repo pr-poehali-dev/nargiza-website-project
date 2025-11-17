@@ -289,11 +289,15 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-32">
-        <img
-          src="https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
-          alt="NARGIZA"
-          className="absolute inset-0 w-full h-full object-cover scale-105 animate-slow-zoom"
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="https://disk.yandex.ru/i/RHi8UTfTCTu60A" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-purple-900/30 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20" />
         
