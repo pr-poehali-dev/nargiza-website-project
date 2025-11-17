@@ -81,7 +81,12 @@ const Index = () => {
     }, 60 * 60 * 1000);
     
     const countdown = setInterval(() => {
-      setNextUpdate(prev => prev > 0 ? prev - 1 : 60);
+      setNextUpdate(prev => {
+        if (prev <= 1) {
+          return 60;
+        }
+        return prev - 1;
+      });
     }, 60 * 1000);
     
     return () => {
