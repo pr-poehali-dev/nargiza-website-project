@@ -67,11 +67,22 @@ const translations: Record<Language, Record<string, string>> = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+const detectBrowserLanguage = (): Language => {
+  const saved = localStorage.getItem('language');
+  if (saved === 'en' || saved === 'ru') {
+    return saved;
+  }
+  
+  const browserLang = navigator.language.toLowerCase();
+  if (browserLang.startsWith('ru')) {
+    return 'ru';
+  }
+  
+  return 'en';
+};
+
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('language');
-    return (saved === 'en' || saved === 'ru') ? saved : 'ru';
-  });
+  const [language, setLanguageState] = useState<Language>(() => detectBrowserLanguage());
 
   useEffect(() => {
     localStorage.setItem('language', language);
