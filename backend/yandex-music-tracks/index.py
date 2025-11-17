@@ -45,44 +45,50 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         client = Client()
         client.init()
         
-        tracks_list: List[Dict[str, Any]] = [
-            {
-                'id': '133959163',
-                'title': 'Гимн алкашей',
-                'artist': 'NARGIZA',
-                'cover': 'https://avatars.yandex.net/get-music-content/12367043/ebe1c3e0.a.38997077-1/400x400',
-                'url': 'https://music.yandex.ru/album/38997077/track/133959163'
-            }
-        ]
+        tracks_list: List[Dict[str, Any]] = []
         
-        artist_tracks = client.artists_tracks(artist_id, page_size=max_results)
+        artist_info = client.artists(artist_id)[0]
         
-        if artist_tracks and artist_tracks.tracks:
-            for track in artist_tracks.tracks[:max_results - 1]:
-                track_id = str(track.id)
-                
-                if track_id == '133959163':
-                    continue
-                
-                title = track.title or 'Без названия'
-                artist_name = track.artists[0].name if track.artists else 'NARGIZA'
-                
-                album_id = track.albums[0].id if track.albums else ''
-                cover_uri = track.cover_uri or (track.albums[0].cover_uri if track.albums else '')
-                
-                cover_url = f'https://{cover_uri.replace("%%", "400x400")}' if cover_uri else ''
-                track_url = f'https://music.yandex.ru/album/{album_id}/track/{track_id}' if album_id else ''
-                
-                tracks_list.append({
-                    'id': track_id,
-                    'title': title,
-                    'artist': artist_name,
-                    'cover': cover_url,
-                    'url': track_url
-                })
-                
+        if artist_info:
+            direct_albums = artist_info.get_albums(page_size=10, sort_by='year')
+            
+            seen_tracks = set()
+            
+            for album in direct_albums:
                 if len(tracks_list) >= max_results:
                     break
+                    
+                album_with_tracks = client.albums_with_tracks(album.id)
+                
+                if album_with_tracks and album_with_tracks.volumes:
+                    for volume in album_with_tracks.volumes:
+                        for track in volume:
+                            if len(tracks_list) >= max_results:
+                                break
+                            
+                            track_id = str(track.id)
+                            
+                            if track_id in seen_tracks:
+                                continue
+                            
+                            seen_tracks.add(track_id)
+                            
+                            title = track.title or 'Без названия'
+                            artist_name = track.artists[0].name if track.artists else 'NARGIZA'
+                            
+                            album_id = album.id
+                            cover_uri = track.cover_uri or album.cover_uri or ''
+                            
+                            cover_url = f'https://{cover_uri.replace("%%", "400x400")}' if cover_uri else ''
+                            track_url = f'https://music.yandex.ru/album/{album_id}/track/{track_id}'
+                            
+                            tracks_list.append({
+                                'id': track_id,
+                                'title': title,
+                                'artist': artist_name,
+                                'cover': cover_url,
+                                'url': track_url
+                            })
         
         now = datetime.now()
         update_time = now.strftime('%H:%M')
