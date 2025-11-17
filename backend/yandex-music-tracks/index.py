@@ -1,7 +1,7 @@
 import json
-import requests
 from typing import Dict, Any, List
 from datetime import datetime
+from yandex_music import Client
 
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -42,50 +42,33 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     max_results = int(params.get('maxResults', '6'))
     
     try:
-        tracks_list: List[Dict[str, Any]] = [
-            {
-                'id': '1',
-                'title': 'Гимн алкашей',
-                'artist': 'NARGIZA',
-                'cover': 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
-                'url': 'https://music.yandex.ru/album/38997077/track/133959163'
-            },
-            {
-                'id': '2',
-                'title': 'Я волонтёр',
-                'artist': 'NARGIZA',
-                'cover': 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg',
-                'url': 'https://music.yandex.ru/album/38997077/track/133942956'
-            },
-            {
-                'id': '3',
-                'title': 'Земля',
-                'artist': 'NARGIZA',
-                'cover': 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg',
-                'url': 'https://music.yandex.ru/album/38945197/track/133686043'
-            },
-            {
-                'id': '4',
-                'title': 'Ты мне врёшь',
-                'artist': 'NARGIZA',
-                'cover': 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg',
-                'url': 'https://music.yandex.ru/album/38904755/track/133379894'
-            },
-            {
-                'id': '5',
-                'title': 'Он занят',
-                'artist': 'NARGIZA',
-                'cover': 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg',
-                'url': 'https://music.yandex.ru/album/38871039/track/133146551'
-            },
-            {
-                'id': '6',
-                'title': 'Похоронка',
-                'artist': 'NARGIZA',
-                'cover': 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg',
-                'url': 'https://music.yandex.ru/album/38845093/track/132998054'
-            }
-        ][:max_results]
+        client = Client()
+        client.init()
+        
+        artist = client.artists_tracks(artist_id, page_size=max_results)
+        
+        tracks_list: List[Dict[str, Any]] = []
+        
+        if artist and artist.tracks:
+            for track in artist.tracks[:max_results]:
+                track_id = str(track.id)
+                title = track.title or 'Без названия'
+                
+                artist_name = track.artists[0].name if track.artists else 'NARGIZA'
+                
+                album_id = track.albums[0].id if track.albums else ''
+                cover_uri = track.cover_uri or (track.albums[0].cover_uri if track.albums else '')
+                
+                cover_url = f'https://{cover_uri.replace("%%", "400x400")}' if cover_uri else ''
+                track_url = f'https://music.yandex.ru/album/{album_id}/track/{track_id}' if album_id else ''
+                
+                tracks_list.append({
+                    'id': track_id,
+                    'title': title,
+                    'artist': artist_name,
+                    'cover': cover_url,
+                    'url': track_url
+                })
         
         now = datetime.now()
         update_time = now.strftime('%H:%M')
@@ -103,7 +86,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
     
-    except requests.RequestException as e:
+    except Exception as e:
         return {
             'statusCode': 500,
             'headers': {
