@@ -42,6 +42,7 @@ const Index = () => {
   const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
+  const [nextUpdate, setNextUpdate] = useState<number>(60);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -65,6 +66,7 @@ const Index = () => {
         const data = await response.json();
         console.log('Tracks loaded:', data.tracks);
         setTracks(data.tracks || []);
+        setNextUpdate(60);
       } catch (error) {
         console.error('Error fetching tracks:', error);
       } finally {
@@ -78,7 +80,14 @@ const Index = () => {
       fetchTracks();
     }, 60 * 60 * 1000);
     
-    return () => clearInterval(interval);
+    const countdown = setInterval(() => {
+      setNextUpdate(prev => prev > 0 ? prev - 1 : 60);
+    }, 60 * 1000);
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(countdown);
+    };
   }, []);
 
   useEffect(() => {
@@ -341,6 +350,10 @@ const Index = () => {
               {t('tracks.title')}
             </h3>
             <p className="text-lg text-muted-foreground">{t('tracks.subtitle')}</p>
+            <div className="flex items-center justify-center gap-2 mt-4 text-sm text-muted-foreground">
+              <Icon name="Clock" size={16} className="text-primary" />
+              <span>Обновление через {nextUpdate} мин</span>
+            </div>
           </div>
           
           {isLoadingTracks ? (
