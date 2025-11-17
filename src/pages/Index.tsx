@@ -312,12 +312,12 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
+              { title: 'Гимн алкашей', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg' },
               { title: 'Я волонтёр', cover: 'https://cdn.poehali.dev/files/c8124c8a-fb2c-4862-a097-7ed5dfeb16e2.jpg' },
               { title: 'Земля', cover: 'https://cdn.poehali.dev/files/8c740a4e-930e-4ca5-9e0d-8f576693c135.jpg' },
               { title: 'Ты мне врёшь', cover: 'https://cdn.poehali.dev/files/61a5e76d-d6aa-4bb7-ba7f-c43a25aefb6e.jpg' },
               { title: 'Он занят', cover: 'https://cdn.poehali.dev/files/469f299e-8ac3-4a30-850e-e1c3c53a9f06.jpg' },
               { title: 'Похоронка', cover: 'https://cdn.poehali.dev/files/44a7af92-053e-4bd1-8ae5-e3d87477fa34.jpg' },
-              { title: 'Сижу на работе', cover: 'https://cdn.poehali.dev/files/207cbbc7-08c5-4011-a142-53a39404e9b2.jpg' },
             ].map((track, index) => (
               <Card key={index} className="overflow-hidden">
                 <div className="flex items-center gap-4 p-4">
