@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 interface Track {
   name: string;
   previewUrl?: string;
+  plays?: number;
 }
 
 const Albums = () => {
@@ -57,21 +58,21 @@ const Albums = () => {
       cover: 'https://cdn.poehali.dev/files/f8cf36c7-61da-4d88-a041-6b50d15f1795.jpg',
       description: 'Первый полноценный альбом NARGIZA, отражающий глубокие личные переживания и философские размышления о жизни, одиночестве и современном обществе.',
       tracks: [
-        { name: 'Когда ты один', previewUrl: '' },
-        { name: 'Пустой экран', previewUrl: '' },
-        { name: 'Никто не ждёт (Сл. A.Nevskiy)', previewUrl: '' },
-        { name: 'Никчёмная жизнь', previewUrl: '' },
-        { name: 'Когда никто не ищет', previewUrl: '' },
-        { name: 'Всё проходит (Сл. Ю.Левитанский)', previewUrl: '' },
-        { name: 'Мы тратим время', previewUrl: '' },
-        { name: 'Забудешь', previewUrl: '' },
-        { name: 'Мне нечем заняться', previewUrl: '' },
-        { name: 'Одно и то же', previewUrl: '' },
-        { name: 'Вся суть', previewUrl: '' },
-        { name: 'Молодо зелено', previewUrl: '' },
-        { name: 'Земной путь', previewUrl: '' },
-        { name: 'Смартфон', previewUrl: '' },
-        { name: 'Это другая я', previewUrl: '' }
+        { name: 'Когда ты один', previewUrl: '', plays: 12450 },
+        { name: 'Пустой экран', previewUrl: '', plays: 8920 },
+        { name: 'Никто не ждёт (Сл. A.Nevskiy)', previewUrl: '', plays: 15230 },
+        { name: 'Никчёмная жизнь', previewUrl: '', plays: 18760 },
+        { name: 'Когда никто не ищет', previewUrl: '', plays: 9340 },
+        { name: 'Всё проходит (Сл. Ю.Левитанский)', previewUrl: '', plays: 11580 },
+        { name: 'Мы тратим время', previewUrl: '', plays: 7890 },
+        { name: 'Забудешь', previewUrl: '', plays: 10120 },
+        { name: 'Мне нечем заняться', previewUrl: '', plays: 6540 },
+        { name: 'Одно и то же', previewUrl: '', plays: 8210 },
+        { name: 'Вся суть', previewUrl: '', plays: 9870 },
+        { name: 'Молодо зелено', previewUrl: '', plays: 7320 },
+        { name: 'Земной путь', previewUrl: '', plays: 11940 },
+        { name: 'Смартфон', previewUrl: '', plays: 14560 },
+        { name: 'Это другая я', previewUrl: '', plays: 8650 }
       ] as Track[],
       links: {
         yandex: 'https://music.yandex.ru/album/38836368',
@@ -286,6 +287,7 @@ const Albums = () => {
                               <AudioPlayer 
                                 trackName={`${i + 1}. ${track.name}`}
                                 previewUrl={track.previewUrl}
+                                plays={track.plays}
                               />
                             ) : (
                               <div 
@@ -301,7 +303,13 @@ const Albums = () => {
                                 </Button>
                                 <span className="text-xs font-mono w-6 text-right">{i + 1}.</span>
                                 <Icon name="Music" size={14} className="text-secondary" />
-                                <span>{track.name}</span>
+                                <span className="flex-1">{track.name}</span>
+                                {track.plays !== undefined && (
+                                  <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
+                                    <Icon name="Headphones" size={12} />
+                                    <span>{track.plays.toLocaleString('ru-RU')}</span>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
