@@ -20,7 +20,6 @@ interface Track {
   artist: string;
   cover: string;
   url: string;
-  playCount?: number;
 }
 
 const Index = () => {
@@ -404,18 +403,10 @@ const Index = () => {
                         <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
                           {track.title}
                         </h4>
-                        <div className="flex items-center gap-3">
-                          <p className="text-sm text-muted-foreground flex items-center gap-2">
-                            <Icon name="Mic2" size={14} className="flex-shrink-0" />
-                            {track.artist}
-                          </p>
-                          {track.playCount !== undefined && (
-                            <p className="text-sm text-muted-foreground flex items-center gap-1">
-                              <Icon name="Headphones" size={14} className="flex-shrink-0" />
-                              {track.playCount.toLocaleString('ru-RU')}
-                            </p>
-                          )}
-                        </div>
+                        <p className="text-sm text-muted-foreground flex items-center gap-2">
+                          <Icon name="Mic2" size={14} className="flex-shrink-0" />
+                          {track.artist}
+                        </p>
                       </div>
                       <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
