@@ -6,10 +6,9 @@ import { Slider } from '@/components/ui/slider';
 interface AudioPlayerProps {
   trackName: string;
   previewUrl?: string;
-  plays?: number;
 }
 
-const AudioPlayer = ({ trackName, previewUrl, plays }: AudioPlayerProps) => {
+const AudioPlayer = ({ trackName, previewUrl }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -80,15 +79,7 @@ const AudioPlayer = ({ trackName, previewUrl, plays }: AudioPlayerProps) => {
       </Button>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-2 mb-1">
-          <div className="text-sm font-medium truncate">{trackName}</div>
-          {plays !== undefined && (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
-              <Icon name="Headphones" size={12} />
-              <span>{plays.toLocaleString('ru-RU')}</span>
-            </div>
-          )}
-        </div>
+        <div className="text-sm font-medium truncate mb-1">{trackName}</div>
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground min-w-[35px]">
             {formatTime(currentTime)}
