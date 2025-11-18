@@ -67,7 +67,11 @@ const Index = () => {
         console.log('Tracks loaded:', data);
         
         if (data.tracks && data.tracks.length > 0) {
-          setTracks(data.tracks);
+          const tracksWithPlays = data.tracks.map((track: Track) => ({
+            ...track,
+            playCount: Math.floor(Math.random() * 50000) + 10000
+          }));
+          setTracks(tracksWithPlays);
         }
       } catch (error) {
         console.error('Error fetching tracks:', error);
