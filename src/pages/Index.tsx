@@ -334,6 +334,12 @@ const Index = () => {
                   Apple Music
                 </a>
               </Button>
+              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
+                <a href="https://open.spotify.com/artist/5r8FoySmxKhXoDaRdFdXjm" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Music" size={20} />
+                  Spotify
+                </a>
+              </Button>
             </div>
           </div>
         </div>
