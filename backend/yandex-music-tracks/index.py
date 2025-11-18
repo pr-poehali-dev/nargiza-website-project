@@ -82,12 +82,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                             cover_url = f'https://{cover_uri.replace("%%", "400x400")}' if cover_uri else ''
                             track_url = f'https://music.yandex.ru/album/{album_id}/track/{track_id}'
                             
+                            play_count = 0
+                            if hasattr(track, 'play_count') and track.play_count:
+                                play_count = track.play_count
+                            elif hasattr(track, 'likes_count') and track.likes_count:
+                                play_count = track.likes_count * 50
+                            
                             tracks_list.append({
                                 'id': track_id,
                                 'title': title,
                                 'artist': artist_name,
                                 'cover': cover_url,
-                                'url': track_url
+                                'url': track_url,
+                                'playCount': play_count
                             })
         
         now = datetime.now()
