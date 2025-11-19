@@ -93,13 +93,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
-                'Cache-Control': 'public, max-age=3600'
+                'Cache-Control': 'no-cache'
             },
             'isBase64Encoded': False,
             'body': json.dumps({
                 'articles': articles,
-                'total': len(articles)
-            })
+                'total': len(articles),
+                'version': '2.0'
+            }, ensure_ascii=False)
         }
             
     except Exception as e:
