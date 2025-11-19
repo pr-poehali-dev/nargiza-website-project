@@ -102,7 +102,8 @@ const Index = () => {
       try {
         const response = await fetch('https://functions.poehali.dev/5493c424-75e6-4ead-8c15-daa12aef0abf?maxResults=6');
         const data = await response.json();
-        if (data.articles) {
+        console.log('News loaded:', data);
+        if (data.articles && data.articles.length > 0) {
           setNews(data.articles);
         }
       } catch (error) {
@@ -486,6 +487,11 @@ const Index = () => {
             <div className="text-center text-muted-foreground py-12 animate-pulse">
               <Icon name="Loader2" size={32} className="animate-spin mx-auto mb-2" />
               {t('news.loading')}
+            </div>
+          ) : news.length === 0 ? (
+            <div className="text-center text-muted-foreground py-12">
+              <Icon name="Newspaper" size={48} className="mx-auto mb-4 opacity-50" />
+              <p className="text-lg">Новости временно недоступны</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
