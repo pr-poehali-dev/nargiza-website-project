@@ -41,9 +41,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     max_results = int(query_params.get('maxResults', '6'))
     
     rss_feeds = [
-        'https://www.billboard.com/feed/',
-        'https://pitchfork.com/rss/news/',
-        'https://www.rollingstone.com/music/music-news/feed/'
+        'https://www.intermedia.ru/rss/',
+        'https://zvuki.ru/feed/',
+        'https://daily.afisha.ru/rss/music/'
     ]
     
     articles: List[Dict[str, str]] = []
