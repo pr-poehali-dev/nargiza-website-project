@@ -100,7 +100,10 @@ const Index = () => {
   const fetchNews = async () => {
     setIsLoadingNews(true);
     try {
-      const response = await fetch('https://functions.poehali.dev/5493c424-75e6-4ead-8c15-daa12aef0abf?maxResults=6');
+      const timestamp = Date.now();
+      const response = await fetch(`https://functions.poehali.dev/5493c424-75e6-4ead-8c15-daa12aef0abf?maxResults=6&t=${timestamp}`, {
+        cache: 'no-store'
+      });
       const data = await response.json();
       console.log('News loaded:', data);
       if (data.articles && data.articles.length > 0) {
