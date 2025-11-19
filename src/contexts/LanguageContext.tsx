@@ -55,6 +55,10 @@ const translations: Record<Language, Record<string, string>> = {
     'albums.tracklist': 'Треклист',
     'albums.listen': 'Слушать',
     'albums.listenOn': 'Слушать на',
+    'news.title': 'Новости музыки',
+    'news.subtitle': 'Последние события в мире музыки',
+    'news.readMore': 'Читать полностью',
+    'news.loading': 'Загрузка новостей...',
   },
   en: {
     'nav.home': 'Home',
@@ -102,6 +106,10 @@ const translations: Record<Language, Record<string, string>> = {
     'albums.tracklist': 'Tracklist',
     'albums.listen': 'Listen',
     'albums.listenOn': 'Listen on',
+    'news.title': 'Music News',
+    'news.subtitle': 'Latest events in the world of music',
+    'news.readMore': 'Read more',
+    'news.loading': 'Loading news...',
   },
 };
 

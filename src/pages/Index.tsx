@@ -22,6 +22,15 @@ interface Track {
   url: string;
 }
 
+interface NewsArticle {
+  title: string;
+  description: string;
+  url: string;
+  publishedAt: string;
+  source: string;
+  urlToImage?: string;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
@@ -38,10 +47,12 @@ const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [news, setNews] = useState<NewsArticle[]>([]);
   const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });
   const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
+  const [isLoadingNews, setIsLoadingNews] = useState(true);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -84,6 +95,26 @@ const Index = () => {
     return () => {
       clearInterval(interval);
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('https://newsapi.org/v2/everything?q=music&language=ru&sortBy=publishedAt&pageSize=6&apiKey=4c0f84e0e7d44c5fa67bb2c9e5a0b9cf');
+        const data = await response.json();
+        if (data.articles) {
+          setNews(data.articles);
+        }
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      } finally {
+        setIsLoadingNews(false);
+      }
+    };
+    
+    fetchNews();
+    const interval = setInterval(fetchNews, 60 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -442,7 +473,72 @@ const Index = () => {
         </div>
       </section>
 
-
+      <section className="py-24 px-6 bg-gradient-to-b from-background via-secondary/5 to-background">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h3 className="text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {t('news.title')}
+            </h3>
+            <p className="text-lg text-muted-foreground">{t('news.subtitle')}</p>
+          </div>
+          
+          {isLoadingNews ? (
+            <div className="text-center text-muted-foreground py-12 animate-pulse">
+              <Icon name="Loader2" size={32} className="animate-spin mx-auto mb-2" />
+              {t('news.loading')}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {news.map((article, index) => (
+                <a
+                  key={index}
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <Card className="overflow-hidden hover:shadow-xl transition-all hover:scale-[1.02] h-full">
+                    <CardContent className="p-0">
+                      {article.urlToImage && (
+                        <div className="relative h-48 overflow-hidden bg-muted">
+                          <img
+                            src={article.urlToImage}
+                            alt={article.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                      )}
+                      <div className="p-6">
+                        <div className="flex items-center gap-2 mb-3 text-xs text-muted-foreground">
+                          <Icon name="Newspaper" size={14} />
+                          <span>{article.source}</span>
+                          <span>•</span>
+                          <span>{new Date(article.publishedAt).toLocaleDateString('ru-RU')}</span>
+                        </div>
+                        <h4 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                          {article.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
+                          {article.description}
+                        </p>
+                        <div className="flex items-center gap-2 text-sm font-semibold text-primary">
+                          <span>{t('news.readMore')}</span>
+                          <Icon name="ArrowRight" size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
       <footer className="py-16 px-6 border-t border-border/50 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
