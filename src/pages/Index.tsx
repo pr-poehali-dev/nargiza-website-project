@@ -97,22 +97,23 @@ const Index = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/5493c424-75e6-4ead-8c15-daa12aef0abf?maxResults=6');
-        const data = await response.json();
-        console.log('News loaded:', data);
-        if (data.articles && data.articles.length > 0) {
-          setNews(data.articles);
-        }
-      } catch (error) {
-        console.error('Error fetching news:', error);
-      } finally {
-        setIsLoadingNews(false);
+  const fetchNews = async () => {
+    setIsLoadingNews(true);
+    try {
+      const response = await fetch('https://functions.poehali.dev/5493c424-75e6-4ead-8c15-daa12aef0abf?maxResults=6');
+      const data = await response.json();
+      console.log('News loaded:', data);
+      if (data.articles && data.articles.length > 0) {
+        setNews(data.articles);
       }
-    };
-    
+    } catch (error) {
+      console.error('Error fetching news:', error);
+    } finally {
+      setIsLoadingNews(false);
+    }
+  };
+
+  useEffect(() => {
     fetchNews();
     const interval = setInterval(fetchNews, 60 * 60 * 1000);
     return () => clearInterval(interval);
@@ -480,7 +481,17 @@ const Index = () => {
             <h3 className="text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t('news.title')}
             </h3>
-            <p className="text-lg text-muted-foreground">{t('news.subtitle')}</p>
+            <p className="text-lg text-muted-foreground mb-4">{t('news.subtitle')}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchNews}
+              disabled={isLoadingNews}
+              className="gap-2"
+            >
+              <Icon name={isLoadingNews ? 'Loader2' : 'RefreshCw'} size={16} className={isLoadingNews ? 'animate-spin' : ''} />
+              Обновить новости
+            </Button>
           </div>
           
           {isLoadingNews ? (
