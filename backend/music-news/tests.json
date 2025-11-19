@@ -1,0 +1,26 @@
+{
+  "tests": [
+    {
+      "name": "Get music news",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "articles": "array",
+        "total": "number"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get music news with limit",
+      "method": "GET",
+      "path": "/?maxResults=3",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "articles": "array",
+        "total": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

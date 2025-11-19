@@ -100,7 +100,7 @@ const Index = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch('https://newsapi.org/v2/everything?q=music&language=ru&sortBy=publishedAt&pageSize=6&apiKey=4c0f84e0e7d44c5fa67bb2c9e5a0b9cf');
+        const response = await fetch('https://functions.poehali.dev/5493c424-75e6-4ead-8c15-daa12aef0abf?maxResults=6');
         const data = await response.json();
         if (data.articles) {
           setNews(data.articles);
