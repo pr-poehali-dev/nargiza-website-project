@@ -331,13 +331,13 @@ const Index = () => {
           <h2 className="text-7xl md:text-9xl font-black mb-8 bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent drop-shadow-2xl tracking-tighter animate-fade-in">
             NARGIZA
           </h2>
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <span className="text-7xl md:text-8xl hover:scale-110 transition-transform cursor-pointer drop-shadow-2xl" title="Казахстан">🇰🇿</span>
-            <span className="text-7xl md:text-8xl hover:scale-110 transition-transform cursor-pointer drop-shadow-2xl" title="Россия">🇷🇺</span>
-          </div>
-          <p className="text-2xl md:text-3xl text-white font-light drop-shadow-2xl tracking-wide">
+          <p className="text-2xl md:text-3xl text-white font-light drop-shadow-2xl tracking-wide mb-8">
             {t('hero.subtitle')}
           </p>
+          <div className="flex items-center justify-center gap-6">
+            <span className="text-7xl md:text-8xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0s'}} title="Казахстан">🇰🇿</span>
+            <span className="text-7xl md:text-8xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0.3s'}} title="Россия">🇷🇺</span>
+          </div>
         </div>
       </section>
 
