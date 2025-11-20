@@ -319,7 +319,7 @@ const Index = () => {
         <iframe
           src="https://kinescope.io/0yYBcWD1H79dMAAEf3EjLJ?autoplay=1&muted=1&loop=1&controls=0&quality=1080p"
           allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;"
-          className="absolute inset-0 w-full h-full pointer-events-none"
+          className="absolute inset-0 w-full h-full pointer-events-none animate-fade-in"
           style={{ border: 'none', width: '100%', height: '100%', objectFit: 'cover' }}
           allowFullScreen
         />
