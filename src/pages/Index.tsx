@@ -317,7 +317,7 @@ const Index = () => {
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-20">
         <iframe
-          src="https://kinescope.io/0yYBcWD1H79dMAAEf3EjLJ"
+          src="https://kinescope.io/0yYBcWD1H79dMAAEf3EjLJ?autoplay=1&muted=1&loop=1&controls=0"
           allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           style={{ border: 'none' }}
