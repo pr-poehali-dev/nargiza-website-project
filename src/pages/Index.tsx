@@ -337,8 +337,8 @@ const Index = () => {
             {t('hero.subtitle')}
           </p>
           <div className="flex items-center justify-center gap-6">
-            <span className="text-7xl md:text-8xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0s'}} title="Казахстан">🇰🇿</span>
-            <span className="text-7xl md:text-8xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0.3s'}} title="Россия">🇷🇺</span>
+            <span className="text-5xl md:text-6xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0s'}} title="Казахстан">🇰🇿</span>
+            <span className="text-5xl md:text-6xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0.3s'}} title="Россия">🇷🇺</span>
           </div>
         </div>
       </section>
