@@ -317,10 +317,10 @@ const Index = () => {
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-20">
         <iframe
-          src="https://kinescope.io/0yYBcWD1H79dMAAEf3EjLJ?autoplay=1&muted=1&loop=1&controls=0"
+          src="https://kinescope.io/0yYBcWD1H79dMAAEf3EjLJ?autoplay=1&muted=1&loop=1&controls=0&quality=1080p"
           allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;"
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          style={{ border: 'none' }}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ border: 'none', width: '100%', height: '100%', objectFit: 'cover' }}
           allowFullScreen
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-purple-900/40 to-black/80" />
