@@ -142,23 +142,24 @@
     }
   }
 
-  @keyframes bounce-slow {
+  @keyframes flag-wave {
     0%,
     100% {
-      transform: translateY(0) rotate(0deg);
+      transform: rotate(0deg) skewX(0deg);
     }
     25% {
-      transform: translateY(-10px) rotate(5deg);
+      transform: rotate(2deg) skewX(3deg);
     }
     50% {
-      transform: translateY(-15px) rotate(0deg);
+      transform: rotate(0deg) skewX(-2deg);
     }
     75% {
-      transform: translateY(-10px) rotate(-5deg);
+      transform: rotate(-2deg) skewX(3deg);
     }
   }
 
   .animate-bounce-slow {
-    animation: bounce-slow 3s ease-in-out infinite;
+    animation: flag-wave 2.5s ease-in-out infinite;
+    transform-origin: left center;
   }
 }
