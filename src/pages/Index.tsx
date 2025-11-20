@@ -182,13 +182,7 @@ const Index = () => {
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold tracking-tight">NARGIZA</h1>
-              <div className="flex items-center gap-2">
-                <span className="text-3xl hover:scale-110 transition-transform cursor-pointer" title="Казахстан">🇰🇿</span>
-                <span className="text-3xl hover:scale-110 transition-transform cursor-pointer" title="Россия">🇷🇺</span>
-              </div>
-            </div>
+            <h1 className="text-2xl font-bold tracking-tight">NARGIZA</h1>
             
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -337,6 +331,10 @@ const Index = () => {
           <h2 className="text-7xl md:text-9xl font-black mb-8 bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent drop-shadow-2xl tracking-tighter animate-fade-in">
             NARGIZA
           </h2>
+          <div className="flex items-center justify-center gap-6 mb-8">
+            <span className="text-7xl md:text-8xl hover:scale-110 transition-transform cursor-pointer drop-shadow-2xl" title="Казахстан">🇰🇿</span>
+            <span className="text-7xl md:text-8xl hover:scale-110 transition-transform cursor-pointer drop-shadow-2xl" title="Россия">🇷🇺</span>
+          </div>
           <p className="text-2xl md:text-3xl text-white font-light drop-shadow-2xl tracking-wide">
             {t('hero.subtitle')}
           </p>
