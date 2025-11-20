@@ -182,7 +182,13 @@ const Index = () => {
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight">NARGIZA</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold tracking-tight">NARGIZA</h1>
+              <div className="flex items-center gap-2">
+                <span className="text-3xl hover:scale-110 transition-transform cursor-pointer" title="Казахстан">🇰🇿</span>
+                <span className="text-3xl hover:scale-110 transition-transform cursor-pointer" title="Россия">🇷🇺</span>
+              </div>
+            </div>
             
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
