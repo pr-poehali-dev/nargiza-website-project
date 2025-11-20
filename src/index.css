@@ -162,4 +162,23 @@
     animation: flag-wave 2.5s ease-in-out infinite;
     transform-origin: left center;
   }
+
+  @keyframes video-loop-fade {
+    0% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    95% {
+      opacity: 0.3;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .video-loop-fade {
+    animation: video-loop-fade 10s ease-in-out infinite;
+  }
 }
