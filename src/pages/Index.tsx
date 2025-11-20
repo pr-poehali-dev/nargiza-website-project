@@ -316,10 +316,12 @@ const Index = () => {
       </nav>
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-20">
-        <img
-          src="https://cdn.poehali.dev/files/13c938ba-9097-4030-8363-e259d96ee6f7.jpg"
-          alt="NARGIZA"
-          className="absolute inset-0 w-full h-full object-cover scale-105 animate-slow-zoom"
+        <iframe
+          src="https://kinescope.io/0yYBcWD1H79dMAAEf3EjLJ"
+          allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          style={{ border: 'none' }}
+          allowFullScreen
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-purple-900/30 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20" />
