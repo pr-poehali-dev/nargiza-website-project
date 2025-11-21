@@ -574,9 +574,9 @@ const Index = () => {
               <div className="flex flex-col gap-3 text-center md:text-left">
                 <h4 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">NARGIZA</h4>
                 <p className="text-muted-foreground font-medium">{t('footer.copyright')}</p>
-                <a href="mailto:bodma@mail.ru" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 justify-center md:justify-start">
+                <a href="mailto:post@nargizamail.ru" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 justify-center md:justify-start">
                   <Icon name="Mail" size={18} />
-                  bodma@mail.ru
+                  post@nargizamail.ru
                 </a>
               </div>
               <div className="flex gap-4">
