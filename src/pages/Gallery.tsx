@@ -54,6 +54,16 @@ const Gallery = () => {
     setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
   };
 
+  const downloadImage = async () => {
+    const imageUrl = gallery[currentImageIndex];
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = `nargiza-photo-${currentImageIndex + 1}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
     if (!lightboxOpen) return;
     
@@ -129,13 +139,22 @@ const Gallery = () => {
 
           {lightboxOpen && (
             <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade-in">
-              <button
-                onClick={closeLightbox}
-                className="absolute top-6 right-6 text-white hover:text-primary transition-colors z-10"
-                aria-label="Закрыть"
-              >
-                <Icon name="X" size={32} />
-              </button>
+              <div className="absolute top-6 right-6 flex gap-3 z-10">
+                <button
+                  onClick={downloadImage}
+                  className="text-white hover:text-primary transition-colors bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70"
+                  aria-label="Скачать фото"
+                >
+                  <Icon name="Download" size={24} />
+                </button>
+                <button
+                  onClick={closeLightbox}
+                  className="text-white hover:text-primary transition-colors bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70"
+                  aria-label="Закрыть"
+                >
+                  <Icon name="X" size={24} />
+                </button>
+              </div>
               
               <button
                 onClick={prevImage}
