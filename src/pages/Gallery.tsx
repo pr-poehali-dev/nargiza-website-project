@@ -35,6 +35,7 @@ const Gallery = () => {
     'https://cdn.poehali.dev/files/7cfb1c54-5be8-486f-b126-6039752e5677.jpg',
     'https://cdn.poehali.dev/files/83c64ba9-9359-4f30-a131-6ec03d3e84d2.jpg',
     'https://cdn.poehali.dev/files/10b003be-0603-465c-ae52-14ab8fcde546.jpg',
+    'https://cdn.poehali.dev/files/c016e7a3-f7dc-4619-8963-d405cf6e2fb8.jpg',
   ];
 
   const openLightbox = (index: number) => {
