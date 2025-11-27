@@ -53,6 +53,7 @@ const Index = () => {
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
   const [isLoadingNews, setIsLoadingNews] = useState(true);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -120,6 +121,14 @@ const Index = () => {
     fetchNews();
     const interval = setInterval(fetchNews, 60 * 60 * 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -320,6 +329,7 @@ const Index = () => {
           src="https://cdn.poehali.dev/files/da943f2c-3c28-4003-9b05-f77a1dc8d807.jpg"
           alt="Nargiza background"
           className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+          style={{ transform: `translateY(${scrollY * 0.5}px)` }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-purple-900/40 to-black/80" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-transparent to-secondary/30" />
