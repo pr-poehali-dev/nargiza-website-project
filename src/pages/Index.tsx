@@ -254,8 +254,10 @@ const Index = () => {
                   <Icon name="Youtube" size={20} />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon">
-                <Icon name="Music" size={20} />
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://tiktok.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Music" size={20} />
+                </a>
               </Button>
             </div>
           </div>
