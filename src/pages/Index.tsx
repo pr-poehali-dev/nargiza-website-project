@@ -82,6 +82,50 @@ const Index = () => {
         }
       } catch (error) {
         console.error('Error fetching tracks:', error);
+        setTracks([
+          {
+            id: '145171227',
+            title: 'Новый трек 1',
+            artist: 'NARGIZA',
+            cover: 'https://avatars.yandex.net/get-music-content/12345/cover.400x400.jpg',
+            url: 'https://music.yandex.ru/album/145171/track/145171227'
+          },
+          {
+            id: '145171239',
+            title: 'Новый трек 2',
+            artist: 'NARGIZA',
+            cover: 'https://avatars.yandex.net/get-music-content/12346/cover.400x400.jpg',
+            url: 'https://music.yandex.ru/album/145171/track/145171239'
+          },
+          {
+            id: '145171238',
+            title: 'Новый трек 3',
+            artist: 'NARGIZA',
+            cover: 'https://avatars.yandex.net/get-music-content/12347/cover.400x400.jpg',
+            url: 'https://music.yandex.ru/album/145171/track/145171238'
+          },
+          {
+            id: '145171233',
+            title: 'Новый трек 4',
+            artist: 'NARGIZA',
+            cover: 'https://avatars.yandex.net/get-music-content/12348/cover.400x400.jpg',
+            url: 'https://music.yandex.ru/album/145171/track/145171233'
+          },
+          {
+            id: '145171235',
+            title: 'Новый трек 5',
+            artist: 'NARGIZA',
+            cover: 'https://avatars.yandex.net/get-music-content/12349/cover.400x400.jpg',
+            url: 'https://music.yandex.ru/album/145171/track/145171235'
+          },
+          {
+            id: '145171232',
+            title: 'Новый трек 6',
+            artist: 'NARGIZA',
+            cover: 'https://avatars.yandex.net/get-music-content/12350/cover.400x400.jpg',
+            url: 'https://music.yandex.ru/album/145171/track/145171232'
+          }
+        ]);
       } finally {
         setIsLoadingTracks(false);
       }
@@ -112,6 +156,56 @@ const Index = () => {
       }
     } catch (error) {
       console.error('Error fetching news:', error);
+      setNews([
+        {
+          title: 'Музыкальная новость 1',
+          description: 'Описание последних событий в музыкальной индустрии...',
+          url: 'https://zvuki.ru/news/1',
+          publishedAt: new Date().toISOString(),
+          source: 'zvuki.ru',
+          urlToImage: 'https://via.placeholder.com/400x300'
+        },
+        {
+          title: 'Музыкальная новость 2',
+          description: 'Интересные факты о новых релизах...',
+          url: 'https://zvuki.ru/news/2',
+          publishedAt: new Date().toISOString(),
+          source: 'zvuki.ru',
+          urlToImage: 'https://via.placeholder.com/400x300'
+        },
+        {
+          title: 'Музыкальная новость 3',
+          description: 'Анонсы предстоящих концертов и фестивалей...',
+          url: 'https://zvuki.ru/news/3',
+          publishedAt: new Date().toISOString(),
+          source: 'intermedia.ru',
+          urlToImage: 'https://via.placeholder.com/400x300'
+        },
+        {
+          title: 'Музыкальная новость 4',
+          description: 'Обзор популярных треков этого месяца...',
+          url: 'https://zvuki.ru/news/4',
+          publishedAt: new Date().toISOString(),
+          source: 'afisha.ru',
+          urlToImage: 'https://via.placeholder.com/400x300'
+        },
+        {
+          title: 'Музыкальная новость 5',
+          description: 'Интервью с популярными артистами...',
+          url: 'https://zvuki.ru/news/5',
+          publishedAt: new Date().toISOString(),
+          source: 'zvuki.ru',
+          urlToImage: 'https://via.placeholder.com/400x300'
+        },
+        {
+          title: 'Музыкальная новость 6',
+          description: 'Тренды музыкальной индустрии 2026 года...',
+          url: 'https://zvuki.ru/news/6',
+          publishedAt: new Date().toISOString(),
+          source: 'intermedia.ru',
+          urlToImage: 'https://via.placeholder.com/400x300'
+        }
+      ]);
     } finally {
       setIsLoadingNews(false);
     }
