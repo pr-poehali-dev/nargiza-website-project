@@ -31,6 +31,12 @@ interface NewsArticle {
   urlToImage?: string;
 }
 
+interface StreamingStats {
+  yandex: { streams: number; updated_at: string };
+  spotify: { streams: number; updated_at: string };
+  apple: { streams: number; updated_at: string };
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
@@ -54,6 +60,7 @@ const Index = () => {
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
   const [isLoadingNews, setIsLoadingNews] = useState(true);
   const [scrollY, setScrollY] = useState(0);
+  const [streamingStats, setStreamingStats] = useState<StreamingStats | null>(null);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -240,6 +247,21 @@ const Index = () => {
       }
     };
     trackAndFetchStats();
+  }, []);
+
+  useEffect(() => {
+    const fetchStreamingStats = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a');
+        const data = await response.json();
+        setStreamingStats(data);
+      } catch (error) {
+        console.error('Error fetching streaming stats:', error);
+      }
+    };
+    fetchStreamingStats();
+    const interval = setInterval(fetchStreamingStats, 5 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -508,7 +530,7 @@ const Index = () => {
                 </div>
                 <h4 className="text-2xl font-bold mb-2">Yandex Music</h4>
                 <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
-                  12.5K
+                  {streamingStats ? (streamingStats.yandex.streams / 1000).toFixed(1) + 'K' : '...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
               </CardContent>
@@ -521,7 +543,7 @@ const Index = () => {
                 </div>
                 <h4 className="text-2xl font-bold mb-2">Spotify</h4>
                 <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent mb-2">
-                  8.3K
+                  {streamingStats ? (streamingStats.spotify.streams / 1000).toFixed(1) + 'K' : '...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
               </CardContent>
@@ -534,7 +556,7 @@ const Index = () => {
                 </div>
                 <h4 className="text-2xl font-bold mb-2">Apple Music</h4>
                 <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
-                  6.7K
+                  {streamingStats ? (streamingStats.apple.streams / 1000).toFixed(1) + 'K' : '...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
               </CardContent>

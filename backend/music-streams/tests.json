@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Get streaming statistics",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "yandex": {
+          "streams": 15000
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Update platform streams",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "platform": "yandex",
+        "streams": 15000
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
