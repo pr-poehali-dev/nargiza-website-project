@@ -1,12 +1,11 @@
 import json
 import os
 import psycopg2
+import requests
 from datetime import datetime
 
-MONTHLY_LISTENERS = 330016
-
 def handler(event: dict, context) -> dict:
-    '''Обновление статистики месячных слушателей Yandex Music в базе данных (фиксированное значение)'''
+    '''Автоматический парсинг актуальной статистики месячных слушателей с Yandex Music API'''
     method = event.get('httpMethod', 'GET')
 
     if method == 'OPTIONS':
@@ -21,8 +20,35 @@ def handler(event: dict, context) -> dict:
             'isBase64Encoded': False
         }
     
+    artist_id = '9639626'
+    
     try:
-        monthly_listeners = MONTHLY_LISTENERS
+        api_url = f'https://music.yandex.ru/handlers/artist.jsx?artist={artist_id}'
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Referer': f'https://music.yandex.ru/artist/{artist_id}'
+        }
+        
+        response = requests.get(api_url, headers=headers, timeout=10)
+        
+        if response.status_code != 200:
+            raise Exception(f'API request failed with status {response.status_code}')
+        
+        data = response.json()
+        
+        monthly_listeners = None
+        
+        if 'stats' in data and data['stats']:
+            stats = data['stats']
+            monthly_listeners = stats.get('lastMonthListeners')
+        
+        if not monthly_listeners:
+            raise Exception('Could not extract monthly listeners from API response')
+        
+        monthly_listeners = int(monthly_listeners)
         
         dsn = os.environ.get('DATABASE_URL')
         conn = psycopg2.connect(dsn)
