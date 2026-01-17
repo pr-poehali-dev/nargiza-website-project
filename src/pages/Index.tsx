@@ -531,8 +531,8 @@ const Index = () => {
             <p className="text-lg text-muted-foreground">{t('streams.subtitle')}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
+          <div className="flex justify-center">
+            <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group max-w-md w-full">
               <CardContent className="p-12 text-center">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
                   <Icon name="Music" size={32} className="text-white" />
@@ -540,19 +540,6 @@ const Index = () => {
                 <h4 className="text-3xl font-bold mb-3">Yandex Music</h4>
                 <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent mb-3">
                   {streamingStats ? streamingStats.yandex.streams.toLocaleString('ru-RU') : '...'}
-                </p>
-                <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
-              <CardContent className="p-12 text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
-                  <Icon name="Music" size={32} className="text-white" />
-                </div>
-                <h4 className="text-3xl font-bold mb-3">Spotify</h4>
-                <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent mb-3">
-                  {streamingStats ? streamingStats.spotify.streams.toLocaleString('ru-RU') : '...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
               </CardContent>
