@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Parse and update Yandex Music stats",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "platform": "yandex"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

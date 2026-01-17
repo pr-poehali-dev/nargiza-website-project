@@ -250,6 +250,14 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
+    const updateYandexStats = async () => {
+      try {
+        await fetch('https://functions.poehali.dev/6216c52f-7243-4dcd-8c37-45841228c5e1');
+      } catch (error) {
+        console.error('Error updating Yandex stats:', error);
+      }
+    };
+
     const fetchStreamingStats = async () => {
       try {
         const response = await fetch('https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a');
@@ -259,9 +267,17 @@ const Index = () => {
         console.error('Error fetching streaming stats:', error);
       }
     };
+
+    updateYandexStats();
     fetchStreamingStats();
-    const interval = setInterval(fetchStreamingStats, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    
+    const statsInterval = setInterval(fetchStreamingStats, 5 * 60 * 1000);
+    const updateInterval = setInterval(updateYandexStats, 24 * 60 * 60 * 1000);
+    
+    return () => {
+      clearInterval(statsInterval);
+      clearInterval(updateInterval);
+    };
   }, []);
 
   useEffect(() => {
