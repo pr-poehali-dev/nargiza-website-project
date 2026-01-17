@@ -35,7 +35,7 @@ def handler(event: dict, context) -> dict:
         }
     
     api_key = os.environ.get('YOUTUBE_API_KEY')
-    channel_id = os.environ.get('YOUTUBE_CHANNEL_ID', 'UCHsx3vaP6N42JupKs7g_-7Q')
+    channel_identifier = os.environ.get('YOUTUBE_CHANNEL_ID', '@nargizamuz')
     
     if not api_key:
         return {
@@ -50,11 +50,19 @@ def handler(event: dict, context) -> dict:
     
     try:
         api_url = f'https://www.googleapis.com/youtube/v3/channels'
-        params = {
-            'part': 'statistics',
-            'id': channel_id,
-            'key': api_key
-        }
+        
+        if channel_identifier.startswith('@'):
+            params = {
+                'part': 'statistics',
+                'forHandle': channel_identifier,
+                'key': api_key
+            }
+        else:
+            params = {
+                'part': 'statistics',
+                'id': channel_identifier,
+                'key': api_key
+            }
         
         response = requests.get(api_url, params=params, timeout=10)
         
