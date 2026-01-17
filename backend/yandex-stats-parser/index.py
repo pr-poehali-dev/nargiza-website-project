@@ -39,16 +39,21 @@ def handler(event: dict, context) -> dict:
         
         data = response.json()
         
+        print(f'[DEBUG] API Response keys: {list(data.keys())}')
+        print(f'[DEBUG] Stats data: {data.get("stats")}')
+        
         monthly_listeners = None
         
         if 'stats' in data and data['stats']:
             stats = data['stats']
             monthly_listeners = stats.get('lastMonthListeners')
+            print(f'[DEBUG] Extracted monthly_listeners: {monthly_listeners}')
         
         if not monthly_listeners:
             raise Exception('Could not extract monthly listeners from API response')
         
         monthly_listeners = int(monthly_listeners)
+        print(f'[DEBUG] Final value to save: {monthly_listeners}')
         
         dsn = os.environ.get('DATABASE_URL')
         conn = psycopg2.connect(dsn)
