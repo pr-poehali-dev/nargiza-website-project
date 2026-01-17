@@ -546,7 +546,7 @@ const Index = () => {
                 </div>
                 <h4 className="text-3xl font-bold mb-3">Yandex Music</h4>
                 <p className="text-5xl md:text-6xl font-black bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent mb-3">
-                  {streamingStats ? (streamingStats.yandex.streams / 1000).toFixed(1) + 'K' : '...'}
+                  {streamingStats ? streamingStats.yandex.streams.toLocaleString('ru-RU') : '...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
               </CardContent>
