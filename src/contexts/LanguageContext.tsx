@@ -59,6 +59,9 @@ const translations: Record<Language, Record<string, string>> = {
     'news.subtitle': 'Последние события в мире музыки',
     'news.readMore': 'Читать полностью',
     'news.loading': 'Загрузка новостей...',
+    'streams.title': 'Статистика прослушиваний',
+    'streams.subtitle': 'Ежемесячные прослушивания на музыкальных платформах',
+    'streams.monthly': 'прослушиваний в месяц',
   },
   en: {
     'nav.home': 'Home',
@@ -110,6 +113,9 @@ const translations: Record<Language, Record<string, string>> = {
     'news.subtitle': 'Latest events in the world of music',
     'news.readMore': 'Read more',
     'news.loading': 'Loading news...',
+    'streams.title': 'Streaming Statistics',
+    'streams.subtitle': 'Monthly streams on music platforms',
+    'streams.monthly': 'monthly streams',
   },
 };
 
