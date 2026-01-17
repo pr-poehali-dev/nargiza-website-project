@@ -1,5 +1,7 @@
 import json
 import requests
+import os
+import psycopg2
 from typing import Dict, Any, List
 from datetime import datetime
 from yandex_music import Client
@@ -44,6 +46,40 @@ def get_track_plays(track_id: str, track_url: str) -> int:
     return 0
 
 
+def update_streaming_stats(total_plays: int):
+    '''Update Yandex Music streaming statistics in database'''
+    try:
+        dsn = os.environ.get('DATABASE_URL')
+        if not dsn:
+            return
+        
+        conn = psycopg2.connect(dsn)
+        conn.autocommit = True
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS music_streams (
+                platform VARCHAR(50) PRIMARY KEY,
+                monthly_streams INTEGER NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        cursor.execute("""
+            INSERT INTO music_streams (platform, monthly_streams, updated_at)
+            VALUES (%s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (platform) 
+            DO UPDATE SET 
+                monthly_streams = EXCLUDED.monthly_streams,
+                updated_at = CURRENT_TIMESTAMP
+        """, ('yandex', total_plays))
+        
+        cursor.close()
+        conn.close()
+    except:
+        pass
+
+
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
     Business: Fetch latest tracks from Yandex Music artist with play counts from web scraping
@@ -86,6 +122,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         client.init()
         
         tracks_list: List[Dict[str, Any]] = []
+        total_plays = 0
         
         artist_info = client.artists(artist_id)[0]
         
@@ -123,6 +160,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                             track_url = f'https://music.yandex.ru/album/{album_id}/track/{track_id}'
                             
                             play_count = get_track_plays(track_id, track_url)
+                            total_plays += play_count
                             
                             tracks_list.append({
                                 'id': track_id,
@@ -132,6 +170,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                                 'url': track_url,
                                 'playCount': play_count
                             })
+        
+        update_streaming_stats(total_plays)
         
         now = datetime.now()
         update_time = now.strftime('%H:%M')
