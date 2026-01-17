@@ -546,15 +546,25 @@ const Index = () => {
             </Card>
 
             <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
-              <CardContent className="p-12 text-center">
+              <CardContent className="p-8 text-center">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
                   <Icon name="Youtube" size={32} className="text-white" />
                 </div>
-                <h4 className="text-3xl font-bold mb-3">YouTube</h4>
-                <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-3">
-                  {streamingStats?.youtube ? streamingStats.youtube.streams.toLocaleString('ru-RU') : '...'}
-                </p>
-                <p className="text-sm text-muted-foreground">Подписчиков</p>
+                <h4 className="text-3xl font-bold mb-4">YouTube</h4>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-1">
+                      {streamingStats?.youtube ? streamingStats.youtube.streams.toLocaleString('ru-RU') : '...'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Подписчиков</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-1">
+                      {streamingStats?.youtube?.views ? streamingStats.youtube.views.toLocaleString('ru-RU') : '...'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Просмотров</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

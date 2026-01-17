@@ -74,12 +74,15 @@ def handler(event: dict, context) -> dict:
         if 'items' not in data or len(data['items']) == 0:
             raise Exception('Channel not found or invalid channel ID')
         
-        subscriber_count = data['items'][0]['statistics'].get('subscriberCount')
+        statistics = data['items'][0]['statistics']
+        subscriber_count = statistics.get('subscriberCount')
+        view_count = statistics.get('viewCount')
         
         if not subscriber_count:
             raise Exception('Could not extract subscriber count from API response')
         
         subscriber_count = int(subscriber_count)
+        view_count = int(view_count) if view_count else 0
         
         dsn = os.environ.get('DATABASE_URL')
         conn = psycopg2.connect(dsn)
@@ -90,18 +93,25 @@ def handler(event: dict, context) -> dict:
             CREATE TABLE IF NOT EXISTS music_streams (
                 platform VARCHAR(50) PRIMARY KEY,
                 monthly_streams INTEGER NOT NULL,
+                view_count BIGINT DEFAULT 0,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        
+        cursor.execute("""
+            ALTER TABLE music_streams 
+            ADD COLUMN IF NOT EXISTS view_count BIGINT DEFAULT 0
+        """)
 
         cursor.execute("""
-            INSERT INTO music_streams (platform, monthly_streams, updated_at)
-            VALUES (%s, %s, CURRENT_TIMESTAMP)
+            INSERT INTO music_streams (platform, monthly_streams, view_count, updated_at)
+            VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
             ON CONFLICT (platform) 
             DO UPDATE SET 
                 monthly_streams = EXCLUDED.monthly_streams,
+                view_count = EXCLUDED.view_count,
                 updated_at = CURRENT_TIMESTAMP
-        """, ('youtube', subscriber_count))
+        """, ('youtube', subscriber_count, view_count))
 
         cursor.close()
         conn.close()
@@ -116,6 +126,7 @@ def handler(event: dict, context) -> dict:
                 'success': True,
                 'platform': 'youtube',
                 'subscriber_count': subscriber_count,
+                'view_count': view_count,
                 'updated_at': datetime.now().isoformat()
             }),
             'isBase64Encoded': False

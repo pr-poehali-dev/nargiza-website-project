@@ -28,13 +28,19 @@ def handler(event: dict, context) -> dict:
         CREATE TABLE IF NOT EXISTS music_streams (
             platform VARCHAR(50) PRIMARY KEY,
             monthly_streams INTEGER NOT NULL,
+            view_count BIGINT DEFAULT 0,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
+    """)
+    
+    cursor.execute("""
+        ALTER TABLE music_streams 
+        ADD COLUMN IF NOT EXISTS view_count BIGINT DEFAULT 0
     """)
 
     if method == 'GET':
         cursor.execute("""
-            SELECT platform, monthly_streams, updated_at 
+            SELECT platform, monthly_streams, view_count, updated_at 
             FROM music_streams
             ORDER BY platform
         """)
@@ -54,7 +60,7 @@ def handler(event: dict, context) -> dict:
                 """, (item['platform'], item['streams']))
             
             cursor.execute("""
-                SELECT platform, monthly_streams, updated_at 
+                SELECT platform, monthly_streams, view_count, updated_at 
                 FROM music_streams
                 ORDER BY platform
             """)
@@ -63,7 +69,8 @@ def handler(event: dict, context) -> dict:
         result = {
             row[0]: {
                 'streams': row[1],
-                'updated_at': row[2].isoformat() if row[2] else None
+                'views': row[2] if len(row) > 2 and row[2] else 0,
+                'updated_at': row[3].isoformat() if len(row) > 3 and row[3] else None
             }
             for row in rows
         }
