@@ -260,8 +260,16 @@ const Index = () => {
 
     const fetchStreamingStats = async () => {
       try {
-        const response = await fetch('https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a');
+        const timestamp = Date.now();
+        const response = await fetch(`https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
         const data = await response.json();
+        console.log('Streaming stats loaded:', data);
         setStreamingStats(data);
       } catch (error) {
         console.error('Error fetching streaming stats:', error);
