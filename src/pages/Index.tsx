@@ -262,11 +262,7 @@ const Index = () => {
       try {
         const timestamp = Date.now();
         const response = await fetch(`https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a?t=${timestamp}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
+          cache: 'no-store'
         });
         const data = await response.json();
         console.log('Streaming stats loaded:', data);
