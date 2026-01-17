@@ -525,7 +525,7 @@ const Index = () => {
       <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h3 className="text-4xl md:text-5xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <h3 className="text-3xl md:text-4xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t('streams.title')}
             </h3>
             <p className="text-lg text-muted-foreground">{t('streams.subtitle')}</p>
