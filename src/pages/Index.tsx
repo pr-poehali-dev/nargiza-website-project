@@ -629,7 +629,7 @@ const Index = () => {
             <Card className="max-w-4xl mx-auto border-2">
               <CardContent className="p-6">
                 <h4 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
-                  Рост аудитории Yandex Music
+                  График аудитории
                 </h4>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={historyData}>
