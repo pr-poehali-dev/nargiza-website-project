@@ -61,6 +61,28 @@ const Index = () => {
   const [isLoadingNews, setIsLoadingNews] = useState(true);
   const [scrollY, setScrollY] = useState(0);
   const [streamingStats, setStreamingStats] = useState<StreamingStats | null>(null);
+  const [isUpdatingStats, setIsUpdatingStats] = useState(false);
+
+  const updateStreamingStats = async () => {
+    setIsUpdatingStats(true);
+    try {
+      await fetch('https://functions.poehali.dev/6216c52f-7243-4dcd-8c37-45841228c5e1');
+      await fetch('https://functions.poehali.dev/af5c9ee9-7965-45f5-b795-ecc8c53be8da');
+      
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const timestamp = Date.now();
+      const response = await fetch(`https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a?t=${timestamp}`, {
+        cache: 'no-store'
+      });
+      const data = await response.json();
+      setStreamingStats(data);
+    } catch (error) {
+      console.error('Error updating streaming stats:', error);
+    } finally {
+      setIsUpdatingStats(false);
+    }
+  };
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -265,8 +287,11 @@ const Index = () => {
     };
 
     fetchStreamingStats();
+    updateStreamingStats();
     
-    const statsInterval = setInterval(fetchStreamingStats, 5 * 60 * 1000);
+    const statsInterval = setInterval(() => {
+      updateStreamingStats();
+    }, 10 * 60 * 1000);
     
     return () => {
       clearInterval(statsInterval);
@@ -528,7 +553,17 @@ const Index = () => {
             <h3 className="text-3xl md:text-4xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t('streams.title')}
             </h3>
-            <p className="text-lg text-muted-foreground">{t('streams.subtitle')}</p>
+            <p className="text-lg text-muted-foreground mb-4">{t('streams.subtitle')}</p>
+            <Button 
+              onClick={updateStreamingStats} 
+              disabled={isUpdatingStats}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <Icon name={isUpdatingStats ? "Loader2" : "RefreshCw"} size={16} className={isUpdatingStats ? "animate-spin" : ""} />
+              {isUpdatingStats ? 'Обновление...' : 'Обновить статистику'}
+            </Button>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
