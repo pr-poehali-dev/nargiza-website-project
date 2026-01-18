@@ -4,6 +4,7 @@ import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 
 interface YouTubeVideo {
@@ -37,6 +38,13 @@ interface StreamingStats {
   apple: { streams: number; updated_at: string };
 }
 
+interface HistoryData {
+  month: string;
+  year: number;
+  listeners: number;
+  date: string;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
@@ -62,6 +70,7 @@ const Index = () => {
   const [scrollY, setScrollY] = useState(0);
   const [streamingStats, setStreamingStats] = useState<StreamingStats | null>(null);
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
+  const [historyData, setHistoryData] = useState<HistoryData[]>([]);
 
   const updateStreamingStats = async () => {
     setIsUpdatingStats(true);
@@ -286,7 +295,19 @@ const Index = () => {
       }
     };
 
+    const fetchHistory = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/fa05ce70-f248-4c7e-9159-8d33020a2e03');
+        const data = await response.json();
+        console.log('History loaded:', data);
+        setHistoryData(data.history || []);
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      }
+    };
+
     fetchStreamingStats();
+    fetchHistory();
     updateStreamingStats();
     
     const statsInterval = setInterval(() => {
@@ -566,7 +587,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
             <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
               <CardContent className="p-12 text-center">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
@@ -603,6 +624,48 @@ const Index = () => {
               </CardContent>
             </Card>
           </div>
+
+          {historyData.length > 0 && (
+            <Card className="max-w-4xl mx-auto border-2">
+              <CardContent className="p-6">
+                <h4 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
+                  Рост аудитории Yandex Music
+                </h4>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={historyData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="hsl(var(--muted-foreground))"
+                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                    />
+                    <YAxis 
+                      stroke="hsl(var(--muted-foreground))"
+                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      tickFormatter={(value) => `${(value / 1000).toFixed(0)}K`}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px',
+                        color: 'hsl(var(--foreground))'
+                      }}
+                      formatter={(value: number) => [value.toLocaleString('ru-RU'), 'Слушателей']}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="listeners" 
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={3}
+                      dot={{ fill: 'hsl(var(--primary))', r: 5 }}
+                      activeDot={{ r: 7 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </section>
 

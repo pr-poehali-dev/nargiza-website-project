@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Get Yandex Music history",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "history": "array",
+        "total": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
