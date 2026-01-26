@@ -785,7 +785,7 @@ const Index = () => {
             </Button>
           </div>
 
-          {streamingStats ? (
+          {streamingStats && streamingStats.yandex && streamingStats.spotify && streamingStats.apple ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <Card className="overflow-hidden hover:shadow-xl transition-all">
                 <CardContent className="p-8 text-center">
