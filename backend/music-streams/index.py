@@ -19,21 +19,64 @@ def handler(event: dict, context) -> dict:
             'isBase64Encoded': False
         }
 
+    dsn = os.environ.get('DATABASE_URL')
+    conn = psycopg2.connect(dsn)
+    conn.autocommit = True
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS music_streams (
+            platform VARCHAR(50) PRIMARY KEY,
+            monthly_streams INTEGER NOT NULL,
+            view_count BIGINT DEFAULT 0,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    
+    cursor.execute("""
+        ALTER TABLE music_streams 
+        ADD COLUMN IF NOT EXISTS view_count BIGINT DEFAULT 0
+    """)
+
     if method == 'GET':
+        cursor.execute("""
+            SELECT platform, monthly_streams, view_count, updated_at 
+            FROM music_streams
+            ORDER BY platform
+        """)
+        rows = cursor.fetchall()
+        
+        if not rows:
+            default_data = [
+                {'platform': 'yandex', 'streams': 12500},
+                {'platform': 'spotify', 'streams': 8300},
+                {'platform': 'apple', 'streams': 6700}
+            ]
+            
+            for item in default_data:
+                cursor.execute("""
+                    INSERT INTO music_streams (platform, monthly_streams, updated_at)
+                    VALUES (%s, %s, CURRENT_TIMESTAMP)
+                """, (item['platform'], item['streams']))
+            
+            cursor.execute("""
+                SELECT platform, monthly_streams, view_count, updated_at 
+                FROM music_streams
+                ORDER BY platform
+            """)
+            rows = cursor.fetchall()
+
         result = {
-            'yandex': {
-                'streams': 52000,
-                'updated_at': datetime.now().isoformat()
-            },
-            'spotify': {
-                'streams': 28300,
-                'updated_at': datetime.now().isoformat()
-            },
-            'apple': {
-                'streams': 16700,
-                'updated_at': datetime.now().isoformat()
+            row[0]: {
+                'streams': row[1],
+                'views': row[2] if len(row) > 2 and row[2] else 0,
+                'updated_at': row[3].isoformat() if len(row) > 3 and row[3] else None
             }
+            for row in rows
         }
+
+        cursor.close()
+        conn.close()
 
         return {
             'statusCode': 200,
@@ -44,6 +87,49 @@ def handler(event: dict, context) -> dict:
             'body': json.dumps(result),
             'isBase64Encoded': False
         }
+
+    if method == 'POST':
+        body = json.loads(event.get('body', '{}'))
+        platform = body.get('platform')
+        streams = body.get('streams')
+
+        if not platform or streams is None:
+            cursor.close()
+            conn.close()
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': 'platform and streams are required'}),
+                'isBase64Encoded': False
+            }
+
+        cursor.execute("""
+            INSERT INTO music_streams (platform, monthly_streams, updated_at)
+            VALUES (%s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (platform) 
+            DO UPDATE SET 
+                monthly_streams = EXCLUDED.monthly_streams,
+                updated_at = CURRENT_TIMESTAMP
+        """, (platform, streams))
+
+        cursor.close()
+        conn.close()
+
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'success': True, 'platform': platform, 'streams': streams}),
+            'isBase64Encoded': False
+        }
+
+    cursor.close()
+    conn.close()
 
     return {
         'statusCode': 405,

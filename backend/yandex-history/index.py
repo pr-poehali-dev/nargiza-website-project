@@ -24,16 +24,53 @@ def handler(event: dict, context) -> dict:
             'body': json.dumps({'error': 'Method not allowed'})
         }
 
-    history = [
-        {'month': 'Сентябрь', 'year': 2025, 'listeners': 8500, 'date': '2025-09-01T00:00:00'},
-        {'month': 'Октябрь', 'year': 2025, 'listeners': 12300, 'date': '2025-10-01T00:00:00'},
-        {'month': 'Ноябрь', 'year': 2025, 'listeners': 15700, 'date': '2025-11-01T00:00:00'},
-        {'month': 'Декабрь', 'year': 2025, 'listeners': 24800, 'date': '2025-12-01T00:00:00'},
-        {'month': 'Январь', 'year': 2026, 'listeners': 32000, 'date': '2026-01-01T00:00:00'}
-    ]
+    try:
+        dsn = os.environ.get('DATABASE_URL')
+        conn = psycopg2.connect(dsn)
+        cur = conn.cursor()
 
-    return {
-        'statusCode': 200,
-        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-        'body': json.dumps({'history': history, 'total': len(history)})
-    }
+        cur.execute('''
+            SELECT month_name, year, listeners, recorded_at 
+            FROM yandex_music_history 
+            ORDER BY year, 
+                CASE month_name
+                    WHEN 'Январь' THEN 1
+                    WHEN 'Февраль' THEN 2
+                    WHEN 'Март' THEN 3
+                    WHEN 'Апрель' THEN 4
+                    WHEN 'Май' THEN 5
+                    WHEN 'Июнь' THEN 6
+                    WHEN 'Июль' THEN 7
+                    WHEN 'Август' THEN 8
+                    WHEN 'Сентябрь' THEN 9
+                    WHEN 'Октябрь' THEN 10
+                    WHEN 'Ноябрь' THEN 11
+                    WHEN 'Декабрь' THEN 12
+                END
+        ''')
+
+        rows = cur.fetchall()
+        history = []
+        for row in rows:
+            history.append({
+                'month': row[0],
+                'year': row[1],
+                'listeners': row[2],
+                'date': row[3].isoformat() if row[3] else None
+            })
+
+        cur.close()
+        conn.close()
+
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'history': history, 'total': len(history)})
+        }
+
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e)})
+        }
