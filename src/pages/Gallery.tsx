@@ -20,7 +20,6 @@ const Gallery = () => {
   }, [language, t]);
 
   const gallery = [
-    'https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/files/a8b70dbd-6fdb-4141-9030-7db067cff183.jpg',
     'https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/bucket/6fa31ee3-b703-4e08-b6e8-89f97e8f68ae.jpg',
     'https://cdn.poehali.dev/files/1000679112.jpg',
     'https://cdn.poehali.dev/files/1000673325.jpg',
