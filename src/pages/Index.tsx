@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import SnowEffect from '@/components/SnowEffect';
 
 
 interface YouTubeVideo {
@@ -359,6 +360,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SnowEffect />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
