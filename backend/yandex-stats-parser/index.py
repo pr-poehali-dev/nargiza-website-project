@@ -86,6 +86,24 @@ def handler(event: dict, context) -> dict:
                 updated_at = CURRENT_TIMESTAMP
         """, ('yandex', monthly_listeners))
 
+        now = datetime.now()
+        month_names = {
+            1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель',
+            5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август',
+            9: 'Сентябрь', 10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
+        }
+        current_month = month_names[now.month]
+        current_year = now.year
+        
+        cursor.execute("""
+            INSERT INTO yandex_music_history (month_name, year, listeners, recorded_at)
+            VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (month_name, year) 
+            DO UPDATE SET 
+                listeners = EXCLUDED.listeners,
+                recorded_at = CURRENT_TIMESTAMP
+        """, (current_month, current_year, monthly_listeners))
+
         cursor.close()
         conn.close()
 
