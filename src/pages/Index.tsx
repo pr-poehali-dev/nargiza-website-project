@@ -326,6 +326,7 @@ const Index = () => {
       try {
         const response = await fetch('https://functions.poehali.dev/552e2e24-011c-4cad-9e44-60eccfbc41b7?chatId=-1002357698267');
         const data = await response.json();
+        console.log('Telegram stats response:', data);
         if (data.subscribers && data.subscribers > 0) {
           setTelegramSubscribers(data.subscribers);
         }
