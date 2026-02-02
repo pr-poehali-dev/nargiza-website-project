@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS request should return CORS headers",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "GET request should return subscriber count",
+      "method": "GET",
+      "path": "/?chatId=@nargizamuz",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "subscribers": "number",
+        "chat_id": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
