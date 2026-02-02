@@ -24,12 +24,12 @@ def handler(event: dict, context) -> dict:
         
         if not bot_token:
             return {
-                'statusCode': 500,
+                'statusCode': 200,
                 'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({'error': 'TELEGRAM_BOT_TOKEN not configured'})
+                'body': json.dumps({'subscribers': 0, 'chat_id': chat_id, 'configured': False})
             }
 
         try:
