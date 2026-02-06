@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Test TikTok stats parser",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "platform": "tiktok"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

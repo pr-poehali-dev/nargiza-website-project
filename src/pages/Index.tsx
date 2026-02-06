@@ -37,6 +37,8 @@ interface StreamingStats {
   yandex: { streams: number; updated_at: string };
   spotify: { streams: number; updated_at: string };
   apple: { streams: number; updated_at: string };
+  youtube?: { streams: number; views: number; updated_at: string };
+  tiktok?: { streams: number; views: number; updated_at: string };
 }
 
 interface HistoryData {
@@ -79,6 +81,7 @@ const Index = () => {
     try {
       await fetch('https://functions.poehali.dev/6216c52f-7243-4dcd-8c37-45841228c5e1');
       await fetch('https://functions.poehali.dev/af5c9ee9-7965-45f5-b795-ecc8c53be8da');
+      await fetch('https://functions.poehali.dev/e7b76376-0249-47ec-98ae-0ac906fd4a47');
       
       await new Promise(resolve => setTimeout(resolve, 2000));
       
@@ -655,13 +658,13 @@ const Index = () => {
                 <div className="space-y-3">
                   <div>
                     <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent mb-1">
-                      {streamingStats?.tiktok ? streamingStats.tiktok.followers.toLocaleString('ru-RU') : '...'}
+                      {streamingStats?.tiktok ? streamingStats.tiktok.streams.toLocaleString('ru-RU') : '...'}
                     </p>
                     <p className="text-xs text-muted-foreground">Подписчиков</p>
                   </div>
                   <div>
                     <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent mb-1">
-                      {streamingStats?.tiktok?.likes ? streamingStats.tiktok.likes.toLocaleString('ru-RU') : '...'}
+                      {streamingStats?.tiktok?.views ? streamingStats.tiktok.views.toLocaleString('ru-RU') : '...'}
                     </p>
                     <p className="text-xs text-muted-foreground">Лайков</p>
                   </div>
