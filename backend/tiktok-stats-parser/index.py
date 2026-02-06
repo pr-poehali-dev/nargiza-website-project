@@ -1,11 +1,10 @@
 import json
 import os
 import psycopg2
-import requests
 from datetime import datetime
 
 def handler(event: dict, context) -> dict:
-    '''Автоматический парсинг статистики с TikTok профиля'''
+    '''Ручное обновление статистики TikTok через POST запрос'''
     method = event.get('httpMethod', 'GET')
 
     if method == 'OPTIONS':
@@ -14,67 +13,49 @@ def handler(event: dict, context) -> dict:
             'headers': {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, X-Cron-Token'
+                'Access-Control-Allow-Headers': 'Content-Type'
             },
             'body': '',
             'isBase64Encoded': False
         }
     
-    cron_token = os.environ.get('STATS_CRON_TOKEN', '')
-    provided_token = event.get('headers', {}).get('x-cron-token', '')
-    
-    if cron_token and provided_token != cron_token:
+    if method == 'GET':
         return {
-            'statusCode': 401,
+            'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            'body': json.dumps({'error': 'Unauthorized: Invalid cron token'}),
+            'body': json.dumps({
+                'message': 'Отправь POST запрос с follower_count и heart_count для обновления статистики TikTok',
+                'example': {
+                    'follower_count': 1234567,
+                    'heart_count': 9876543
+                }
+            }),
             'isBase64Encoded': False
         }
     
-    tiktok_username = os.environ.get('TIKTOK_USERNAME', 'nargizamuz')
-    rapidapi_key = os.environ.get('RAPIDAPI_KEY')
-    
-    if not rapidapi_key:
+    if method != 'POST':
         return {
-            'statusCode': 500,
+            'statusCode': 405,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            'body': json.dumps({'error': 'Missing RAPIDAPI_KEY in environment'}),
+            'body': json.dumps({'error': 'Method not allowed, use POST'}),
             'isBase64Encoded': False
         }
     
     try:
-        api_url = 'https://tiktok-scraper7.p.rapidapi.com/user/info'
+        body = event.get('body', '{}')
+        data = json.loads(body)
         
-        headers = {
-            'x-rapidapi-key': rapidapi_key,
-            'x-rapidapi-host': 'tiktok-scraper7.p.rapidapi.com'
-        }
+        follower_count = data.get('follower_count', 0)
+        heart_count = data.get('heart_count', 0)
         
-        params = {
-            'unique_id': tiktok_username
-        }
-        
-        response = requests.get(api_url, headers=headers, params=params, timeout=15)
-        
-        if response.status_code != 200:
-            raise Exception(f'TikTok API request failed with status {response.status_code}')
-        
-        data = response.json()
-        
-        if 'data' not in data or 'user' not in data['data']:
-            raise Exception('Invalid TikTok API response format')
-        
-        user_data = data['data']['user']
-        stats = user_data.get('stats', {})
-        
-        follower_count = stats.get('followerCount', 0)
-        heart_count = stats.get('heartCount', 0)
+        if follower_count == 0 and heart_count == 0:
+            raise Exception('Укажи follower_count и heart_count')
         
         dsn = os.environ.get('DATABASE_URL')
         conn = psycopg2.connect(dsn)
@@ -95,15 +76,15 @@ def handler(event: dict, context) -> dict:
             ADD COLUMN IF NOT EXISTS view_count BIGINT DEFAULT 0
         """)
 
-        cursor.execute("""
+        cursor.execute(f"""
             INSERT INTO music_streams (platform, monthly_streams, view_count, updated_at)
-            VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+            VALUES ('tiktok', {follower_count}, {heart_count}, CURRENT_TIMESTAMP)
             ON CONFLICT (platform) 
             DO UPDATE SET 
                 monthly_streams = EXCLUDED.monthly_streams,
                 view_count = EXCLUDED.view_count,
                 updated_at = CURRENT_TIMESTAMP
-        """, ('tiktok', follower_count, heart_count))
+        """)
 
         cursor.close()
         conn.close()

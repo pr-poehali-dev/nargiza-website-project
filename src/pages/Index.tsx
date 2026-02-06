@@ -6,6 +6,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import SnowEffect from '@/components/SnowEffect';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 
 interface YouTubeVideo {
@@ -75,13 +78,16 @@ const Index = () => {
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
+  const [showTikTokDialog, setShowTikTokDialog] = useState(false);
+  const [tiktokFollowers, setTiktokFollowers] = useState('');
+  const [tiktokLikes, setTiktokLikes] = useState('');
+  const [isUpdatingTikTok, setIsUpdatingTikTok] = useState(false);
 
   const updateStreamingStats = async () => {
     setIsUpdatingStats(true);
     try {
       await fetch('https://functions.poehali.dev/6216c52f-7243-4dcd-8c37-45841228c5e1');
       await fetch('https://functions.poehali.dev/af5c9ee9-7965-45f5-b795-ecc8c53be8da');
-      await fetch('https://functions.poehali.dev/e7b76376-0249-47ec-98ae-0ac906fd4a47');
       
       await new Promise(resolve => setTimeout(resolve, 2000));
       
@@ -95,6 +101,39 @@ const Index = () => {
       console.error('Error updating streaming stats:', error);
     } finally {
       setIsUpdatingStats(false);
+    }
+  };
+
+  const updateTikTokStats = async () => {
+    if (!tiktokFollowers || !tiktokLikes) return;
+    
+    setIsUpdatingTikTok(true);
+    try {
+      await fetch('https://functions.poehali.dev/e7b76376-0249-47ec-98ae-0ac906fd4a47', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          follower_count: parseInt(tiktokFollowers),
+          heart_count: parseInt(tiktokLikes)
+        })
+      });
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const timestamp = Date.now();
+      const response = await fetch(`https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a?t=${timestamp}`, {
+        cache: 'no-store'
+      });
+      const data = await response.json();
+      setStreamingStats(data);
+      
+      setShowTikTokDialog(false);
+      setTiktokFollowers('');
+      setTiktokLikes('');
+    } catch (error) {
+      console.error('Error updating TikTok stats:', error);
+    } finally {
+      setIsUpdatingTikTok(false);
     }
   };
 
@@ -600,16 +639,27 @@ const Index = () => {
               {t('streams.title')}
             </h3>
             <p className="text-lg text-muted-foreground mb-4">{t('streams.subtitle')}</p>
-            <Button 
-              onClick={updateStreamingStats} 
-              disabled={isUpdatingStats}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <Icon name={isUpdatingStats ? "Loader2" : "RefreshCw"} size={16} className={isUpdatingStats ? "animate-spin" : ""} />
-              {isUpdatingStats ? 'Обновление...' : 'Обновить статистику'}
-            </Button>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Button 
+                onClick={updateStreamingStats} 
+                disabled={isUpdatingStats}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Icon name={isUpdatingStats ? "Loader2" : "RefreshCw"} size={16} className={isUpdatingStats ? "animate-spin" : ""} />
+                {isUpdatingStats ? 'Обновление...' : 'Обновить статистику'}
+              </Button>
+              <Button 
+                onClick={() => setShowTikTokDialog(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Icon name="Video" size={16} />
+                Добавить TikTok
+              </Button>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
@@ -954,6 +1004,49 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={showTikTokDialog} onOpenChange={setShowTikTokDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Добавить статистику TikTok</DialogTitle>
+            <DialogDescription>
+              Введите актуальные данные вашего профиля TikTok
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="followers">Количество подписчиков</Label>
+              <Input
+                id="followers"
+                type="number"
+                placeholder="Например: 1234567"
+                value={tiktokFollowers}
+                onChange={(e) => setTiktokFollowers(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="likes">Количество лайков</Label>
+              <Input
+                id="likes"
+                type="number"
+                placeholder="Например: 9876543"
+                value={tiktokLikes}
+                onChange={(e) => setTiktokLikes(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              onClick={updateTikTokStats}
+              disabled={isUpdatingTikTok || !tiktokFollowers || !tiktokLikes}
+              className="gap-2"
+            >
+              {isUpdatingTikTok && <Icon name="Loader2" size={16} className="animate-spin" />}
+              {isUpdatingTikTok ? 'Обновление...' : 'Сохранить'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
