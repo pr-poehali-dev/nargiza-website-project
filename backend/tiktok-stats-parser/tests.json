@@ -1,26 +1,13 @@
 {
   "tests": [
     {
-      "name": "Test GET instruction",
+      "name": "Test TikTok parser",
       "method": "GET",
       "path": "/",
       "expectedStatus": 200,
       "expectedBody": {
-        "message": "string"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Test POST with stats",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "follower_count": 100000,
-        "heart_count": 500000
-      },
-      "expectedStatus": 200,
-      "expectedBody": {
-        "success": true
+        "success": true,
+        "platform": "tiktok"
       },
       "bodyMatcher": "partial"
     }

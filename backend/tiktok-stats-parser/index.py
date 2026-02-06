@@ -1,10 +1,11 @@
 import json
 import os
 import psycopg2
+import requests
 from datetime import datetime
 
 def handler(event: dict, context) -> dict:
-    '''Ручное обновление статистики TikTok через POST запрос'''
+    '''Автоматический парсинг статистики TikTok через SocialData API'''
     method = event.get('httpMethod', 'GET')
 
     if method == 'OPTIONS':
@@ -12,50 +13,39 @@ def handler(event: dict, context) -> dict:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type'
             },
             'body': '',
             'isBase64Encoded': False
         }
     
-    if method == 'GET':
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({
-                'message': 'Отправь POST запрос с follower_count и heart_count для обновления статистики TikTok',
-                'example': {
-                    'follower_count': 1234567,
-                    'heart_count': 9876543
-                }
-            }),
-            'isBase64Encoded': False
-        }
-    
-    if method != 'POST':
-        return {
-            'statusCode': 405,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({'error': 'Method not allowed, use POST'}),
-            'isBase64Encoded': False
-        }
+    tiktok_username = os.environ.get('TIKTOK_USERNAME', 'nargizamuz')
     
     try:
-        body = event.get('body', '{}')
-        data = json.loads(body)
+        url = 'https://social-data-api1.p.rapidapi.com/user/info'
+        
+        headers = {
+            'x-rapidapi-key': os.environ.get('RAPIDAPI_KEY'),
+            'x-rapidapi-host': 'social-data-api1.p.rapidapi.com'
+        }
+        
+        params = {
+            'username': tiktok_username
+        }
+        
+        response = requests.get(url, headers=headers, params=params, timeout=15)
+        
+        if response.status_code != 200:
+            raise Exception(f'SocialData API returned status {response.status_code}: {response.text[:200]}')
+        
+        data = response.json()
+        
+        if not data or 'follower_count' not in data:
+            raise Exception(f'Invalid API response: {json.dumps(data)[:300]}')
         
         follower_count = data.get('follower_count', 0)
         heart_count = data.get('heart_count', 0)
-        
-        if follower_count == 0 and heart_count == 0:
-            raise Exception('Укажи follower_count и heart_count')
         
         dsn = os.environ.get('DATABASE_URL')
         conn = psycopg2.connect(dsn)
@@ -98,6 +88,7 @@ def handler(event: dict, context) -> dict:
             'body': json.dumps({
                 'success': True,
                 'platform': 'tiktok',
+                'username': tiktok_username,
                 'follower_count': follower_count,
                 'heart_count': heart_count,
                 'updated_at': datetime.now().isoformat()
