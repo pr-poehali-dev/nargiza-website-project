@@ -609,7 +609,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
             <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
               <CardContent className="p-12 text-center">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
@@ -641,6 +641,29 @@ const Index = () => {
                       {streamingStats?.youtube?.views ? streamingStats.youtube.views.toLocaleString('ru-RU') : '...'}
                     </p>
                     <p className="text-xs text-muted-foreground">Просмотров</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
+              <CardContent className="p-8 text-center">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-black to-gray-900 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                  <Icon name="Video" size={32} className="text-white" />
+                </div>
+                <h4 className="text-3xl font-bold mb-4">TikTok</h4>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent mb-1">
+                      {streamingStats?.tiktok ? streamingStats.tiktok.followers.toLocaleString('ru-RU') : '...'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Подписчиков</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent mb-1">
+                      {streamingStats?.tiktok?.likes ? streamingStats.tiktok.likes.toLocaleString('ru-RU') : '...'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Лайков</p>
                   </div>
                 </div>
               </CardContent>
