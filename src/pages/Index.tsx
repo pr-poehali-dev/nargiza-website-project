@@ -417,11 +417,14 @@ const Index = () => {
       <audio 
         ref={audioRef} 
         loop 
-        preload="auto" 
-        src="https://files.catbox.moe/ylylo7.mp3"
+        preload="auto"
+        crossOrigin="anonymous"
         onError={(e) => console.error('Audio loading error:', e)}
         onLoadedData={() => console.log('Audio loaded successfully')}
-      />
+      >
+        <source src="https://files.catbox.moe/ylylo7.mp3" type="audio/mpeg" />
+        Ваш браузер не поддерживает аудио элемент.
+      </audio>
       <SnowEffect />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
