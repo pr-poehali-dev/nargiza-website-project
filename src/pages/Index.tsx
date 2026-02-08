@@ -79,31 +79,31 @@ const Index = () => {
   useEffect(() => {
     const audio = new Audio('https://files.catbox.moe/ylylo7.mp3');
     audio.loop = true;
-    audio.volume = 0.2;
+    audio.volume = 0.3;
+    audio.preload = 'auto';
     setAudioElement(audio);
     
-    const playAudio = () => {
-      audio.play().then(() => {
-        setIsMusicPlaying(true);
-      }).catch(() => {
-        setIsMusicPlaying(false);
-      });
-    };
-
+    let hasStarted = false;
+    
     const handleFirstInteraction = () => {
-      playAudio();
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
+      if (!hasStarted) {
+        hasStarted = true;
+        audio.play().then(() => {
+          setIsMusicPlaying(true);
+        }).catch((error) => {
+          console.log('Failed to play audio:', error);
+          setIsMusicPlaying(false);
+        });
+      }
     };
 
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
+    document.addEventListener('click', handleFirstInteraction, { once: true });
+    document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+    document.addEventListener('keydown', handleFirstInteraction, { once: true });
 
     return () => {
       audio.pause();
       audio.src = '';
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
     };
   }, []);
 
