@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
@@ -74,31 +74,18 @@ const Index = () => {
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    const audio = new Audio('https://files.catbox.moe/ylylo7.mp3');
-    audio.loop = true;
-    audio.volume = 0.3;
-    audio.preload = 'auto';
-    setAudioElement(audio);
-
-    return () => {
-      audio.pause();
-      audio.src = '';
-    };
-  }, []);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const toggleMusic = () => {
-    if (audioElement) {
+    if (audioRef.current) {
       if (isMusicPlaying) {
-        audioElement.pause();
+        audioRef.current.pause();
         setIsMusicPlaying(false);
       } else {
-        audioElement.play().then(() => {
+        audioRef.current.play().then(() => {
           setIsMusicPlaying(true);
         }).catch(error => {
-          console.log('Play failed:', error);
+          console.error('Play failed:', error);
         });
       }
     }
@@ -410,6 +397,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <audio ref={audioRef} loop preload="auto" src="https://files.catbox.moe/ylylo7.mp3" />
       <SnowEffect />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
