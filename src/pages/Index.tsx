@@ -75,9 +75,9 @@ const Index = () => {
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
 
   useEffect(() => {
-    const audio = new Audio('/background-music.mp3');
+    const audio = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_4a273e7c49.mp3');
     audio.loop = true;
-    audio.volume = 0.3;
+    audio.volume = 0.2;
     
     const playAudio = () => {
       audio.play().catch(error => {
