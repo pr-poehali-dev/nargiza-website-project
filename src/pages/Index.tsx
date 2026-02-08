@@ -77,17 +77,34 @@ const Index = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const toggleMusic = () => {
-    if (audioRef.current) {
-      if (isMusicPlaying) {
-        audioRef.current.pause();
-        setIsMusicPlaying(false);
-      } else {
-        audioRef.current.play().then(() => {
+    const audio = audioRef.current;
+    if (!audio) {
+      console.error('Audio element not found');
+      return;
+    }
+
+    console.log('Audio element state:', {
+      readyState: audio.readyState,
+      networkState: audio.networkState,
+      error: audio.error,
+      src: audio.src,
+      paused: audio.paused
+    });
+
+    if (isMusicPlaying) {
+      audio.pause();
+      setIsMusicPlaying(false);
+      console.log('Music paused');
+    } else {
+      audio.play()
+        .then(() => {
           setIsMusicPlaying(true);
-        }).catch(error => {
+          console.log('Music playing successfully');
+        })
+        .catch(error => {
           console.error('Play failed:', error);
+          alert(`Не удалось запустить музыку: ${error.message}`);
         });
-      }
     }
   };
 
@@ -397,7 +414,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <audio ref={audioRef} loop preload="auto" src="https://files.catbox.moe/ylylo7.mp3" />
+      <audio 
+        ref={audioRef} 
+        loop 
+        preload="auto" 
+        src="https://files.catbox.moe/ylylo7.mp3"
+        onError={(e) => console.error('Audio loading error:', e)}
+        onLoadedData={() => console.log('Audio loaded successfully')}
+      />
       <SnowEffect />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
