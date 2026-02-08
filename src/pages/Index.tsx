@@ -77,7 +77,7 @@ const Index = () => {
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    const audio = new Audio('https://cloud.mail.ru/public/qoDu/85qrgAuj9');
     audio.loop = true;
     audio.volume = 0.2;
     setAudioElement(audio);
