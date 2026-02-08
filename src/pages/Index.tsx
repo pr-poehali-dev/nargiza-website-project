@@ -74,6 +74,27 @@ const Index = () => {
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
 
+  useEffect(() => {
+    const audio = new Audio('/background-music.mp3');
+    audio.loop = true;
+    audio.volume = 0.3;
+    
+    const playAudio = () => {
+      audio.play().catch(error => {
+        console.log('Autoplay blocked, waiting for user interaction:', error);
+      });
+    };
+
+    playAudio();
+    document.addEventListener('click', playAudio, { once: true });
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+      document.removeEventListener('click', playAudio);
+    };
+  }, []);
+
   const updateStreamingStats = async () => {
     setIsUpdatingStats(true);
     try {
