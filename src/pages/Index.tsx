@@ -421,7 +421,7 @@ const Index = () => {
         onError={(e) => console.error('Audio loading error:', e)}
         onLoadedData={() => console.log('Audio loaded successfully')}
       >
-        <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg" />
+        <source src="https://pixeldrain.com/api/file/sAF7UF5y" type="audio/mpeg" />
         Ваш браузер не поддерживает аудио элемент.
       </audio>
       <SnowEffect />
