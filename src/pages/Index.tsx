@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
@@ -73,40 +73,6 @@ const Index = () => {
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const toggleMusic = () => {
-    const audio = audioRef.current;
-    if (!audio) {
-      console.error('Audio element not found');
-      return;
-    }
-
-    console.log('Audio element state:', {
-      readyState: audio.readyState,
-      networkState: audio.networkState,
-      error: audio.error,
-      src: audio.src,
-      paused: audio.paused
-    });
-
-    if (isMusicPlaying) {
-      audio.pause();
-      setIsMusicPlaying(false);
-      console.log('Music paused');
-    } else {
-      audio.play()
-        .then(() => {
-          setIsMusicPlaying(true);
-          console.log('Music playing successfully');
-        })
-        .catch(error => {
-          console.error('Play failed:', error);
-          alert(`Не удалось запустить музыку: ${error.message}`);
-        });
-    }
-  };
 
   const updateStreamingStats = async () => {
     setIsUpdatingStats(true);
@@ -414,14 +380,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <audio 
-        ref={audioRef} 
-        src="https://pixeldrain.com/api/file/sAF7UF5y"
-        loop 
-        preload="auto"
-        onError={(e) => console.error('Audio loading error:', e)}
-        onLoadedData={() => console.log('Audio loaded successfully')}
-      />
       <SnowEffect />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
@@ -464,16 +422,7 @@ const Index = () => {
                 {t('nav.videos')}
               </button>
             </div>
-            <div className="flex gap-4 items-center">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleMusic}
-                className="gap-2"
-                title={isMusicPlaying ? 'Выключить музыку' : 'Включить музыку'}
-              >
-                <Icon name={isMusicPlaying ? "Volume2" : "VolumeX"} size={18} />
-              </Button>
+            <div className="flex gap-4">
               <Button
                 variant="ghost"
                 size="sm"
