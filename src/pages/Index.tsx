@@ -77,7 +77,7 @@ const Index = () => {
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio('https://drive.google.com/uc?export=download&id=1JsS_BTIiteFIZOs32HCnkr_DEbVT3zxa');
+    const audio = new Audio('https://files.catbox.moe/ylylo7.mp3');
     audio.loop = true;
     audio.volume = 0.2;
     setAudioElement(audio);
