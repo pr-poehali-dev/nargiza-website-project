@@ -73,14 +73,19 @@ const Index = () => {
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const audio = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_4a273e7c49.mp3');
     audio.loop = true;
     audio.volume = 0.2;
+    setAudioElement(audio);
     
     const playAudio = () => {
-      audio.play().catch(error => {
+      audio.play().then(() => {
+        setIsMusicPlaying(true);
+      }).catch(error => {
         console.log('Autoplay blocked, waiting for user interaction:', error);
       });
     };
@@ -94,6 +99,21 @@ const Index = () => {
       document.removeEventListener('click', playAudio);
     };
   }, []);
+
+  const toggleMusic = () => {
+    if (audioElement) {
+      if (isMusicPlaying) {
+        audioElement.pause();
+        setIsMusicPlaying(false);
+      } else {
+        audioElement.play().then(() => {
+          setIsMusicPlaying(true);
+        }).catch(error => {
+          console.log('Play failed:', error);
+        });
+      }
+    }
+  };
 
   const updateStreamingStats = async () => {
     setIsUpdatingStats(true);
@@ -443,7 +463,16 @@ const Index = () => {
                 {t('nav.videos')}
               </button>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleMusic}
+                className="gap-2"
+                title={isMusicPlaying ? 'Выключить музыку' : 'Включить музыку'}
+              >
+                <Icon name={isMusicPlaying ? "Volume2" : "VolumeX"} size={18} />
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
