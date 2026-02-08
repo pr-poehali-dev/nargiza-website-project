@@ -418,11 +418,10 @@ const Index = () => {
         ref={audioRef} 
         loop 
         preload="auto"
-        crossOrigin="anonymous"
         onError={(e) => console.error('Audio loading error:', e)}
         onLoadedData={() => console.log('Audio loaded successfully')}
       >
-        <source src="https://files.catbox.moe/ylylo7.mp3" type="audio/mpeg" />
+        <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg" />
         Ваш браузер не поддерживает аудио элемент.
       </audio>
       <SnowEffect />
