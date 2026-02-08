@@ -416,14 +416,12 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground">
       <audio 
         ref={audioRef} 
+        src="https://pixeldrain.com/api/file/sAF7UF5y"
         loop 
         preload="auto"
         onError={(e) => console.error('Audio loading error:', e)}
         onLoadedData={() => console.log('Audio loaded successfully')}
-      >
-        <source src="https://pixeldrain.com/api/file/sAF7UF5y" type="audio/mpeg" />
-        Ваш браузер не поддерживает аудио элемент.
-      </audio>
+      />
       <SnowEffect />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
