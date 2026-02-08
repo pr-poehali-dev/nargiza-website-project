@@ -77,7 +77,7 @@ const Index = () => {
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_4a273e7c49.mp3');
+    const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
     audio.loop = true;
     audio.volume = 0.2;
     setAudioElement(audio);
@@ -85,18 +85,25 @@ const Index = () => {
     const playAudio = () => {
       audio.play().then(() => {
         setIsMusicPlaying(true);
-      }).catch(error => {
-        console.log('Autoplay blocked, waiting for user interaction:', error);
+      }).catch(() => {
+        setIsMusicPlaying(false);
       });
     };
 
-    playAudio();
-    document.addEventListener('click', playAudio, { once: true });
+    const handleFirstInteraction = () => {
+      playAudio();
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
 
     return () => {
       audio.pause();
       audio.src = '';
-      document.removeEventListener('click', playAudio);
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
     };
   }, []);
 
