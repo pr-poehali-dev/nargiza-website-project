@@ -81,6 +81,15 @@ const Index = () => {
     audio.loop = true;
     audio.volume = 0.3;
     audio.preload = 'auto';
+    
+    audio.addEventListener('loadeddata', () => {
+      console.log('Audio loaded successfully');
+    });
+    
+    audio.addEventListener('error', (e) => {
+      console.error('Audio error:', e);
+    });
+    
     setAudioElement(audio);
     
     let hasStarted = false;
@@ -88,22 +97,29 @@ const Index = () => {
     const handleFirstInteraction = () => {
       if (!hasStarted) {
         hasStarted = true;
+        console.log('Attempting to play audio...');
         audio.play().then(() => {
+          console.log('Audio playing successfully');
           setIsMusicPlaying(true);
         }).catch((error) => {
-          console.log('Failed to play audio:', error);
+          console.error('Failed to play audio:', error);
           setIsMusicPlaying(false);
         });
       }
     };
 
-    document.addEventListener('click', handleFirstInteraction, { once: true });
-    document.addEventListener('touchstart', handleFirstInteraction, { once: true });
-    document.addEventListener('keydown', handleFirstInteraction, { once: true });
+    setTimeout(() => {
+      handleFirstInteraction();
+    }, 1000);
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
 
     return () => {
       audio.pause();
       audio.src = '';
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
     };
   }, []);
 
