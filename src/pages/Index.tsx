@@ -705,7 +705,7 @@ const Index = () => {
 
       <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 animate-pulse"></div>
-        <div className="container mx-auto max-w-4xl relative z-10">
+        <div className="container mx-auto max-w-4xl relative z-10 space-y-8">
           <a 
             href="https://t.me/+S_nWXyBTkcI0MzQy" 
             target="_blank" 
@@ -736,6 +736,34 @@ const Index = () => {
                   )}
                   <div className="inline-flex items-center gap-3 text-lg font-semibold text-primary group-hover:gap-5 transition-all">
                     <span>Открыть Telegram</span>
+                    <Icon name="ArrowRight" size={24} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a 
+            href="https://max.ru/join/btkovK_LOSzZKNOdqyqwtZQVlqwxcQX56V63RCHNNSE" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block group"
+          >
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 p-1 hover:scale-[1.02] transition-all duration-300 shadow-2xl hover:shadow-blue-500/50">
+              <div className="bg-background rounded-[22px] p-12 md:p-16 text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 group-hover:from-blue-500/10 group-hover:via-purple-500/10 group-hover:to-blue-500/10 transition-all"></div>
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                    <Icon name="MessageCircle" size={36} className="text-white" />
+                  </div>
+                  <h3 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                    Присоединяйся к Max
+                  </h3>
+                  <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
+                    Эксклюзивный контент, новости и общение с фанатами
+                  </p>
+                  <div className="inline-flex items-center gap-3 text-lg font-semibold text-blue-500 group-hover:gap-5 transition-all">
+                    <span>Открыть Max</span>
                     <Icon name="ArrowRight" size={24} className="group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
