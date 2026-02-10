@@ -343,6 +343,8 @@ const Index = () => {
         console.log('Max stats response:', data);
         if (data.subscribers && data.subscribers > 0) {
           setMaxSubscribers(data.subscribers);
+        } else {
+          console.warn('Max channel stats unavailable:', data.error);
         }
       } catch (error) {
         console.error('Error fetching Max stats:', error);
