@@ -47,6 +47,21 @@ def handler(event: dict, context) -> dict:
                     if subscribers_match:
                         break
                 
+                debug_mode = event.get('queryStringParameters', {}).get('debug') == 'true'
+                
+                if debug_mode:
+                    return {
+                        'statusCode': 200,
+                        'headers': {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        },
+                        'body': json.dumps({
+                            'html_preview': html[:3000],
+                            'html_length': len(html)
+                        })
+                    }
+                
                 if subscribers_match:
                     count_str = subscribers_match.group(1).replace(' ', '').replace('\xa0', '').replace(',', '')
                     
@@ -77,7 +92,8 @@ def handler(event: dict, context) -> dict:
                         'body': json.dumps({
                             'subscribers': 0,
                             'source': 'max',
-                            'error': 'Subscribers count not found in HTML'
+                            'error': 'Subscribers count not found in HTML',
+                            'html_preview': html[:500]
                         })
                     }
                     
