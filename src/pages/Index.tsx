@@ -438,7 +438,7 @@ const Index = () => {
                 </a>
               </Button>
               <Button variant="ghost" size="icon" asChild>
-                <a href="https://max.ru/join/H4mTmMsolpd8rW3VWN9f0BN_L_ifpKzkTe2ybXRPALk" target="_blank" rel="noopener noreferrer">
+                <a href="https://max.ru/join/btkovK_LOSzZKNOdqyqwtZQVlqwxcQX56V63RCHNNSE" target="_blank" rel="noopener noreferrer">
                   <Icon name="MessageCircle" size={20} />
                 </a>
               </Button>
