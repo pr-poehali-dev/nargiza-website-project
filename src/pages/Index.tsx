@@ -73,7 +73,6 @@ const Index = () => {
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
-  const [maxSubscribers, setMaxSubscribers] = useState<number | null>(null);
 
   const updateStreamingStats = async () => {
     setIsUpdatingStats(true);
@@ -336,24 +335,9 @@ const Index = () => {
       }
     };
 
-    const fetchMaxStats = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/91863a01-4d74-41c2-87b0-22916a3eb4d4');
-        const data = await response.json();
-        console.log('Max stats response:', data);
-        if (data.subscribers && data.subscribers > 0) {
-          setMaxSubscribers(data.subscribers);
-        }
-      } catch (error) {
-        console.error('Error fetching Max stats:', error);
-      }
-    };
-
     fetchTelegramStats();
-    fetchMaxStats();
     const interval = setInterval(() => {
       fetchTelegramStats();
-      fetchMaxStats();
     }, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -780,15 +764,6 @@ const Index = () => {
                   <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
                     Эксклюзивный контент, новости и общение с фанатами
                   </p>
-                  {maxSubscribers !== null && (
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                      <Icon name="Users" size={20} className="text-blue-500" />
-                      <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                        {maxSubscribers.toLocaleString('ru-RU')}
-                      </span>
-                      <span className="text-lg text-muted-foreground">подписчиков</span>
-                    </div>
-                  )}
                   <div className="inline-flex items-center gap-3 text-lg font-semibold text-blue-500 group-hover:gap-5 transition-all">
                     <span>Открыть Max</span>
                     <Icon name="ArrowRight" size={24} className="group-hover:translate-x-1 transition-transform" />
