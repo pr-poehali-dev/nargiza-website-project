@@ -438,6 +438,11 @@ const Index = () => {
                 </a>
               </Button>
               <Button variant="ghost" size="icon" asChild>
+                <a href="https://max.ru/join/H4mTmMsolpd8rW3VWN9f0BN_L_ifpKzkTe2ybXRPALk" target="_blank" rel="noopener noreferrer">
+                  <Icon name="MessageCircle" size={20} />
+                </a>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
                 <a href="https://www.instagram.com/nargizamuz?igsh=MThzaDNsYmF0cHdqdg==" target="_blank" rel="noopener noreferrer">
                   <Icon name="Instagram" size={20} />
                 </a>
@@ -501,6 +506,11 @@ const Index = () => {
                   </a>
                 </Button>
                 <Button variant="ghost" size="icon" asChild>
+                  <a href="https://max.ru/join/H4mTmMsolpd8rW3VWN9f0BN_L_ifpKzkTe2ybXRPALk" target="_blank" rel="noopener noreferrer">
+                    <Icon name="MessageCircle" size={20} />
+                  </a>
+                </Button>
+                <Button variant="ghost" size="icon" asChild>
                   <a href="https://www.instagram.com/nargizamuz?igsh=MThzaDNsYmF0cHdqdg==" target="_blank" rel="noopener noreferrer">
                     <Icon name="Instagram" size={20} />
                   </a>
@@ -510,8 +520,10 @@ const Index = () => {
                     <Icon name="Youtube" size={20} />
                   </a>
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Icon name="Music" size={20} />
+                <Button variant="ghost" size="icon" asChild>
+                  <a href="https://tiktok.com/@nargizamuz" target="_blank" rel="noopener noreferrer">
+                    <Icon name="Music" size={20} />
+                  </a>
                 </Button>
               </div>
             </div>
