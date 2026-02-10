@@ -32,16 +32,29 @@ def handler(event: dict, context) -> dict:
             with urllib.request.urlopen(req, timeout=10) as response:
                 html = response.read().decode('utf-8')
                 
-                print(f'HTML snippet: {html[:2000]}...')
+                patterns = [
+                    r'(\d+[\s\d]*[kкKК]?)\s*подписчик',
+                    r'(\d+[\s\d]*[kкKК]?)\s*участник',
+                    r'subscribers["\']?\s*:\s*["\']?(\d+)',
+                    r'members["\']?\s*:\s*["\']?(\d+)',
+                    r'"subscribersCount"\s*:\s*(\d+)',
+                    r'"membersCount"\s*:\s*(\d+)',
+                ]
                 
-                subscribers_match = re.search(r'(\d+[\s\d]*)\s*подписчик', html, re.IGNORECASE)
-                if not subscribers_match:
-                    subscribers_match = re.search(r'(\d+[\s\d]*)\s*участник', html, re.IGNORECASE)
+                subscribers_match = None
+                for pattern in patterns:
+                    subscribers_match = re.search(pattern, html, re.IGNORECASE)
+                    if subscribers_match:
+                        break
                 
                 if subscribers_match:
-                    count_str = subscribers_match.group(1).replace(' ', '').replace('\xa0', '')
-                    count = int(count_str)
-                    print(f'Found: {subscribers_match.group(0)} -> {count}')
+                    count_str = subscribers_match.group(1).replace(' ', '').replace('\xa0', '').replace(',', '')
+                    
+                    if 'k' in count_str.lower() or 'к' in count_str.lower():
+                        count_str = count_str.lower().replace('k', '').replace('к', '')
+                        count = int(float(count_str) * 1000)
+                    else:
+                        count = int(count_str)
                     
                     return {
                         'statusCode': 200,
