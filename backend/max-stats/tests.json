@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Get Max subscribers count",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "subscribers": "number",
+        "source": "max"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
