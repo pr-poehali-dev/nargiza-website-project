@@ -32,6 +32,8 @@ def handler(event: dict, context) -> dict:
             with urllib.request.urlopen(req, timeout=10) as response:
                 html = response.read().decode('utf-8')
                 
+                print(f'HTML snippet: {html[:2000]}...')
+                
                 subscribers_match = re.search(r'(\d+[\s\d]*)\s*подписчик', html, re.IGNORECASE)
                 if not subscribers_match:
                     subscribers_match = re.search(r'(\d+[\s\d]*)\s*участник', html, re.IGNORECASE)
@@ -39,6 +41,7 @@ def handler(event: dict, context) -> dict:
                 if subscribers_match:
                     count_str = subscribers_match.group(1).replace(' ', '').replace('\xa0', '')
                     count = int(count_str)
+                    print(f'Found: {subscribers_match.group(0)} -> {count}')
                     
                     return {
                         'statusCode': 200,
