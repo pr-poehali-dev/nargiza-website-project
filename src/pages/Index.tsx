@@ -313,7 +313,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SnowEffect />
-      <RadioPlayer />
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -490,6 +489,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <RadioPlayer />
 
       <section className="py-32 px-6 bg-gradient-to-b from-background via-card/50 to-background">
         <div className="container mx-auto max-w-5xl">
