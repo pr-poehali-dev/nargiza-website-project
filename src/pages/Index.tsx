@@ -465,7 +465,7 @@ const Index = () => {
 
       <section id="home" className="relative h-screen flex items-end justify-center overflow-hidden pb-20">
         <img
-          src="https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/bucket/6140e322-80a0-4e0f-a501-789ea4d25e06.jpg"
+          src="https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/bucket/90310330-b0a3-4212-8ca6-48ae2ed3d1a8.jpg"
           alt="Nargiza background"
           className="absolute inset-0 w-full h-full object-cover animate-fade-in"
           style={{ transform: `translateY(${scrollY * 0.5}px)` }}
