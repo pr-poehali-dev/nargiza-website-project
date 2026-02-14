@@ -1,47 +1,106 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Icon from '@/components/ui/icon';
 
-const STREAM_URL = 'http://130.49.148.73:1030';
+const PROXY_URL = 'https://functions.poehali.dev/daa3b167-1f44-4b41-b7f3-1328e7b93115';
 
 const RadioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mediaSourceRef = useRef<MediaSource | null>(null);
+  const sourceBufferRef = useRef<SourceBuffer | null>(null);
+  const fetchingRef = useRef(false);
+  const stoppedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [isLoading, setIsLoading] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
-  useEffect(() => {
-    const audio = new Audio(STREAM_URL);
-    audio.volume = volume;
-    audioRef.current = audio;
+  const fetchChunk = useCallback(async () => {
+    if (fetchingRef.current || stoppedRef.current) return;
+    fetchingRef.current = true;
 
-    audio.addEventListener('playing', () => {
-      setIsPlaying(true);
-      setAutoplayBlocked(false);
-    });
+    try {
+      const response = await fetch(PROXY_URL);
+      if (!response.ok) throw new Error('Stream error');
 
-    audio.addEventListener('pause', () => {
-      setIsPlaying(false);
-    });
+      const arrayBuffer = await response.arrayBuffer();
+      const sb = sourceBufferRef.current;
 
-    audio.addEventListener('error', () => {
-      setIsPlaying(false);
-    });
-
-    const tryAutoplay = async () => {
-      try {
-        await audio.play();
-      } catch {
-        setAutoplayBlocked(true);
+      if (sb && !sb.updating && mediaSourceRef.current?.readyState === 'open') {
+        sb.appendBuffer(arrayBuffer);
       }
-    };
+    } catch (e) {
+      console.error('Radio chunk error:', e);
+    } finally {
+      fetchingRef.current = false;
+    }
+  }, []);
 
-    tryAutoplay();
+  const startStream = useCallback(async () => {
+    stoppedRef.current = false;
+    setIsLoading(true);
 
-    return () => {
-      audio.pause();
-      audio.src = '';
-      audio.load();
-    };
+    if (!window.MediaSource) {
+      setIsLoading(false);
+      return;
+    }
+
+    const audio = audioRef.current || new Audio();
+    audioRef.current = audio;
+    audio.volume = volume;
+
+    const ms = new MediaSource();
+    mediaSourceRef.current = ms;
+    audio.src = URL.createObjectURL(ms);
+
+    ms.addEventListener('sourceopen', async () => {
+      try {
+        const sb = ms.addSourceBuffer('audio/mpeg');
+        sourceBufferRef.current = sb;
+
+        sb.addEventListener('updateend', () => {
+          if (!stoppedRef.current) {
+            setTimeout(fetchChunk, 100);
+          }
+        });
+
+        await fetchChunk();
+        setIsLoading(false);
+
+        try {
+          await audio.play();
+          setIsPlaying(true);
+          setAutoplayBlocked(false);
+        } catch (_e) {
+          setAutoplayBlocked(true);
+          setIsPlaying(false);
+        }
+      } catch (e) {
+        console.error('MediaSource error:', e);
+        setIsLoading(false);
+      }
+    });
+  }, [volume, fetchChunk]);
+
+  const stopStream = useCallback(() => {
+    stoppedRef.current = true;
+    fetchingRef.current = false;
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    if (mediaSourceRef.current?.readyState === 'open') {
+      try { mediaSourceRef.current.endOfStream(); } catch (_e) { /* stream already closed */ }
+    }
+    mediaSourceRef.current = null;
+    sourceBufferRef.current = null;
+    setIsPlaying(false);
+  }, []);
+
+  useEffect(() => {
+    startStream();
+    return () => stopStream();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -51,17 +110,10 @@ const RadioPlayer = () => {
   }, [volume]);
 
   const togglePlay = async () => {
-    if (!audioRef.current) return;
-
     if (isPlaying) {
-      audioRef.current.pause();
+      stopStream();
     } else {
-      try {
-        audioRef.current.src = STREAM_URL;
-        await audioRef.current.play();
-      } catch {
-        setAutoplayBlocked(true);
-      }
+      await startStream();
     }
   };
 
@@ -71,6 +123,7 @@ const RadioPlayer = () => {
         <div className="flex items-center justify-center gap-4 sm:gap-6">
           <button
             onClick={togglePlay}
+            disabled={isLoading}
             className={`
               relative w-12 h-12 rounded-full shrink-0
               flex items-center justify-center transition-all duration-300
@@ -80,12 +133,13 @@ const RadioPlayer = () => {
               }
               ${autoplayBlocked ? 'animate-pulse' : ''}
               hover:scale-110 active:scale-95
+              disabled:opacity-50
             `}
           >
             {isPlaying && (
               <span className="absolute inset-0 rounded-full border-2 border-primary/40 animate-ping" />
             )}
-            <Icon name={isPlaying ? 'Pause' : 'Play'} size={20} />
+            <Icon name={isLoading ? 'Loader2' : isPlaying ? 'Pause' : 'Play'} size={20} className={isLoading ? 'animate-spin' : ''} />
           </button>
 
           <div className="flex items-center gap-3 min-w-0">
@@ -103,7 +157,7 @@ const RadioPlayer = () => {
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-semibold truncate">NARGIZA Radio</span>
               <span className="text-xs text-muted-foreground truncate">
-                {isPlaying ? 'В эфире' : autoplayBlocked ? 'Нажмите Play' : 'Загрузка...'}
+                {isLoading ? 'Загрузка...' : isPlaying ? 'В эфире' : autoplayBlocked ? 'Нажмите Play' : 'Остановлено'}
               </span>
             </div>
           </div>
