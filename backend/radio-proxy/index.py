@@ -23,14 +23,14 @@ def handler(event, context):
             STREAM_URL,
             headers={'Icy-MetaData': '1', 'User-Agent': 'Mozilla/5.0'},
             stream=True,
-            timeout=(5, 15)
+            timeout=(5, 30)
         )
         ct = r.headers.get('Content-Type', '')
 
         data = b''
-        for chunk in r.iter_content(chunk_size=8192):
+        for chunk in r.iter_content(chunk_size=16384):
             data += chunk
-            if len(data) >= 256 * 1024:
+            if len(data) >= 512 * 1024:
                 break
         r.close()
 

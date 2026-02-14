@@ -1,97 +1,163 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Icon from '@/components/ui/icon';
 
 const PROXY_URL = 'https://functions.poehali.dev/daa3b167-1f44-4b41-b7f3-1328e7b93115';
 
 const RadioPlayer = () => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioARef = useRef<HTMLAudioElement | null>(null);
+  const audioBRef = useRef<HTMLAudioElement | null>(null);
+  const activeRef = useRef<'A' | 'B'>('A');
   const stoppedRef = useRef(false);
-  const blobUrlRef = useRef<string | null>(null);
+  const blobUrlsRef = useRef<string[]>([]);
+  const prefetchedBlobRef = useRef<Blob | null>(null);
+  const isFetchingRef = useRef(false);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isLoading, setIsLoading] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
-  const playChunk = async () => {
+  const cleanupBlobUrl = (url: string) => {
+    URL.revokeObjectURL(url);
+    blobUrlsRef.current = blobUrlsRef.current.filter(u => u !== url);
+  };
+
+  const fetchChunk = async (): Promise<Blob | null> => {
+    if (stoppedRef.current) return null;
+    try {
+      const response = await fetch(PROXY_URL);
+      if (!response.ok) return null;
+      return await response.blob();
+    } catch {
+      return null;
+    }
+  };
+
+  const prefetchNext = useCallback(async () => {
+    if (stoppedRef.current || isFetchingRef.current || prefetchedBlobRef.current) return;
+    isFetchingRef.current = true;
+    const blob = await fetchChunk();
+    if (blob && !stoppedRef.current) {
+      prefetchedBlobRef.current = blob;
+    }
+    isFetchingRef.current = false;
+  }, []);
+
+  const getActiveAudio = useCallback(() => {
+    return activeRef.current === 'A' ? audioARef.current : audioBRef.current;
+  }, []);
+
+  const getInactiveAudio = useCallback(() => {
+    return activeRef.current === 'A' ? audioBRef.current : audioARef.current;
+  }, []);
+
+  const playChunk = useCallback(async (blob?: Blob | null) => {
     if (stoppedRef.current) return;
     setIsLoading(true);
 
-    try {
-      const response = await fetch(PROXY_URL);
-      if (!response.ok) throw new Error('Stream error');
+    let audioBlob = blob || prefetchedBlobRef.current;
+    prefetchedBlobRef.current = null;
 
-      const blob = await response.blob();
-      if (stoppedRef.current) return;
+    if (!audioBlob) {
+      audioBlob = await fetchChunk();
+    }
 
-      if (blobUrlRef.current) {
-        URL.revokeObjectURL(blobUrlRef.current);
-      }
-
-      const url = URL.createObjectURL(blob);
-      blobUrlRef.current = url;
-
-      const audio = audioRef.current || new Audio();
-      audioRef.current = audio;
-      audio.volume = volume;
-      audio.src = url;
-
-      audio.onended = () => {
-        if (!stoppedRef.current) {
-          playChunk();
-        }
-      };
-
-      audio.onerror = () => {
-        if (!stoppedRef.current) {
-          setTimeout(playChunk, 2000);
-        }
-      };
-
-      setIsLoading(false);
-
-      try {
-        await audio.play();
-        setIsPlaying(true);
-        setAutoplayBlocked(false);
-      } catch (_e) {
-        setAutoplayBlocked(true);
-        setIsPlaying(false);
-      }
-    } catch (e) {
-      console.error('Radio error:', e);
+    if (!audioBlob || stoppedRef.current) {
       setIsLoading(false);
       if (!stoppedRef.current) {
-        setTimeout(playChunk, 3000);
+        setTimeout(() => playChunk(), 3000);
       }
+      return;
     }
-  };
 
-  const stopStream = () => {
+    const url = URL.createObjectURL(audioBlob);
+    blobUrlsRef.current.push(url);
+
+    const audio = getActiveAudio();
+    if (!audio) return;
+
+    audio.volume = volume;
+    audio.src = url;
+
+    const handleTimeUpdate = () => {
+      if (audio.duration && audio.currentTime > audio.duration * 0.5) {
+        prefetchNext();
+      }
+    };
+
+    const handleEnded = () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+      cleanupBlobUrl(url);
+
+      if (!stoppedRef.current) {
+        activeRef.current = activeRef.current === 'A' ? 'B' : 'A';
+        playChunk();
+      }
+    };
+
+    const handleError = () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+      cleanupBlobUrl(url);
+
+      if (!stoppedRef.current) {
+        setTimeout(() => playChunk(), 2000);
+      }
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+
+    setIsLoading(false);
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+      setAutoplayBlocked(false);
+    } catch {
+      setAutoplayBlocked(true);
+      setIsPlaying(false);
+    }
+  }, [volume, getActiveAudio, prefetchNext]);
+
+  const stopStream = useCallback(() => {
     stoppedRef.current = true;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.onended = null;
-      audioRef.current.onerror = null;
-      audioRef.current.src = '';
-    }
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-      blobUrlRef.current = null;
-    }
+    prefetchedBlobRef.current = null;
+    isFetchingRef.current = false;
+
+    [audioARef.current, audioBRef.current].forEach(audio => {
+      if (audio) {
+        audio.pause();
+        audio.src = '';
+        audio.onended = null;
+        audio.onerror = null;
+      }
+    });
+
+    blobUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+    blobUrlsRef.current = [];
     setIsPlaying(false);
-  };
+  }, []);
 
   useEffect(() => {
+    audioARef.current = new Audio();
+    audioBRef.current = new Audio();
+
     stoppedRef.current = false;
     playChunk();
+
     return () => stopStream();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
+    [audioARef.current, audioBRef.current].forEach(audio => {
+      if (audio) audio.volume = volume;
+    });
   }, [volume]);
 
   const togglePlay = async () => {
