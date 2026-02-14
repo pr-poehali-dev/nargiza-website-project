@@ -18,6 +18,10 @@ def handler(event, context):
             'body': ''
         }
 
+    qs = event.get('queryStringParameters') or {}
+    size = int(qs.get('size', '256'))
+    max_bytes = max(64, min(size, 512)) * 1024
+
     try:
         r = requests.get(
             STREAM_URL,
@@ -30,7 +34,7 @@ def handler(event, context):
         data = b''
         for chunk in r.iter_content(chunk_size=16384):
             data += chunk
-            if len(data) >= 512 * 1024:
+            if len(data) >= max_bytes:
                 break
         r.close()
 

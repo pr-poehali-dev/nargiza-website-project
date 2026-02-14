@@ -7,71 +7,110 @@ const RadioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const stoppedRef = useRef(false);
   const blobUrlRef = useRef<string | null>(null);
+  const nextBlobRef = useRef<Blob | null>(null);
+  const fetchingNextRef = useRef(false);
+  const chunkIndexRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isLoading, setIsLoading] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
+  const fetchChunk = async (sizeKb: number): Promise<Blob | null> => {
+    if (stoppedRef.current) return null;
+    try {
+      const response = await fetch(`${PROXY_URL}?size=${sizeKb}`);
+      if (!response.ok) return null;
+      return await response.blob();
+    } catch {
+      return null;
+    }
+  };
+
+  const prefetchNext = async () => {
+    if (stoppedRef.current || fetchingNextRef.current || nextBlobRef.current) return;
+    fetchingNextRef.current = true;
+    const blob = await fetchChunk(512);
+    if (!stoppedRef.current) {
+      nextBlobRef.current = blob;
+    }
+    fetchingNextRef.current = false;
+  };
+
   const playChunk = async () => {
     if (stoppedRef.current) return;
-    setIsLoading(true);
 
-    try {
-      const response = await fetch(PROXY_URL);
-      if (!response.ok) throw new Error('Stream error');
+    const isFirst = chunkIndexRef.current === 0;
+    if (isFirst) setIsLoading(true);
 
-      const blob = await response.blob();
-      if (stoppedRef.current) return;
+    let blob = nextBlobRef.current;
+    nextBlobRef.current = null;
 
-      if (blobUrlRef.current) {
-        URL.revokeObjectURL(blobUrlRef.current);
-      }
+    if (!blob) {
+      blob = await fetchChunk(isFirst ? 128 : 512);
+    }
 
-      const url = URL.createObjectURL(blob);
-      blobUrlRef.current = url;
-
-      const audio = audioRef.current || new Audio();
-      audioRef.current = audio;
-      audio.volume = volume;
-      audio.src = url;
-
-      audio.onended = () => {
-        if (!stoppedRef.current) {
-          playChunk();
-        }
-      };
-
-      audio.onerror = () => {
-        if (!stoppedRef.current) {
-          setTimeout(playChunk, 2000);
-        }
-      };
-
-      setIsLoading(false);
-
-      try {
-        await audio.play();
-        setIsPlaying(true);
-        setAutoplayBlocked(false);
-      } catch {
-        setAutoplayBlocked(true);
-        setIsPlaying(false);
-      }
-    } catch (e) {
-      console.error('Radio error:', e);
+    if (!blob || stoppedRef.current) {
       setIsLoading(false);
       if (!stoppedRef.current) {
-        setTimeout(playChunk, 3000);
+        setTimeout(playChunk, 2000);
       }
+      return;
+    }
+
+    chunkIndexRef.current++;
+
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+    }
+
+    const url = URL.createObjectURL(blob);
+    blobUrlRef.current = url;
+
+    const audio = audioRef.current || new Audio();
+    audioRef.current = audio;
+    audio.volume = volume;
+    audio.src = url;
+
+    audio.onended = () => {
+      if (!stoppedRef.current) {
+        playChunk();
+      }
+    };
+
+    audio.onerror = () => {
+      if (!stoppedRef.current) {
+        setTimeout(playChunk, 2000);
+      }
+    };
+
+    audio.ontimeupdate = () => {
+      if (audio.duration && audio.currentTime > audio.duration * 0.5) {
+        prefetchNext();
+      }
+    };
+
+    setIsLoading(false);
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+      setAutoplayBlocked(false);
+    } catch {
+      setAutoplayBlocked(true);
+      setIsPlaying(false);
     }
   };
 
   const stopStream = () => {
     stoppedRef.current = true;
+    chunkIndexRef.current = 0;
+    nextBlobRef.current = null;
+    fetchingNextRef.current = false;
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.onended = null;
       audioRef.current.onerror = null;
+      audioRef.current.ontimeupdate = null;
       audioRef.current.src = '';
     }
     if (blobUrlRef.current) {
