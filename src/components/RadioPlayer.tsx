@@ -1,55 +1,105 @@
 import { useState, useEffect, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 
-const STREAM_URL = 'http://130.49.148.73:1040/stream';
+const PROXY_URL = 'https://functions.poehali.dev/25ae8eec-b1dc-4ba0-9c84-d8629c0b8d28';
 
 const RadioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const stoppedRef = useRef(false);
+  const blobUrlRef = useRef<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isLoading, setIsLoading] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+
+  const playChunk = async () => {
+    if (stoppedRef.current) return;
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(PROXY_URL);
+      if (!response.ok) throw new Error('Stream error');
+
+      const blob = await response.blob();
+      if (stoppedRef.current) return;
+
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+
+      const url = URL.createObjectURL(blob);
+      blobUrlRef.current = url;
+
+      const audio = audioRef.current || new Audio();
+      audioRef.current = audio;
+      audio.volume = volume;
+      audio.src = url;
+
+      audio.onended = () => {
+        if (!stoppedRef.current) {
+          playChunk();
+        }
+      };
+
+      audio.onerror = () => {
+        if (!stoppedRef.current) {
+          setTimeout(playChunk, 2000);
+        }
+      };
+
+      setIsLoading(false);
+
+      try {
+        await audio.play();
+        setIsPlaying(true);
+        setAutoplayBlocked(false);
+      } catch {
+        setAutoplayBlocked(true);
+        setIsPlaying(false);
+      }
+    } catch (e) {
+      console.error('Radio error:', e);
+      setIsLoading(false);
+      if (!stoppedRef.current) {
+        setTimeout(playChunk, 3000);
+      }
+    }
+  };
+
+  const stopStream = () => {
+    stoppedRef.current = true;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
+      audioRef.current.src = '';
+    }
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+    setIsPlaying(false);
+  };
 
   useEffect(() => {
-    const audio = new Audio();
-    audio.preload = 'none';
-    audioRef.current = audio;
-
-    audio.addEventListener('playing', () => {
-      setIsPlaying(true);
-      setIsLoading(false);
-    });
-    audio.addEventListener('waiting', () => setIsLoading(true));
-    audio.addEventListener('pause', () => setIsPlaying(false));
-    audio.addEventListener('error', () => {
-      setIsPlaying(false);
-      setIsLoading(false);
-    });
-
-    return () => {
-      audio.pause();
-      audio.src = '';
-    };
+    stoppedRef.current = false;
+    playChunk();
+    return () => stopStream();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = volume;
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
   }, [volume]);
 
   const togglePlay = async () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
     if (isPlaying) {
-      audio.pause();
-      audio.src = '';
+      stopStream();
     } else {
-      setIsLoading(true);
-      audio.src = STREAM_URL;
-      try {
-        await audio.play();
-      } catch {
-        setIsLoading(false);
-      }
+      stoppedRef.current = false;
+      await playChunk();
     }
   };
 
@@ -67,6 +117,7 @@ const RadioPlayer = () => {
                 ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
                 : 'bg-muted text-foreground hover:bg-muted/80'
               }
+              ${autoplayBlocked ? 'animate-pulse' : ''}
               hover:scale-110 active:scale-95
               disabled:opacity-50
             `}
@@ -92,7 +143,7 @@ const RadioPlayer = () => {
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-semibold truncate">NARGIZA Radio</span>
               <span className="text-xs text-muted-foreground truncate">
-                {isLoading ? 'Загрузка...' : isPlaying ? 'В эфире' : 'Остановлено'}
+                {isLoading ? 'Загрузка...' : isPlaying ? 'В эфире' : autoplayBlocked ? 'Нажмите Play' : 'Остановлено'}
               </span>
             </div>
           </div>
