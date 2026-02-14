@@ -1,104 +1,89 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 
 const PROXY_URL = 'https://functions.poehali.dev/daa3b167-1f44-4b41-b7f3-1328e7b93115';
 
 const RadioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const mediaSourceRef = useRef<MediaSource | null>(null);
-  const sourceBufferRef = useRef<SourceBuffer | null>(null);
-  const fetchingRef = useRef(false);
   const stoppedRef = useRef(false);
+  const blobUrlRef = useRef<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isLoading, setIsLoading] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
-  const fetchChunk = useCallback(async () => {
-    if (fetchingRef.current || stoppedRef.current) return;
-    fetchingRef.current = true;
+  const playChunk = async () => {
+    if (stoppedRef.current) return;
+    setIsLoading(true);
 
     try {
       const response = await fetch(PROXY_URL);
       if (!response.ok) throw new Error('Stream error');
 
-      const arrayBuffer = await response.arrayBuffer();
-      const sb = sourceBufferRef.current;
+      const blob = await response.blob();
+      if (stoppedRef.current) return;
 
-      if (sb && !sb.updating && mediaSourceRef.current?.readyState === 'open') {
-        sb.appendBuffer(arrayBuffer);
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+
+      const url = URL.createObjectURL(blob);
+      blobUrlRef.current = url;
+
+      const audio = audioRef.current || new Audio();
+      audioRef.current = audio;
+      audio.volume = volume;
+      audio.src = url;
+
+      audio.onended = () => {
+        if (!stoppedRef.current) {
+          playChunk();
+        }
+      };
+
+      audio.onerror = () => {
+        if (!stoppedRef.current) {
+          setTimeout(playChunk, 2000);
+        }
+      };
+
+      setIsLoading(false);
+
+      try {
+        await audio.play();
+        setIsPlaying(true);
+        setAutoplayBlocked(false);
+      } catch (_e) {
+        setAutoplayBlocked(true);
+        setIsPlaying(false);
       }
     } catch (e) {
-      console.error('Radio chunk error:', e);
-    } finally {
-      fetchingRef.current = false;
-    }
-  }, []);
-
-  const startStream = useCallback(async () => {
-    stoppedRef.current = false;
-    setIsLoading(true);
-
-    if (!window.MediaSource) {
+      console.error('Radio error:', e);
       setIsLoading(false);
-      return;
-    }
-
-    const audio = audioRef.current || new Audio();
-    audioRef.current = audio;
-    audio.volume = volume;
-
-    const ms = new MediaSource();
-    mediaSourceRef.current = ms;
-    audio.src = URL.createObjectURL(ms);
-
-    ms.addEventListener('sourceopen', async () => {
-      try {
-        const sb = ms.addSourceBuffer('audio/mpeg');
-        sourceBufferRef.current = sb;
-
-        sb.addEventListener('updateend', () => {
-          if (!stoppedRef.current) {
-            setTimeout(fetchChunk, 100);
-          }
-        });
-
-        await fetchChunk();
-        setIsLoading(false);
-
-        try {
-          await audio.play();
-          setIsPlaying(true);
-          setAutoplayBlocked(false);
-        } catch (_e) {
-          setAutoplayBlocked(true);
-          setIsPlaying(false);
-        }
-      } catch (e) {
-        console.error('MediaSource error:', e);
-        setIsLoading(false);
+      if (!stoppedRef.current) {
+        setTimeout(playChunk, 3000);
       }
-    });
-  }, [volume, fetchChunk]);
+    }
+  };
 
-  const stopStream = useCallback(() => {
+  const stopStream = () => {
     stoppedRef.current = true;
-    fetchingRef.current = false;
-
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
       audioRef.current.src = '';
     }
-    if (mediaSourceRef.current?.readyState === 'open') {
-      try { mediaSourceRef.current.endOfStream(); } catch (_e) { /* stream already closed */ }
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
     }
-    mediaSourceRef.current = null;
-    sourceBufferRef.current = null;
     setIsPlaying(false);
-  }, []);
+  };
 
   useEffect(() => {
-    startStream();
+    stoppedRef.current = false;
+    playChunk();
     return () => stopStream();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -113,7 +98,8 @@ const RadioPlayer = () => {
     if (isPlaying) {
       stopStream();
     } else {
-      await startStream();
+      stoppedRef.current = false;
+      await playChunk();
     }
   };
 
