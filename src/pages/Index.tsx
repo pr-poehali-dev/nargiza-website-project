@@ -69,7 +69,6 @@ const Index = () => {
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
 
-  const [scrollY, setScrollY] = useState(0);
   const [streamUrlCopied, setStreamUrlCopied] = useState(false);
   const [streamingStats, setStreamingStats] = useState<StreamingStats | null>(null);
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
@@ -188,13 +187,7 @@ const Index = () => {
 
 
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
 
   useEffect(() => {
     const trackAndFetchStats = async () => {
@@ -468,7 +461,7 @@ const Index = () => {
           src="https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/bucket/90310330-b0a3-4212-8ca6-48ae2ed3d1a8.jpg"
           alt="Nargiza background"
           className="absolute inset-0 w-full h-full object-cover animate-fade-in"
-          style={{ transform: `translateY(${scrollY * 0.5}px)` }}
+          style={{ transform: 'translateZ(0)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/90" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20" />
