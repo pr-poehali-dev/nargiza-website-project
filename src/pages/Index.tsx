@@ -535,6 +535,132 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-24 px-6 bg-gradient-to-b from-background via-card/30 to-background relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="container mx-auto max-w-5xl relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              </span>
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">В эфире</span>
+            </div>
+            <h3 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+              Радио NARGIZA
+            </h3>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Слушайте любимые треки в прямом эфире — 24 часа в сутки, 7 дней в неделю
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-primary/20">
+                  <Icon name="Download" size={28} className="text-white" />
+                </div>
+                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 1</div>
+                <h4 className="text-xl font-bold mb-3">Скачайте программу</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                  Установите бесплатный плеер RFM Play для прослушивания интернет-радио
+                </p>
+                <Button className="w-full gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity" asChild>
+                  <a href="https://rfmplay.github.io/" target="_blank" rel="noopener noreferrer">
+                    <Icon name="ExternalLink" size={16} />
+                    Скачать RFM Play
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-secondary to-accent flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-secondary/20">
+                  <Icon name="Settings" size={28} className="text-white" />
+                </div>
+                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 2</div>
+                <h4 className="text-xl font-bold mb-3">Добавьте станцию</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                  Откройте настройки программы и добавьте новую радиостанцию, вставив URL-адрес потока
+                </p>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText('http://130.49.148.73:1040/stream');
+                    setStreamUrlCopied(true);
+                    setTimeout(() => setStreamUrlCopied(false), 2000);
+                  }}
+                  className="relative w-full group/copy"
+                >
+                  <code className="block w-full px-4 py-3 bg-background rounded-lg text-xs text-primary border border-border font-mono break-all text-left hover:border-primary/50 transition-colors cursor-pointer">
+                    http://130.49.148.73:1040/stream
+                  </code>
+                  <span className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-medium transition-all ${streamUrlCopied ? 'text-green-500' : 'text-muted-foreground opacity-0 group-hover/copy:opacity-100'}`}>
+                    <Icon name={streamUrlCopied ? 'Check' : 'Copy'} size={14} />
+                    {streamUrlCopied ? 'Скопировано!' : 'Копировать'}
+                  </span>
+                </button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-accent to-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-accent/20">
+                  <Icon name="Headphones" size={28} className="text-white" />
+                </div>
+                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 3</div>
+                <h4 className="text-xl font-bold mb-3">Наслаждайтесь</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                  Нажмите «Воспроизвести» и слушайте лучшие треки NARGIZA в прямом эфире без ограничений
+                </p>
+                <div className="flex items-center justify-center gap-1.5">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-1.5 bg-gradient-to-t from-primary to-secondary rounded-full animate-pulse"
+                      style={{
+                        height: `${16 + Math.random() * 20}px`,
+                        animationDelay: `${i * 0.15}s`,
+                        animationDuration: `${0.6 + Math.random() * 0.4}s`
+                      }}
+                    />
+                  ))}
+                  <span className="ml-3 text-sm font-semibold text-primary">LIVE</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 via-card/80 to-secondary/5 backdrop-blur-sm">
+            <CardContent className="p-8 md:p-10">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="flex-shrink-0">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl shadow-primary/30 animate-pulse" style={{animationDuration: '3s'}}>
+                    <Icon name="Radio" size={40} className="text-white" />
+                  </div>
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h4 className="text-2xl font-bold mb-2">Не можете установить программу?</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Вы также можете вставить URL-адрес потока в любой медиаплеер, поддерживающий интернет-радио — например, VLC, AIMP, Winamp или foobar2000. Просто добавьте ссылку <span className="text-primary font-mono text-sm">http://130.49.148.73:1040/stream</span> как сетевой поток.
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <Button variant="outline" size="lg" className="gap-2" asChild>
+                    <a href="https://rfmplay.github.io/" target="_blank" rel="noopener noreferrer">
+                      <Icon name="Download" size={18} />
+                      Скачать
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
@@ -771,132 +897,6 @@ const Index = () => {
       </section>
 
 
-
-      <section className="py-24 px-6 bg-gradient-to-b from-background via-card/30 to-background relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none"></div>
-        
-        <div className="container mx-auto max-w-5xl relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-              </span>
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">В эфире</span>
-            </div>
-            <h3 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              Радио NARGIZA
-            </h3>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Слушайте любимые треки в прямом эфире — 24 часа в сутки, 7 дней в неделю
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-primary/20">
-                  <Icon name="Download" size={28} className="text-white" />
-                </div>
-                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 1</div>
-                <h4 className="text-xl font-bold mb-3">Скачайте программу</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  Установите бесплатный плеер RFM Play для прослушивания интернет-радио
-                </p>
-                <Button className="w-full gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity" asChild>
-                  <a href="https://rfmplay.github.io/" target="_blank" rel="noopener noreferrer">
-                    <Icon name="ExternalLink" size={16} />
-                    Скачать RFM Play
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-secondary to-accent flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-secondary/20">
-                  <Icon name="Settings" size={28} className="text-white" />
-                </div>
-                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 2</div>
-                <h4 className="text-xl font-bold mb-3">Добавьте станцию</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  Откройте настройки программы и добавьте новую радиостанцию, вставив URL-адрес потока
-                </p>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText('http://130.49.148.73:1040/stream');
-                    setStreamUrlCopied(true);
-                    setTimeout(() => setStreamUrlCopied(false), 2000);
-                  }}
-                  className="relative w-full group/copy"
-                >
-                  <code className="block w-full px-4 py-3 bg-background rounded-lg text-xs text-primary border border-border font-mono break-all text-left hover:border-primary/50 transition-colors cursor-pointer">
-                    http://130.49.148.73:1040/stream
-                  </code>
-                  <span className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-medium transition-all ${streamUrlCopied ? 'text-green-500' : 'text-muted-foreground opacity-0 group-hover/copy:opacity-100'}`}>
-                    <Icon name={streamUrlCopied ? 'Check' : 'Copy'} size={14} />
-                    {streamUrlCopied ? 'Скопировано!' : 'Копировать'}
-                  </span>
-                </button>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-accent to-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-accent/20">
-                  <Icon name="Headphones" size={28} className="text-white" />
-                </div>
-                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 3</div>
-                <h4 className="text-xl font-bold mb-3">Наслаждайтесь</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  Нажмите «Воспроизвести» и слушайте лучшие треки NARGIZA в прямом эфире без ограничений
-                </p>
-                <div className="flex items-center justify-center gap-1.5">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-1.5 bg-gradient-to-t from-primary to-secondary rounded-full animate-pulse"
-                      style={{
-                        height: `${16 + Math.random() * 20}px`,
-                        animationDelay: `${i * 0.15}s`,
-                        animationDuration: `${0.6 + Math.random() * 0.4}s`
-                      }}
-                    />
-                  ))}
-                  <span className="ml-3 text-sm font-semibold text-primary">LIVE</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 via-card/80 to-secondary/5 backdrop-blur-sm">
-            <CardContent className="p-8 md:p-10">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-shrink-0">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl shadow-primary/30 animate-pulse" style={{animationDuration: '3s'}}>
-                    <Icon name="Radio" size={40} className="text-white" />
-                  </div>
-                </div>
-                <div className="flex-1 text-center md:text-left">
-                  <h4 className="text-2xl font-bold mb-2">Не можете установить программу?</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Вы также можете вставить URL-адрес потока в любой медиаплеер, поддерживающий интернет-радио — например, VLC, AIMP, Winamp или foobar2000. Просто добавьте ссылку <span className="text-primary font-mono text-sm">http://130.49.148.73:1040/stream</span> как сетевой поток.
-                  </p>
-                </div>
-                <div className="flex-shrink-0">
-                  <Button variant="outline" size="lg" className="gap-2" asChild>
-                    <a href="https://rfmplay.github.io/" target="_blank" rel="noopener noreferrer">
-                      <Icon name="Download" size={18} />
-                      Скачать
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
       <footer className="py-16 px-6 border-t border-border/50 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
