@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import SnowEffect from '@/components/SnowEffect';
-import RadioPlayer from '@/components/RadioPlayer';
+
 
 
 interface YouTubeVideo {
@@ -489,8 +489,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      <RadioPlayer />
 
       <section className="py-32 px-6 bg-gradient-to-b from-background via-card/50 to-background">
         <div className="container mx-auto max-w-5xl">
