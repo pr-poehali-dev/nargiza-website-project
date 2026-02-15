@@ -70,6 +70,7 @@ const Index = () => {
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
 
   const [scrollY, setScrollY] = useState(0);
+  const [streamUrlCopied, setStreamUrlCopied] = useState(false);
   const [streamingStats, setStreamingStats] = useState<StreamingStats | null>(null);
   const [isUpdatingStats, setIsUpdatingStats] = useState(false);
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
@@ -822,11 +823,22 @@ const Index = () => {
                 <p className="text-muted-foreground text-sm leading-relaxed mb-5">
                   Откройте настройки программы и добавьте новую радиостанцию, вставив URL-адрес потока
                 </p>
-                <div className="relative">
-                  <code className="block w-full px-4 py-3 bg-background rounded-lg text-xs text-primary border border-border font-mono break-all select-all">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText('http://130.49.148.73:1040/stream');
+                    setStreamUrlCopied(true);
+                    setTimeout(() => setStreamUrlCopied(false), 2000);
+                  }}
+                  className="relative w-full group/copy"
+                >
+                  <code className="block w-full px-4 py-3 bg-background rounded-lg text-xs text-primary border border-border font-mono break-all text-left hover:border-primary/50 transition-colors cursor-pointer">
                     http://130.49.148.73:1040/stream
                   </code>
-                </div>
+                  <span className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-medium transition-all ${streamUrlCopied ? 'text-green-500' : 'text-muted-foreground opacity-0 group-hover/copy:opacity-100'}`}>
+                    <Icon name={streamUrlCopied ? 'Check' : 'Copy'} size={14} />
+                    {streamUrlCopied ? 'Скопировано!' : 'Копировать'}
+                  </span>
+                </button>
               </CardContent>
             </Card>
 
