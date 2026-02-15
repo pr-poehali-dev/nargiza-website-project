@@ -633,31 +633,6 @@ const Index = () => {
             </Card>
           </div>
 
-          <Card className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 via-card/80 to-secondary/5 backdrop-blur-sm">
-            <CardContent className="p-8 md:p-10">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-shrink-0">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl shadow-primary/30 animate-pulse" style={{animationDuration: '3s'}}>
-                    <Icon name="Radio" size={40} className="text-white" />
-                  </div>
-                </div>
-                <div className="flex-1 text-center md:text-left">
-                  <h4 className="text-2xl font-bold mb-2">Не можете установить программу?</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Вы также можете вставить URL-адрес потока в любой медиаплеер, поддерживающий интернет-радио — например, VLC, AIMP, Winamp или foobar2000. Просто добавьте ссылку <span className="text-primary font-mono text-sm">http://130.49.148.73:1040/stream</span> как сетевой поток.
-                  </p>
-                </div>
-                <div className="flex-shrink-0">
-                  <Button variant="outline" size="lg" className="gap-2" asChild>
-                    <a href="https://rfmplay.github.io/" target="_blank" rel="noopener noreferrer">
-                      <Icon name="Download" size={18} />
-                      Скачать
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
