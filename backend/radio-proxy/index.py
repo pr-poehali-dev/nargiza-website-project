@@ -2,7 +2,7 @@ import json
 import base64
 import requests
 
-STREAM_URL = 'http://130.49.148.73:1040/stream'
+STREAM_URL = 'http://radionargiza.ru:1040/stream'
 
 def handler(event, context):
     """Прокси для радиопотока NARGIZA Radio"""
