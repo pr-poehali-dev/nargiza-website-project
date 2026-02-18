@@ -548,89 +548,53 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-primary/20">
-                  <Icon name="Download" size={28} className="text-white" />
+          <div className="max-w-3xl mx-auto mb-12">
+            <Card className="border-2 border-primary/20 bg-card/50 backdrop-blur-sm overflow-hidden">
+              <CardContent className="p-0">
+                <div className="px-6 py-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/10 flex items-center gap-3">
+                  <Icon name="Megaphone" size={20} className="text-primary" />
+                  <h4 className="text-lg font-bold">Объявление</h4>
                 </div>
-                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 1</div>
-                <h4 className="text-xl font-bold mb-3">Скачайте программу</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  Установите бесплатный плеер RFM Play для прослушивания интернет-радио
-                </p>
-                <Button className="w-full gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity" asChild>
-                  <a href="https://rfmplay.github.io/" target="_blank" rel="noopener noreferrer">
-                    <Icon name="ExternalLink" size={16} />
-                    Скачать RFM Play
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-secondary to-accent flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-secondary/20">
-                  <Icon name="Settings" size={28} className="text-white" />
+                <div className="p-6 md:p-8 space-y-4 text-muted-foreground leading-relaxed">
+                  <p>
+                    Друзья, я уже сообщала что запущено <span className="text-foreground font-semibold">Радио NARGIZA</span>. В данный момент оно работает в тестовом режиме и мы постепенно заполняем его песнями и музыкой.
+                  </p>
+                  <p>
+                    Я хочу сообщить, что мы выпустили <span className="text-foreground font-semibold">собственное приложение для Android</span>, которое можно скачать по ссылке внизу из Google Play. Приложение официальное и очень простое — скачиваете, устанавливаете, запускаете — и всё играет и поёт!
+                  </p>
+                  <div className="bg-primary/5 border border-primary/10 rounded-xl p-5 space-y-3">
+                    <div className="flex items-start gap-3">
+                      <Icon name="Music" size={18} className="text-primary mt-0.5 shrink-0" />
+                      <p>В <span className="font-medium text-foreground">тестовом режиме</span> играет только музыка, в <span className="font-medium text-foreground">обычном</span> — только песни.</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Icon name="ListMusic" size={18} className="text-primary mt-0.5 shrink-0" />
+                      <p>Любой пользователь может выбрать в приложении любую песню и <span className="font-medium text-foreground">заказать её в эфир</span> — она зазвучит сразу после окончания звучащей в эфире песни.</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Icon name="Sparkles" size={18} className="text-primary mt-0.5 shrink-0" />
+                      <p>Можно публиковать самые свежие песни и музыку в разных вариантах. Мне как исполнителю это очень удобно.</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 2</div>
-                <h4 className="text-xl font-bold mb-3">Добавьте станцию</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  Откройте настройки программы и добавьте новую радиостанцию, вставив URL-адрес потока
-                </p>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText('http://radionargiza.ru:1040/stream');
-                    setStreamUrlCopied(true);
-                    setTimeout(() => setStreamUrlCopied(false), 2000);
-                  }}
-                  className="relative w-full group/copy"
-                >
-                  <code className="block w-full px-4 py-3 bg-background rounded-lg text-xs text-primary border border-border font-mono break-all text-left hover:border-primary/50 transition-colors cursor-pointer">
-                    http://radionargiza.ru:1040/stream
-                  </code>
-                  <span className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-medium transition-all ${streamUrlCopied ? 'text-green-500' : 'text-muted-foreground opacity-0 group-hover/copy:opacity-100'}`}>
-                    <Icon name={streamUrlCopied ? 'Check' : 'Copy'} size={14} />
-                    {streamUrlCopied ? 'Скопировано!' : 'Копировать'}
-                  </span>
-                </button>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:scale-105 group bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-accent to-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-accent/20">
-                  <Icon name="Headphones" size={28} className="text-white" />
-                </div>
-                <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider">Шаг 3</div>
-                <h4 className="text-xl font-bold mb-3">Наслаждайтесь</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  Нажмите «Воспроизвести» и слушайте лучшие треки NARGIZA в прямом эфире без ограничений
-                </p>
-                <div className="flex items-center justify-center gap-1.5">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-1.5 bg-gradient-to-t from-primary to-secondary rounded-full animate-pulse"
-                      style={{
-                        height: `${16 + Math.random() * 20}px`,
-                        animationDelay: `${i * 0.15}s`,
-                        animationDuration: `${0.6 + Math.random() * 0.4}s`
-                      }}
-                    />
-                  ))}
-                  <span className="ml-3 text-sm font-semibold text-primary">LIVE</span>
+                <div className="px-6 md:px-8 pb-6 md:pb-8">
+                  <Button className="w-full sm:w-auto gap-3 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity text-lg px-8 py-6" asChild>
+                    <a href="https://play.google.com/store/apps/details?id=com.radionargiza" target="_blank" rel="noopener noreferrer">
+                      <Icon name="Smartphone" size={20} />
+                      Скачать из Google Play
+                    </a>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <Card className="border-2 border-primary/20 bg-card/50 backdrop-blur-sm overflow-hidden">
               <CardContent className="p-0">
                 <div className="px-6 py-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/10 flex items-center gap-3">
                   <Icon name="Calendar" size={20} className="text-primary" />
-                  <h4 className="text-lg font-bold">График работы радиостанции</h4>
+                  <h4 className="text-lg font-bold">График работы</h4>
                 </div>
                 <div className="divide-y divide-border">
                   <div className="flex items-center justify-between px-6 py-4">
@@ -647,6 +611,34 @@ const Index = () => {
                     </div>
                     <span className="text-sm text-muted-foreground px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">Хиты на час</span>
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-primary/20 bg-card/50 backdrop-blur-sm overflow-hidden">
+              <CardContent className="p-0">
+                <div className="px-6 py-4 bg-gradient-to-r from-secondary/10 to-accent/10 border-b border-secondary/10 flex items-center gap-3">
+                  <Icon name="Radio" size={20} className="text-secondary" />
+                  <h4 className="text-lg font-bold">URL потока</h4>
+                </div>
+                <div className="p-6">
+                  <p className="text-sm text-muted-foreground mb-3">Для сторонних плееров:</p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText('http://radionargiza.ru:1040/stream');
+                      setStreamUrlCopied(true);
+                      setTimeout(() => setStreamUrlCopied(false), 2000);
+                    }}
+                    className="relative w-full group/copy"
+                  >
+                    <code className="block w-full px-4 py-3 bg-background rounded-lg text-xs text-primary border border-border font-mono break-all text-left hover:border-primary/50 transition-colors cursor-pointer">
+                      http://radionargiza.ru:1040/stream
+                    </code>
+                    <span className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-medium transition-all ${streamUrlCopied ? 'text-green-500' : 'text-muted-foreground opacity-0 group-hover/copy:opacity-100'}`}>
+                      <Icon name={streamUrlCopied ? 'Check' : 'Copy'} size={14} />
+                      {streamUrlCopied ? 'Скопировано!' : 'Копировать'}
+                    </span>
+                  </button>
                 </div>
               </CardContent>
             </Card>
