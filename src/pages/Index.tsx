@@ -625,6 +625,33 @@ const Index = () => {
             </Card>
           </div>
 
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-2 border-primary/20 bg-card/50 backdrop-blur-sm overflow-hidden">
+              <CardContent className="p-0">
+                <div className="px-6 py-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/10 flex items-center gap-3">
+                  <Icon name="Calendar" size={20} className="text-primary" />
+                  <h4 className="text-lg font-bold">График работы радиостанции</h4>
+                </div>
+                <div className="divide-y divide-border">
+                  <div className="flex items-center justify-between px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                      <span className="font-medium">Пн — Пт</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20">Тестовый режим</span>
+                  </div>
+                  <div className="flex items-center justify-between px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span className="font-medium">Сб — Вс</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">Хиты на час</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
         </div>
       </section>
 
