@@ -8,6 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 
 const API = 'https://functions.poehali.dev/58ac260a-a36e-4d53-9858-d0c993339a0e';
 
+interface User {
+  user_id: number;
+  token: string;
+  display_name: string;
+  is_admin: boolean;
+}
+
 interface Topic {
   id: number;
   title: string;
@@ -17,459 +24,422 @@ interface Topic {
   is_pinned: boolean;
   replies_count: number;
   views_count: number;
+  avatar_color: string;
 }
 
-interface Message {
+interface Msg {
   id: number;
   author_name: string;
   content: string;
   created_at: string;
+  user_id: number;
+  avatar_color: string;
+  posts_count: number;
 }
 
-function timeAgo(dateStr: string) {
-  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (diff < 60) return 'только что';
-  if (diff < 3600) return `${Math.floor(diff / 60)} мин. назад`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} ч. назад`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)} дн. назад`;
-  return new Date(dateStr).toLocaleDateString('ru-RU');
+const COLORS: Record<string, string> = {
+  blue: 'from-blue-500 to-cyan-500',
+  red: 'from-red-500 to-pink-500',
+  green: 'from-emerald-500 to-teal-500',
+  purple: 'from-violet-500 to-purple-500',
+  orange: 'from-orange-500 to-amber-500',
+  pink: 'from-pink-500 to-rose-500',
+  teal: 'from-teal-500 to-cyan-500',
+};
+
+function ago(d: string) {
+  const s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+  if (s < 60) return 'только что';
+  if (s < 3600) return `${Math.floor(s / 60)} мин.`;
+  if (s < 86400) return `${Math.floor(s / 3600)} ч.`;
+  if (s < 604800) return `${Math.floor(s / 86400)} дн.`;
+  return new Date(d).toLocaleDateString('ru-RU');
 }
 
-const AVATAR_COLORS = [
-  'from-primary to-secondary', 'from-pink-500 to-rose-500',
-  'from-violet-500 to-purple-500', 'from-blue-500 to-cyan-500',
-  'from-emerald-500 to-teal-500', 'from-orange-500 to-amber-500',
-];
-
-function avatarColor(name: string) {
-  let h = 0;
-  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
-  return AVATAR_COLORS[Math.abs(h) % AVATAR_COLORS.length];
+async function call(action: string, opts?: { method?: string; body?: object; token?: string }) {
+  const { method = 'GET', body, token } = opts || {};
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers['X-Auth-Token'] = token;
+  const r = await fetch(`${API}?action=${action}`, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return r.json();
 }
 
 const Forum = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const topicId = searchParams.get('topic');
+  const [sp, setSp] = useSearchParams();
+  const topicId = sp.get('topic');
+  const view = sp.get('view');
+
+  const [user, setUser] = useState<User | null>(() => {
+    const s = localStorage.getItem('forum_user');
+    return s ? JSON.parse(s) : null;
+  });
 
   const [topics, setTopics] = useState<Topic[]>([]);
   const [topic, setTopic] = useState<Topic | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Msg[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
-  const [userName, setUserName] = useState(() => localStorage.getItem('forum_name') || '');
-  const [nameInput, setNameInput] = useState('');
-  const [showNamePrompt, setShowNamePrompt] = useState(false);
+  const [loginUser, setLoginUser] = useState('');
+  const [loginPass, setLoginPass] = useState('');
+  const [regUser, setRegUser] = useState('');
+  const [regPass, setRegPass] = useState('');
+  const [regName, setRegName] = useState('');
 
-  const [showNewTopic, setShowNewTopic] = useState(false);
-  const [topicTitle, setTopicTitle] = useState('');
-  const [topicContent, setTopicContent] = useState('');
+  const [newTitle, setNewTitle] = useState('');
+  const [newContent, setNewContent] = useState('');
   const [replyText, setReplyText] = useState('');
 
-  const [isAdmin, setIsAdmin] = useState(() => !!localStorage.getItem('forum_admin_pwd'));
-  const [adminPwd, setAdminPwd] = useState(() => localStorage.getItem('forum_admin_pwd') || '');
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [adminInput, setAdminInput] = useState('');
-  const [adminError, setAdminError] = useState('');
+  const [isMod, setIsMod] = useState(() => !!localStorage.getItem('forum_admin_pwd'));
+  const [modPwd, setModPwd] = useState(() => localStorage.getItem('forum_admin_pwd') || '');
 
-  const loadTopics = useCallback(async () => {
+  const token = user?.token || '';
+
+  const saveUser = (u: User) => {
+    localStorage.setItem('forum_user', JSON.stringify(u));
+    setUser(u);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('forum_user');
+    setUser(null);
+  };
+
+  const fetchTopics = useCallback(async () => {
     setLoading(true);
-    try {
-      const r = await fetch(`${API}?action=topics`);
-      const d = await r.json();
-      setTopics(d.topics || []);
-      setTopic(null);
-      setMessages([]);
-    } catch (e) { console.error(e); }
+    const d = await call('topics');
+    setTopics(d.topics || []);
+    setTopic(null);
+    setMessages([]);
     setLoading(false);
   }, []);
 
-  const loadTopic = useCallback(async (id: number) => {
+  const fetchTopic = useCallback(async (id: number) => {
     setLoading(true);
-    try {
-      const r = await fetch(`${API}?action=messages&topic_id=${id}`);
-      const d = await r.json();
-      setTopic(d.topic);
-      setMessages(d.messages || []);
-    } catch (e) { console.error(e); }
+    const r = await fetch(`${API}?action=messages&topic_id=${id}`);
+    const d = await r.json();
+    setTopic(d.topic);
+    setMessages(d.messages || []);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    if (topicId) loadTopic(Number(topicId));
-    else loadTopics();
-  }, [topicId, loadTopic, loadTopics]);
+    if (view === 'login' || view === 'register' || view === 'new') {
+      setLoading(false);
+      return;
+    }
+    if (topicId) fetchTopic(Number(topicId));
+    else fetchTopics();
+  }, [topicId, view, fetchTopic, fetchTopics]);
 
-  const saveName = (name: string) => {
-    const n = name.trim();
-    if (!n) return;
-    localStorage.setItem('forum_name', n);
-    setUserName(n);
-    setShowNamePrompt(false);
-  };
-
-  const ensureName = (callback: () => void) => {
-    if (userName) { callback(); return; }
-    setShowNamePrompt(true);
-    const checkName = setInterval(() => {
-      const saved = localStorage.getItem('forum_name');
-      if (saved) { clearInterval(checkName); callback(); }
-    }, 200);
-    setTimeout(() => clearInterval(checkName), 30000);
-  };
-
-  const handleCreateTopic = () => {
-    ensureName(() => setShowNewTopic(true));
-  };
-
-  const submitTopic = async () => {
-    if (!topicTitle.trim() || !topicContent.trim() || !userName) return;
+  const doLogin = async () => {
+    setError('');
     setSending(true);
-    try {
-      const r = await fetch(`${API}?action=create_topic`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: topicTitle.trim(), author_name: userName, content: topicContent.trim() })
-      });
-      const d = await r.json();
-      setTopicTitle('');
-      setTopicContent('');
-      setShowNewTopic(false);
-      setSearchParams({ topic: String(d.topic_id) });
-    } catch (e) { console.error(e); }
+    const d = await call('login', { method: 'POST', body: { username: loginUser, password: loginPass } });
     setSending(false);
+    if (d.error) { setError(d.error); return; }
+    saveUser(d);
+    setLoginUser(''); setLoginPass('');
+    setSp({});
   };
 
-  const submitReply = async () => {
-    if (!replyText.trim() || !userName || !topic) return;
+  const doRegister = async () => {
+    setError('');
     setSending(true);
-    try {
-      await fetch(`${API}?action=reply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic_id: topic.id, author_name: userName, content: replyText.trim() })
-      });
-      setReplyText('');
-      await loadTopic(topic.id);
-    } catch (e) { console.error(e); }
+    const d = await call('register', { method: 'POST', body: { username: regUser, password: regPass, display_name: regName } });
     setSending(false);
+    if (d.error) { setError(d.error); return; }
+    saveUser(d);
+    setRegUser(''); setRegPass(''); setRegName('');
+    setSp({});
   };
 
-  const handleReply = () => {
-    ensureName(() => {});
+  const doCreateTopic = async () => {
+    if (!newTitle.trim() || !newContent.trim()) return;
+    setError('');
+    setSending(true);
+    const d = await call('create_topic', { method: 'POST', body: { title: newTitle, content: newContent }, token });
+    setSending(false);
+    if (d.error) { setError(d.error); return; }
+    setNewTitle(''); setNewContent('');
+    setSp({ topic: String(d.topic_id) });
   };
 
-  const loginAdmin = async () => {
-    setAdminError('');
-    try {
-      const r = await fetch(`${API}?action=check_admin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: adminInput })
-      });
-      const d = await r.json();
-      if (d.is_admin) {
-        localStorage.setItem('forum_admin_pwd', adminInput);
-        setAdminPwd(adminInput);
-        setIsAdmin(true);
-        setShowAdminLogin(false);
-        setAdminInput('');
-      } else {
-        setAdminError('Неверный пароль');
-      }
-    } catch { setAdminError('Ошибка'); }
+  const doReply = async () => {
+    if (!replyText.trim() || !topic) return;
+    setSending(true);
+    const d = await call('reply', { method: 'POST', body: { topic_id: topic.id, content: replyText }, token });
+    setSending(false);
+    if (d.error) { setError(d.error); return; }
+    setReplyText('');
+    fetchTopic(topic.id);
   };
 
-  const logoutAdmin = () => {
-    localStorage.removeItem('forum_admin_pwd');
-    setIsAdmin(false);
-    setAdminPwd('');
-  };
+  const canMod = isMod || user?.is_admin;
 
-  const delMessage = async (id: number) => {
-    if (!confirm('Удалить это сообщение?')) return;
-    try {
-      const r = await fetch(`${API}?action=delete_message`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: adminPwd, message_id: id })
-      });
-      if (r.ok && topic) await loadTopic(topic.id);
-    } catch (e) { console.error(e); }
+  const delMsg = async (id: number) => {
+    if (!confirm('Удалить сообщение?')) return;
+    await call('delete_message', { method: 'POST', body: { message_id: id, password: modPwd }, token });
+    if (topic) fetchTopic(topic.id);
   };
 
   const delTopic = async (id: number, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    if (!confirm('Удалить эту тему?')) return;
-    try {
-      const r = await fetch(`${API}?action=delete_topic`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: adminPwd, topic_id: id })
-      });
-      if (r.ok) {
-        setSearchParams({});
-        await loadTopics();
-      }
-    } catch (e) { console.error(e); }
+    e?.stopPropagation();
+    if (!confirm('Удалить тему?')) return;
+    await call('delete_topic', { method: 'POST', body: { topic_id: id, password: modPwd }, token });
+    setSp({});
+    fetchTopics();
+  };
+
+  const modLogin = async () => {
+    const pwd = prompt('Пароль модератора:');
+    if (!pwd) return;
+    const d = await call('check_admin', { method: 'POST', body: { password: pwd } });
+    if (d.is_admin) {
+      localStorage.setItem('forum_admin_pwd', pwd);
+      setModPwd(pwd);
+      setIsMod(true);
+    } else {
+      alert('Неверный пароль');
+    }
+  };
+
+  const goBack = () => {
+    if (topicId || view) setSp({});
+    else navigate('/');
+  };
+
+  // --- AUTH FORM ---
+  const AuthForm = ({ mode }: { mode: 'login' | 'register' }) => (
+    <div className="max-w-md mx-auto">
+      <Card>
+        <CardContent className="p-6 space-y-4">
+          <h2 className="text-xl font-bold text-center">{mode === 'login' ? 'Вход на форум' : 'Регистрация'}</h2>
+          {error && <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm rounded-lg p-3">{error}</div>}
+          {mode === 'register' && (
+            <div>
+              <label className="text-sm font-medium mb-1 block">Ваше имя</label>
+              <Input value={regName} onChange={e => setRegName(e.target.value)} placeholder="Как вас видят другие" maxLength={50} />
+            </div>
+          )}
+          <div>
+            <label className="text-sm font-medium mb-1 block">Логин</label>
+            <Input value={mode === 'login' ? loginUser : regUser} onChange={e => mode === 'login' ? setLoginUser(e.target.value) : setRegUser(e.target.value)} placeholder="От 3 символов" maxLength={30} />
+          </div>
+          <div>
+            <label className="text-sm font-medium mb-1 block">Пароль</label>
+            <Input type="password" value={mode === 'login' ? loginPass : regPass} onChange={e => mode === 'login' ? setLoginPass(e.target.value) : setRegPass(e.target.value)} placeholder="От 4 символов" onKeyDown={e => e.key === 'Enter' && (mode === 'login' ? doLogin() : doRegister())} />
+          </div>
+          <Button onClick={mode === 'login' ? doLogin : doRegister} disabled={sending} className="w-full gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+            {sending && <Icon name="Loader2" size={16} className="animate-spin" />}
+            {mode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            {mode === 'login' ? 'Нет аккаунта? ' : 'Уже есть аккаунт? '}
+            <button onClick={() => { setError(''); setSp({ view: mode === 'login' ? 'register' : 'login' }); }} className="text-primary hover:underline font-medium">
+              {mode === 'login' ? 'Регистрация' : 'Войти'}
+            </button>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  // --- NEW TOPIC ---
+  const NewTopicForm = () => (
+    <div className="max-w-2xl mx-auto">
+      <Card>
+        <CardContent className="p-6 space-y-4">
+          <h2 className="text-xl font-bold">Новая тема</h2>
+          {error && <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm rounded-lg p-3">{error}</div>}
+          <Input value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Заголовок" maxLength={255} autoFocus />
+          <Textarea value={newContent} onChange={e => setNewContent(e.target.value)} placeholder="Сообщение..." rows={5} maxLength={5000} />
+          <div className="flex gap-2">
+            <Button onClick={doCreateTopic} disabled={sending || !newTitle.trim() || !newContent.trim()} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              {sending ? <Icon name="Loader2" size={16} className="animate-spin" /> : <Icon name="Send" size={16} />}
+              Создать
+            </Button>
+            <Button variant="outline" onClick={() => setSp({})}>Отмена</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  // --- TOPIC LIST ---
+  const TopicList = () => (
+    <div className="space-y-2">
+      {topics.length === 0 ? (
+        <div className="text-center py-16">
+          <Icon name="MessageSquare" size={48} className="mx-auto text-muted-foreground/20 mb-4" />
+          <p className="text-muted-foreground mb-4">Пока нет тем</p>
+          {user ? (
+            <Button onClick={() => setSp({ view: 'new' })} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              <Icon name="Plus" size={16} /> Создать тему
+            </Button>
+          ) : (
+            <Button onClick={() => setSp({ view: 'register' })} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              Зарегистрируйтесь, чтобы создать тему
+            </Button>
+          )}
+        </div>
+      ) : topics.map(t => (
+        <Card key={t.id} className="hover:border-primary/30 transition-all cursor-pointer group" onClick={() => setSp({ topic: String(t.id) })}>
+          <CardContent className="p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${COLORS[t.avatar_color] || COLORS.blue} flex items-center justify-center shrink-0`}>
+              <span className="text-white font-bold text-sm">{t.author_name[0]?.toUpperCase()}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                {t.is_pinned && <Icon name="Pin" size={12} className="text-primary shrink-0" />}
+                <h3 className="font-semibold text-sm group-hover:text-primary transition-colors truncate">{t.title}</h3>
+              </div>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
+                <span>{t.author_name}</span>
+                <span>{ago(t.updated_at)}</span>
+                <span className="flex items-center gap-1"><Icon name="MessageSquare" size={11} /> {t.replies_count}</span>
+                <span className="flex items-center gap-1"><Icon name="Eye" size={11} /> {t.views_count}</span>
+              </div>
+            </div>
+            {canMod && (
+              <button onClick={e => delTopic(t.id, e)} className="p-1.5 text-muted-foreground/20 hover:text-red-500 transition-colors shrink-0">
+                <Icon name="Trash2" size={14} />
+              </button>
+            )}
+            <Icon name="ChevronRight" size={18} className="text-muted-foreground/20 group-hover:text-primary transition-colors shrink-0" />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+
+  // --- TOPIC VIEW ---
+  const TopicView = () => {
+    if (!topic) return null;
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-lg font-bold truncate">{topic.title}</h2>
+          {canMod && (
+            <Button variant="outline" size="sm" onClick={() => delTopic(topic.id)} className="gap-1.5 text-red-500 hover:bg-red-500/10 border-red-200 shrink-0">
+              <Icon name="Trash2" size={14} /> Удалить
+            </Button>
+          )}
+        </div>
+        <div className="text-xs text-muted-foreground flex gap-3 mb-4">
+          <span>{topic.author_name}</span>
+          <span>{ago(topic.created_at)}</span>
+          <span className="flex items-center gap-1"><Icon name="Eye" size={11} /> {topic.views_count}</span>
+        </div>
+        <div className="space-y-2">
+          {messages.map(m => (
+            <Card key={m.id}>
+              <CardContent className="p-4 flex items-start gap-3">
+                <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${COLORS[m.avatar_color] || COLORS.blue} flex items-center justify-center shrink-0 mt-0.5`}>
+                  <span className="text-white font-bold text-xs">{m.author_name[0]?.toUpperCase()}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-semibold text-sm">{m.author_name}</span>
+                    <span className="text-xs text-muted-foreground">{ago(m.created_at)}</span>
+                  </div>
+                  <p className="text-sm whitespace-pre-wrap break-words">{m.content}</p>
+                </div>
+                {canMod && (
+                  <button onClick={() => delMsg(m.id)} className="p-1 text-muted-foreground/20 hover:text-red-500 transition-colors shrink-0">
+                    <Icon name="Trash2" size={13} />
+                  </button>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        {user ? (
+          <Card className="border-2 border-primary/20 mt-4">
+            <CardContent className="p-4 space-y-3">
+              <Textarea value={replyText} onChange={e => setReplyText(e.target.value)} placeholder="Напишите ответ..." rows={3} maxLength={5000} />
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">{user.display_name}</span>
+                <Button onClick={doReply} disabled={sending || !replyText.trim()} size="sm" className="gap-1.5 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                  {sending ? <Icon name="Loader2" size={14} className="animate-spin" /> : <Icon name="Send" size={14} />}
+                  Ответить
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="border-2 border-dashed border-muted-foreground/20 mt-4">
+            <CardContent className="p-4 text-center">
+              <p className="text-sm text-muted-foreground mb-3">Войдите, чтобы ответить</p>
+              <div className="flex gap-2 justify-center">
+                <Button size="sm" onClick={() => setSp({ view: 'login' })} className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">Войти</Button>
+                <Button size="sm" variant="outline" onClick={() => setSp({ view: 'register' })}>Регистрация</Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto max-w-4xl flex items-center gap-3 px-4 sm:px-6 py-3">
-          <Button variant="ghost" size="icon" onClick={() => topicId ? setSearchParams({}) : navigate('/')}>
+        <div className="container mx-auto max-w-3xl flex items-center gap-3 px-4 py-3">
+          <Button variant="ghost" size="icon" onClick={goBack} className="shrink-0">
             <Icon name="ArrowLeft" size={20} />
           </Button>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent truncate">
-              {topicId && topic ? topic.title : 'Форум NARGIZA'}
-            </h1>
-            {userName && (
-              <button onClick={() => setShowNamePrompt(true)} className="text-xs text-muted-foreground hover:text-primary transition-colors">
-                {userName} (сменить)
-              </button>
-            )}
+            <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Форум</h1>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
-            {isAdmin ? (
-              <Button variant="outline" size="sm" onClick={logoutAdmin} className="gap-1 text-xs h-8">
-                <Icon name="Shield" size={14} className="text-primary" />
-                Выйти
+            {user ? (
+              <>
+                <span className="text-xs text-muted-foreground hidden sm:block mr-1">{user.display_name}</span>
+                {!topicId && !view && (
+                  <Button size="sm" onClick={() => setSp({ view: 'new' })} className="gap-1.5 h-8 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                    <Icon name="Plus" size={14} />
+                    <span className="hidden sm:inline">Тема</span>
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={logout} className="h-8 text-xs text-muted-foreground">Выйти</Button>
+              </>
+            ) : (
+              <>
+                <Button size="sm" onClick={() => setSp({ view: 'login' })} className="h-8 bg-gradient-to-r from-primary to-secondary hover:opacity-90">Войти</Button>
+                <Button size="sm" variant="outline" onClick={() => setSp({ view: 'register' })} className="h-8">Регистрация</Button>
+              </>
+            )}
+            {!isMod ? (
+              <Button variant="ghost" size="icon" onClick={modLogin} className="h-8 w-8">
+                <Icon name="Shield" size={14} className="text-muted-foreground/30" />
               </Button>
             ) : (
-              <Button variant="ghost" size="icon" onClick={() => setShowAdminLogin(true)} className="h-8 w-8">
-                <Icon name="Shield" size={16} className="text-muted-foreground/50" />
-              </Button>
-            )}
-            {!topicId && (
-              <Button onClick={handleCreateTopic} size="sm" className="gap-1.5 h-8 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-                <Icon name="Plus" size={14} />
-                <span className="hidden sm:inline">Новая тема</span>
+              <Button variant="ghost" size="icon" onClick={() => { localStorage.removeItem('forum_admin_pwd'); setIsMod(false); setModPwd(''); }} className="h-8 w-8" title="Выйти из модерации">
+                <Icon name="ShieldOff" size={14} className="text-primary" />
               </Button>
             )}
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-4">
-
-        {showNamePrompt && (
-          <Card className="border-2 border-primary/20 animate-in fade-in">
-            <CardContent className="p-5">
-              <h3 className="font-bold mb-3">Как вас зовут?</h3>
-              <div className="flex gap-2">
-                <Input
-                  value={nameInput}
-                  onChange={(e) => setNameInput(e.target.value)}
-                  placeholder="Введите ваше имя"
-                  maxLength={100}
-                  onKeyDown={(e) => e.key === 'Enter' && saveName(nameInput)}
-                  autoFocus
-                />
-                <Button onClick={() => saveName(nameInput)} disabled={!nameInput.trim()} className="shrink-0 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-                  OK
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {showAdminLogin && (
-          <Card className="border-2 border-primary/20 animate-in fade-in">
-            <CardContent className="p-5">
-              <h3 className="font-bold mb-3 flex items-center gap-2">
-                <Icon name="Shield" size={18} className="text-primary" />
-                Вход модератора
-              </h3>
-              <div className="flex gap-2">
-                <Input
-                  type="password"
-                  value={adminInput}
-                  onChange={(e) => setAdminInput(e.target.value)}
-                  placeholder="Пароль"
-                  onKeyDown={(e) => e.key === 'Enter' && loginAdmin()}
-                  autoFocus
-                />
-                <Button onClick={loginAdmin} disabled={!adminInput.trim()} className="shrink-0">Войти</Button>
-                <Button variant="ghost" onClick={() => { setShowAdminLogin(false); setAdminInput(''); setAdminError(''); }}>
-                  <Icon name="X" size={16} />
-                </Button>
-              </div>
-              {adminError && <p className="text-sm text-red-500 mt-2">{adminError}</p>}
-            </CardContent>
-          </Card>
-        )}
-
-        {showNewTopic && (
-          <Card className="border-2 border-primary/20 animate-in fade-in">
-            <CardContent className="p-5 space-y-3">
-              <h3 className="font-bold">Новая тема</h3>
-              <Input
-                value={topicTitle}
-                onChange={(e) => setTopicTitle(e.target.value)}
-                placeholder="Заголовок темы"
-                maxLength={255}
-                autoFocus
-              />
-              <Textarea
-                value={topicContent}
-                onChange={(e) => setTopicContent(e.target.value)}
-                placeholder="Первое сообщение..."
-                rows={4}
-                maxLength={5000}
-              />
-              <div className="flex gap-2">
-                <Button
-                  onClick={submitTopic}
-                  disabled={sending || !topicTitle.trim() || !topicContent.trim()}
-                  className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-                >
-                  {sending ? <Icon name="Loader2" size={16} className="animate-spin" /> : <Icon name="Send" size={16} />}
-                  Создать
-                </Button>
-                <Button variant="outline" onClick={() => setShowNewTopic(false)}>Отмена</Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
+      <main className="container mx-auto max-w-3xl px-4 py-6">
         {loading ? (
           <div className="flex justify-center py-20">
             <Icon name="Loader2" size={28} className="animate-spin text-primary" />
           </div>
-        ) : topicId && topic ? (
-          <>
-            {isAdmin && (
-              <div className="flex justify-end">
-                <Button
-                  variant="outline" size="sm"
-                  onClick={() => delTopic(topic.id)}
-                  className="gap-1.5 text-red-500 hover:text-red-600 hover:bg-red-500/10 border-red-200"
-                >
-                  <Icon name="Trash2" size={14} />
-                  Удалить тему
-                </Button>
-              </div>
-            )}
-
-            <div className="space-y-2">
-              {messages.map((msg) => {
-                const isDeleted = msg.content === '[сообщение удалено модератором]' || msg.content === '[удалено]';
-                return (
-                  <Card key={msg.id} className="border border-border/50">
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarColor(msg.author_name)} flex items-center justify-center shrink-0`}>
-                          <span className="text-white font-bold text-xs">{msg.author_name[0].toUpperCase()}</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <span className="font-semibold text-sm truncate">{msg.author_name}</span>
-                              <span className="text-xs text-muted-foreground shrink-0">{timeAgo(msg.created_at)}</span>
-                            </div>
-                            {isAdmin && !isDeleted && (
-                              <button onClick={() => delMessage(msg.id)} className="text-muted-foreground/40 hover:text-red-500 transition-colors shrink-0 p-1">
-                                <Icon name="Trash2" size={14} />
-                              </button>
-                            )}
-                          </div>
-                          <p className={`text-sm whitespace-pre-wrap break-words ${isDeleted ? 'italic text-muted-foreground/50' : ''}`}>
-                            {msg.content}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-
-            <Card className="border-2 border-primary/20">
-              <CardContent className="p-4">
-                {userName ? (
-                  <div className="space-y-3">
-                    <Textarea
-                      value={replyText}
-                      onChange={(e) => setReplyText(e.target.value)}
-                      placeholder="Напишите ответ..."
-                      rows={3}
-                      maxLength={5000}
-                    />
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{userName}</span>
-                      <Button
-                        onClick={submitReply}
-                        disabled={sending || !replyText.trim()}
-                        size="sm"
-                        className="gap-1.5 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-                      >
-                        {sending ? <Icon name="Loader2" size={14} className="animate-spin" /> : <Icon name="Send" size={14} />}
-                        Ответить
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <Button onClick={handleReply} variant="outline" className="w-full gap-2">
-                    <Icon name="MessageSquare" size={16} />
-                    Ответить (введите имя)
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </>
-        ) : topics.length === 0 && !showNewTopic ? (
-          <div className="text-center py-20">
-            <Icon name="MessageSquare" size={48} className="mx-auto text-muted-foreground/20 mb-4" />
-            <p className="text-muted-foreground mb-4">Пока нет тем. Будьте первым!</p>
-            <Button onClick={handleCreateTopic} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-              <Icon name="Plus" size={16} />
-              Создать тему
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {topics.map((t) => (
-              <Card
-                key={t.id}
-                className="border border-border/50 hover:border-primary/30 transition-all cursor-pointer group"
-                onClick={() => setSearchParams({ topic: String(t.id) })}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarColor(t.author_name)} flex items-center justify-center shrink-0`}>
-                      <span className="text-white font-bold text-xs">{t.author_name[0].toUpperCase()}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        {t.is_pinned && <Icon name="Pin" size={12} className="text-primary shrink-0" />}
-                        <h3 className="font-semibold text-sm group-hover:text-primary transition-colors truncate">{t.title}</h3>
-                      </div>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span>{t.author_name}</span>
-                        <span>{timeAgo(t.updated_at)}</span>
-                        <span className="flex items-center gap-1"><Icon name="MessageSquare" size={11} /> {t.replies_count}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      {isAdmin && (
-                        <button
-                          onClick={(e) => delTopic(t.id, e)}
-                          className="p-1.5 text-muted-foreground/30 hover:text-red-500 transition-colors"
-                        >
-                          <Icon name="Trash2" size={14} />
-                        </button>
-                      )}
-                      <Icon name="ChevronRight" size={18} className="text-muted-foreground/20 group-hover:text-primary transition-colors" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+        ) : view === 'login' ? <AuthForm mode="login" />
+          : view === 'register' ? <AuthForm mode="register" />
+          : view === 'new' ? (user ? <NewTopicForm /> : <AuthForm mode="login" />)
+          : topicId ? <TopicView />
+          : <TopicList />
+        }
       </main>
     </div>
   );
