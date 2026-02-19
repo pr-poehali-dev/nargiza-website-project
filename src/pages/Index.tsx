@@ -567,7 +567,7 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="px-6 md:px-8 pb-6 md:pb-8">
-                  <Button className="w-full sm:w-auto gap-3 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity text-lg px-8 py-6" asChild>
+                  <Button className="w-full sm:w-auto gap-3 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity text-sm px-8 py-6" asChild>
                     <a href="https://play.google.com/store/apps/details?id=center.streaming.radio.nargiza" target="_blank" rel="noopener noreferrer">
                       <Icon name="Smartphone" size={20} />
                       Скачать из Google Play
