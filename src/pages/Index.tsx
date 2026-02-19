@@ -462,8 +462,11 @@ const Index = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary/20 border border-primary/40 text-white font-semibold text-lg hover:bg-primary/40 transition-all duration-300 hover:scale-105 backdrop-blur-sm drop-shadow-2xl"
             >
-              <Icon name="Radio" size={22} />
-              Слушать радио
+              <span className="relative flex items-center justify-center">
+                <span className="animate-ping absolute inline-flex h-5 w-5 rounded-full bg-red-500 opacity-50"></span>
+                <Icon name="Radio" size={22} className="relative" />
+              </span>
+              Слушать радио • LIVE
             </a>
           </div>
         </div>
