@@ -4,7 +4,7 @@ import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
 
 
 
@@ -34,18 +34,7 @@ interface NewsArticle {
   urlToImage?: string;
 }
 
-interface StreamingStats {
-  yandex: { streams: number; updated_at: string };
-  spotify: { streams: number; updated_at: string };
-  apple: { streams: number; updated_at: string };
-}
 
-interface HistoryData {
-  month: string;
-  year: number;
-  listeners: number;
-  date: string;
-}
 
 const Index = () => {
   const navigate = useNavigate();
@@ -70,31 +59,10 @@ const Index = () => {
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
 
   const [streamUrlCopied, setStreamUrlCopied] = useState(false);
-  const [streamingStats, setStreamingStats] = useState<StreamingStats | null>(null);
-  const [isUpdatingStats, setIsUpdatingStats] = useState(false);
-  const [historyData, setHistoryData] = useState<HistoryData[]>([]);
+
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
 
-  const updateStreamingStats = async () => {
-    setIsUpdatingStats(true);
-    try {
-      await fetch('https://functions.poehali.dev/6216c52f-7243-4dcd-8c37-45841228c5e1');
-      await fetch('https://functions.poehali.dev/af5c9ee9-7965-45f5-b795-ecc8c53be8da');
-      
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const timestamp = Date.now();
-      const response = await fetch(`https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a?t=${timestamp}`, {
-        cache: 'no-store'
-      });
-      const data = await response.json();
-      setStreamingStats(data);
-    } catch (error) {
-      console.error('Error updating streaming stats:', error);
-    } finally {
-      setIsUpdatingStats(false);
-    }
-  };
+
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -206,44 +174,7 @@ const Index = () => {
     trackAndFetchStats();
   }, []);
 
-  useEffect(() => {
-    const fetchStreamingStats = async () => {
-      try {
-        const timestamp = Date.now();
-        const response = await fetch(`https://functions.poehali.dev/265f3df9-d019-42fc-bfaa-8396d25f3b3a?t=${timestamp}`, {
-          cache: 'no-store'
-        });
-        const data = await response.json();
-        console.log('Streaming stats loaded:', data);
-        setStreamingStats(data);
-      } catch (error) {
-        console.error('Error fetching streaming stats:', error);
-      }
-    };
 
-    const fetchHistory = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/fa05ce70-f248-4c7e-9159-8d33020a2e03');
-        const data = await response.json();
-        console.log('History loaded:', data);
-        setHistoryData(data.history || []);
-      } catch (error) {
-        console.error('Error fetching history:', error);
-      }
-    };
-
-    fetchStreamingStats();
-    fetchHistory();
-    updateStreamingStats();
-    
-    const statsInterval = setInterval(() => {
-      updateStreamingStats();
-    }, 10 * 60 * 1000);
-    
-    return () => {
-      clearInterval(statsInterval);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchTelegramStats = async () => {
@@ -647,106 +578,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {t('streams.title')}
-            </h3>
-            <p className="text-lg text-muted-foreground mb-4">{t('streams.subtitle')}</p>
-            <Button 
-              onClick={updateStreamingStats} 
-              disabled={isUpdatingStats}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <Icon name={isUpdatingStats ? "Loader2" : "RefreshCw"} size={16} className={isUpdatingStats ? "animate-spin" : ""} />
-              {isUpdatingStats ? 'Обновление...' : 'Обновить статистику'}
-            </Button>
-          </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
-            <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
-              <CardContent className="p-12 text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
-                  <Icon name="Music" size={32} className="text-white" />
-                </div>
-                <h4 className="text-3xl font-bold mb-3">Yandex Music</h4>
-                <p className="text-4xl md:text-5xl font-black bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent mb-3">
-                  {streamingStats ? streamingStats.yandex.streams.toLocaleString('ru-RU') : '...'}
-                </p>
-                <p className="text-sm text-muted-foreground">{t('streams.monthly')}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all hover:scale-105 group">
-              <CardContent className="p-8 text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
-                  <Icon name="Youtube" size={32} className="text-white" />
-                </div>
-                <h4 className="text-3xl font-bold mb-4">YouTube</h4>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-1">
-                      {streamingStats?.youtube ? streamingStats.youtube.streams.toLocaleString('ru-RU') : '...'}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Подписчиков</p>
-                  </div>
-                  <div>
-                    <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-1">
-                      {streamingStats?.youtube?.views ? streamingStats.youtube.views.toLocaleString('ru-RU') : '...'}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Просмотров</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {historyData.length > 0 && (
-            <Card className="max-w-4xl mx-auto border-2">
-              <CardContent className="p-6">
-                <h4 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
-                  График аудитории
-                </h4>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={historyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis 
-                      dataKey="month" 
-                      stroke="hsl(var(--muted-foreground))"
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                    />
-                    <YAxis 
-                      stroke="hsl(var(--muted-foreground))"
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                      tickFormatter={(value) => `${(value / 1000).toFixed(0)}K`}
-                    />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))',
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px',
-                        color: 'hsl(var(--foreground))'
-                      }}
-                      formatter={(value: number) => [value.toLocaleString('ru-RU'), 'Слушателей']}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="listeners" 
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={3}
-                      dot={{ fill: 'hsl(var(--primary))', r: 5 }}
-                      activeDot={{ r: 7 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </section>
 
       <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 animate-pulse"></div>
