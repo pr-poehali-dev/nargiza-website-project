@@ -71,6 +71,12 @@ const Forum = () => {
   const [replyContent, setReplyContent] = useState('');
   const [isSending, setIsSending] = useState(false);
 
+  const [isAdmin, setIsAdmin] = useState(() => !!localStorage.getItem('forum_admin_pwd'));
+  const [adminPassword, setAdminPassword] = useState(() => localStorage.getItem('forum_admin_pwd') || '');
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminInput, setAdminInput] = useState('');
+  const [adminError, setAdminError] = useState('');
+
   useEffect(() => {
     if (topicId) {
       loadTopic(Number(topicId));
@@ -149,6 +155,64 @@ const Forum = () => {
     }
   };
 
+  const loginAdmin = async () => {
+    setAdminError('');
+    try {
+      const res = await fetch(`${FORUM_API}?action=check_admin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminInput })
+      });
+      const data = await res.json();
+      if (data.is_admin) {
+        localStorage.setItem('forum_admin_pwd', adminInput);
+        setAdminPassword(adminInput);
+        setIsAdmin(true);
+        setShowAdminLogin(false);
+        setAdminInput('');
+      } else {
+        setAdminError('Неверный пароль');
+      }
+    } catch (e) {
+      setAdminError('Ошибка проверки');
+    }
+  };
+
+  const logoutAdmin = () => {
+    localStorage.removeItem('forum_admin_pwd');
+    setIsAdmin(false);
+    setAdminPassword('');
+  };
+
+  const deleteMessage = async (messageId: number) => {
+    if (!confirm('Удалить это сообщение?')) return;
+    try {
+      await fetch(`${FORUM_API}?action=delete_message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, message_id: messageId })
+      });
+      if (selectedTopic) await loadTopic(selectedTopic.id);
+    } catch (e) {
+      console.error('Error deleting message:', e);
+    }
+  };
+
+  const deleteTopic = async (topicId: number) => {
+    if (!confirm('Удалить эту тему и все сообщения в ней?')) return;
+    try {
+      await fetch(`${FORUM_API}?action=delete_topic`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, topic_id: topicId })
+      });
+      setSearchParams({});
+      await loadTopics();
+    } catch (e) {
+      console.error('Error deleting topic:', e);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -160,18 +224,63 @@ const Forum = () => {
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Форум NARGIZA
             </h1>
-            <p className="text-xs text-muted-foreground">Общение фанатов</p>
+            <p className="text-xs text-muted-foreground">
+              Общение фанатов
+              {isAdmin && <span className="ml-2 text-primary font-semibold">(модератор)</span>}
+            </p>
           </div>
-          {!topicId && (
-            <Button onClick={() => setShowNewTopic(true)} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-              <Icon name="Plus" size={16} />
-              Новая тема
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {isAdmin ? (
+              <Button variant="outline" size="sm" onClick={logoutAdmin} className="gap-1.5 text-xs">
+                <Icon name="Shield" size={14} className="text-primary" />
+                Выйти
+              </Button>
+            ) : (
+              <Button variant="ghost" size="icon" onClick={() => setShowAdminLogin(true)} title="Вход модератора">
+                <Icon name="Shield" size={18} className="text-muted-foreground" />
+              </Button>
+            )}
+            {!topicId && (
+              <Button onClick={() => setShowNewTopic(true)} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                <Icon name="Plus" size={16} />
+                Новая тема
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 
       <main className="container mx-auto max-w-4xl px-6 py-8">
+        {showAdminLogin && (
+          <Card className="mb-6 border-2 border-primary/20">
+            <CardContent className="p-6 space-y-4">
+              <h3 className="text-lg font-bold flex items-center gap-2">
+                <Icon name="Shield" size={20} className="text-primary" />
+                Вход модератора
+              </h3>
+              <div>
+                <Input
+                  type="password"
+                  value={adminInput}
+                  onChange={(e) => setAdminInput(e.target.value)}
+                  placeholder="Пароль модератора"
+                  onKeyDown={(e) => e.key === 'Enter' && loginAdmin()}
+                />
+                {adminError && <p className="text-sm text-red-500 mt-2">{adminError}</p>}
+              </div>
+              <div className="flex gap-3">
+                <Button onClick={loginAdmin} disabled={!adminInput.trim()} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                  <Icon name="LogIn" size={16} />
+                  Войти
+                </Button>
+                <Button variant="outline" onClick={() => { setShowAdminLogin(false); setAdminInput(''); setAdminError(''); }}>
+                  Отмена
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {!newAuthor.trim() || showNewTopic ? (
           <Card className="mb-6 border-2 border-primary/20">
             <CardContent className="p-6 space-y-4">
@@ -234,22 +343,39 @@ const Forum = () => {
           </div>
         ) : topicId && selectedTopic ? (
           <div className="space-y-4">
-            <Button variant="ghost" onClick={() => setSearchParams({})} className="gap-2 mb-2">
-              <Icon name="ArrowLeft" size={16} />
-              Все темы
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" onClick={() => setSearchParams({})} className="gap-2">
+                <Icon name="ArrowLeft" size={16} />
+                Все темы
+              </Button>
+            </div>
 
             <Card className="border-2 border-primary/20">
               <CardContent className="p-6">
-                <div className="flex items-start gap-3 mb-2">
-                  {selectedTopic.is_pinned && <Icon name="Pin" size={16} className="text-primary mt-1 shrink-0" />}
-                  <h2 className="text-2xl font-bold">{selectedTopic.title}</h2>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>{selectedTopic.author_name}</span>
-                  <span>{timeAgo(selectedTopic.created_at)}</span>
-                  <span className="flex items-center gap-1"><Icon name="Eye" size={14} /> {selectedTopic.views_count}</span>
-                  <span className="flex items-center gap-1"><Icon name="MessageSquare" size={14} /> {selectedTopic.replies_count}</span>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1">
+                    <div className="flex items-start gap-3 mb-2">
+                      {selectedTopic.is_pinned && <Icon name="Pin" size={16} className="text-primary mt-1 shrink-0" />}
+                      <h2 className="text-2xl font-bold">{selectedTopic.title}</h2>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span>{selectedTopic.author_name}</span>
+                      <span>{timeAgo(selectedTopic.created_at)}</span>
+                      <span className="flex items-center gap-1"><Icon name="Eye" size={14} /> {selectedTopic.views_count}</span>
+                      <span className="flex items-center gap-1"><Icon name="MessageSquare" size={14} /> {selectedTopic.replies_count}</span>
+                    </div>
+                  </div>
+                  {isAdmin && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => deleteTopic(selectedTopic.id)}
+                      className="gap-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 border-red-200 shrink-0"
+                    >
+                      <Icon name="Trash2" size={14} />
+                      Удалить тему
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -263,11 +389,26 @@ const Forum = () => {
                         <span className="text-white font-bold text-sm">{msg.author_name[0].toUpperCase()}</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="font-semibold text-sm">{msg.author_name}</span>
-                          <span className="text-xs text-muted-foreground">{timeAgo(msg.created_at)}</span>
+                        <div className="flex items-center justify-between gap-3 mb-2">
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold text-sm">{msg.author_name}</span>
+                            <span className="text-xs text-muted-foreground">{timeAgo(msg.created_at)}</span>
+                          </div>
+                          {isAdmin && msg.content !== '[сообщение удалено модератором]' && msg.content !== '[удалено]' && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => deleteMessage(msg.id)}
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-red-500"
+                              title="Удалить сообщение"
+                            >
+                              <Icon name="Trash2" size={14} />
+                            </Button>
+                          )}
                         </div>
-                        <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                        <p className={`text-sm leading-relaxed whitespace-pre-wrap break-words ${msg.content === '[сообщение удалено модератором]' || msg.content === '[удалено]' ? 'italic text-muted-foreground' : ''}`}>
+                          {msg.content}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -342,7 +483,20 @@ const Forum = () => {
                           <span className="flex items-center gap-1"><Icon name="Eye" size={12} /> {topic.views_count}</span>
                         </div>
                       </div>
-                      <Icon name="ChevronRight" size={20} className="text-muted-foreground/30 group-hover:text-primary transition-colors shrink-0 mt-2" />
+                      <div className="flex items-center gap-2 shrink-0 mt-2">
+                        {isAdmin && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => { e.stopPropagation(); deleteTopic(topic.id); }}
+                            className="h-7 w-7 p-0 text-muted-foreground hover:text-red-500"
+                            title="Удалить тему"
+                          >
+                            <Icon name="Trash2" size={14} />
+                          </Button>
+                        )}
+                        <Icon name="ChevronRight" size={20} className="text-muted-foreground/30 group-hover:text-primary transition-colors" />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

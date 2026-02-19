@@ -182,6 +182,80 @@ def handler(event, context):
             'body': json.dumps({'topic_id': topic_id, 'message_id': message_id})
         }
 
+    if method == 'POST' and action == 'check_admin':
+        body = json.loads(event.get('body', '{}'))
+        password = body.get('password', '')
+        admin_password = os.environ.get('FORUM_ADMIN_PASSWORD', '')
+        is_valid = password == admin_password and admin_password != ''
+        cur.close()
+        conn.close()
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'is_admin': is_valid})
+        }
+
+    if method == 'POST' and action == 'delete_message':
+        body = json.loads(event.get('body', '{}'))
+        password = body.get('password', '')
+        message_id = body.get('message_id')
+        admin_password = os.environ.get('FORUM_ADMIN_PASSWORD', '')
+        if password != admin_password or admin_password == '':
+            cur.close()
+            conn.close()
+            return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Forbidden'})}
+        if not message_id:
+            cur.close()
+            conn.close()
+            return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'message_id required'})}
+        message_id = int(message_id)
+        cur.execute(f"SELECT topic_id FROM forum_messages WHERE id = {message_id}")
+        row = cur.fetchone()
+        if not row:
+            cur.close()
+            conn.close()
+            return {'statusCode': 404, 'headers': headers, 'body': json.dumps({'error': 'Message not found'})}
+        topic_id = row[0]
+        cur.execute(f"SELECT MIN(id) FROM forum_messages WHERE topic_id = {topic_id}")
+        first_msg = cur.fetchone()[0]
+        if message_id == first_msg:
+            cur.execute(f"UPDATE forum_messages SET content = '[сообщение удалено модератором]' WHERE id = {message_id}")
+        else:
+            cur.execute(f"UPDATE forum_messages SET content = '[сообщение удалено модератором]' WHERE id = {message_id}")
+        conn.commit()
+        cur.close()
+        conn.close()
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'ok': True})
+        }
+
+    if method == 'POST' and action == 'delete_topic':
+        body = json.loads(event.get('body', '{}'))
+        password = body.get('password', '')
+        topic_id = body.get('topic_id')
+        admin_password = os.environ.get('FORUM_ADMIN_PASSWORD', '')
+        if password != admin_password or admin_password == '':
+            cur.close()
+            conn.close()
+            return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Forbidden'})}
+        if not topic_id:
+            cur.close()
+            conn.close()
+            return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'topic_id required'})}
+        topic_id = int(topic_id)
+        cur.execute(f"UPDATE forum_messages SET content = '[удалено]' WHERE topic_id = {topic_id}")
+        cur.execute(f"UPDATE forum_topics SET title = '[тема удалена модератором]', replies_count = 0 WHERE id = {topic_id}")
+        conn.commit()
+        cur.close()
+        conn.close()
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'ok': True})
+        }
+
     if method == 'POST' and action == 'reply':
         body = json.loads(event.get('body', '{}'))
         topic_id = body.get('topic_id')
