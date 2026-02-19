@@ -59,6 +59,7 @@ const Index = () => {
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
 
   const [streamUrlCopied, setStreamUrlCopied] = useState(false);
+  const [forumMessages, setForumMessages] = useState<{id: number; author_name: string; content: string; created_at: string; topic_id: number; topic_title: string}[]>([]);
 
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
 
@@ -177,6 +178,19 @@ const Index = () => {
 
 
   useEffect(() => {
+    const fetchForumLatest = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/58ac260a-a36e-4d53-9858-d0c993339a0e?action=latest&limit=5');
+        const data = await response.json();
+        setForumMessages(data.messages || []);
+      } catch (error) {
+        console.error('Error fetching forum messages:', error);
+      }
+    };
+    fetchForumLatest();
+  }, []);
+
+  useEffect(() => {
     const fetchTelegramStats = async () => {
       try {
         const response = await fetch('https://functions.poehali.dev/552e2e24-011c-4cad-9e44-60eccfbc41b7?chatId=-1002321956226');
@@ -277,6 +291,12 @@ const Index = () => {
               >
                 {t('nav.videos')}
               </button>
+              <button
+                onClick={() => navigate('/forum')}
+                className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+              >
+                Форум
+              </button>
             </div>
             <div className="flex gap-4">
               <Button
@@ -345,6 +365,12 @@ const Index = () => {
                 className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
               >
                 {t('nav.videos')}
+              </button>
+              <button
+                onClick={() => navigate('/forum')}
+                className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground"
+              >
+                Форум
               </button>
               <Button
                 variant="ghost"
@@ -647,6 +673,58 @@ const Index = () => {
               </div>
             </div>
           </a>
+        </div>
+      </section>
+
+      <section className="py-20 px-6 bg-gradient-to-b from-background to-card/30">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-10">
+            <h3 className="text-3xl md:text-4xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Форум
+            </h3>
+            <p className="text-lg text-muted-foreground">Последние сообщения от наших слушателей</p>
+          </div>
+
+          {forumMessages.length > 0 ? (
+            <div className="space-y-3 mb-8">
+              {forumMessages.map((msg) => (
+                <Card
+                  key={msg.id}
+                  className="border border-border/50 hover:border-primary/30 transition-all cursor-pointer group"
+                  onClick={() => navigate(`/forum?topic=${msg.topic_id}`)}
+                >
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-4">
+                      <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${['from-primary to-secondary','from-pink-500 to-rose-500','from-violet-500 to-purple-500','from-blue-500 to-cyan-500','from-emerald-500 to-teal-500'][Math.abs([...msg.author_name].reduce((a,c)=>c.charCodeAt(0)+((a<<5)-a),0)) % 5]} flex items-center justify-center shrink-0`}>
+                        <span className="text-white font-bold text-sm">{msg.author_name[0].toUpperCase()}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-semibold text-sm">{msg.author_name}</span>
+                          <span className="text-xs text-muted-foreground">
+                            в теме <span className="text-primary group-hover:underline">{msg.topic_title}</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{msg.content}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-10 mb-8">
+              <Icon name="MessageSquare" size={40} className="mx-auto text-muted-foreground/30 mb-3" />
+              <p className="text-muted-foreground">Пока нет сообщений — будьте первым!</p>
+            </div>
+          )}
+
+          <div className="text-center">
+            <Button onClick={() => navigate('/forum')} className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              <Icon name="MessageSquare" size={16} />
+              Перейти на форум
+            </Button>
+          </div>
         </div>
       </section>
 

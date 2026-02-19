@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Albums from "./pages/Albums";
 import Gallery from "./pages/Gallery";
 import Videos from "./pages/Videos";
+import Forum from "./pages/Forum";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/albums" element={<Albums />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/videos" element={<Videos />} />
+            <Route path="/forum" element={<Forum />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
