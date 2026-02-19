@@ -466,7 +466,7 @@ const Index = () => {
                 <span className="animate-ping absolute inline-flex h-5 w-5 rounded-full bg-red-500 opacity-50"></span>
                 <Icon name="Radio" size={22} className="relative" />
               </span>
-              Слушать радио • LIVE
+              Слушать радио • NARGIZA
             </a>
           </div>
         </div>
