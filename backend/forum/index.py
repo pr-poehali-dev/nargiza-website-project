@@ -32,12 +32,12 @@ def handler(event, context):
         limit = int(params.get('limit', '20'))
         offset = (page - 1) * limit
 
-        cur.execute("SELECT COUNT(*) FROM forum_topics")
+        cur.execute("SELECT COUNT(*) FROM forum_topics WHERE is_hidden = FALSE")
         total = cur.fetchone()[0]
 
         cur.execute(
             f"SELECT id, title, author_name, created_at, updated_at, is_pinned, replies_count, views_count "
-            f"FROM forum_topics ORDER BY is_pinned DESC, updated_at DESC LIMIT {limit} OFFSET {offset}"
+            f"FROM forum_topics WHERE is_hidden = FALSE ORDER BY is_pinned DESC, updated_at DESC LIMIT {limit} OFFSET {offset}"
         )
         rows = cur.fetchall()
         topics = []
@@ -121,7 +121,7 @@ def handler(event, context):
         cur.execute(
             f"SELECT m.id, m.author_name, m.content, m.created_at, m.topic_id, t.title "
             f"FROM forum_messages m JOIN forum_topics t ON m.topic_id = t.id "
-            f"ORDER BY m.created_at DESC LIMIT {limit}"
+            f"WHERE t.is_hidden = FALSE ORDER BY m.created_at DESC LIMIT {limit}"
         )
         rows = cur.fetchall()
         messages = []
@@ -245,8 +245,7 @@ def handler(event, context):
             conn.close()
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'topic_id required'})}
         topic_id = int(topic_id)
-        cur.execute(f"UPDATE forum_messages SET content = '[удалено]' WHERE topic_id = {topic_id}")
-        cur.execute(f"UPDATE forum_topics SET title = '[тема удалена модератором]', replies_count = 0 WHERE id = {topic_id}")
+        cur.execute(f"UPDATE forum_topics SET is_hidden = TRUE WHERE id = {topic_id}")
         conn.commit()
         cur.close()
         conn.close()

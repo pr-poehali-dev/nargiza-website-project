@@ -1,0 +1,1 @@
+UPDATE forum_topics SET is_hidden = TRUE WHERE title = '[тема удалена модератором]';
