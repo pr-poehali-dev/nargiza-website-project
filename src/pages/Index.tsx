@@ -297,6 +297,15 @@ const Index = () => {
               >
                 Форум
               </button>
+              <a
+                href="http://130.49.148.73:1030/api/startpage/1/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground flex items-center gap-1"
+              >
+                <Icon name="Radio" size={14} />
+                Радио
+              </a>
             </div>
             <div className="flex gap-4">
               <Button
@@ -372,6 +381,15 @@ const Index = () => {
               >
                 Форум
               </button>
+              <a
+                href="http://130.49.148.73:1030/api/startpage/1/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground flex items-center gap-2"
+              >
+                <Icon name="Radio" size={18} />
+                Радио
+              </a>
               <Button
                 variant="ghost"
                 size="sm"
@@ -436,6 +454,17 @@ const Index = () => {
           <div className="flex items-center justify-center gap-6">
             <span className="text-5xl md:text-6xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0s'}} title="Казахстан">🇰🇿</span>
             <span className="text-5xl md:text-6xl hover:scale-125 transition-all duration-500 cursor-pointer drop-shadow-2xl animate-bounce-slow" style={{animationDelay: '0.3s'}} title="Россия">🇷🇺</span>
+          </div>
+          <div className="mt-10">
+            <a
+              href="http://130.49.148.73:1030/api/startpage/1/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary/20 border border-primary/40 text-white font-semibold text-lg hover:bg-primary/40 transition-all duration-300 hover:scale-105 backdrop-blur-sm drop-shadow-2xl"
+            >
+              <Icon name="Radio" size={22} />
+              Слушать радио
+            </a>
           </div>
         </div>
       </section>
