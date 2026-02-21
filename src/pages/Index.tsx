@@ -63,37 +63,6 @@ const Index = () => {
 
   const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
 
-  useEffect(() => {
-    const loadScript = (src: string): Promise<void> =>
-      new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
-        const s = document.createElement('script');
-        s.src = src;
-        s.onload = () => resolve();
-        s.onerror = reject;
-        document.head.appendChild(s);
-      });
-
-    const initWidget = () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const w = window as any;
-      if (w.jQuery && w.StatusWidget) {
-        w.jQuery(document).ready(function() {
-          new w.StatusWidget(
-            {djImage:false,djName:false,listenersNum:true,trackCurrent:true,history:false,widgetWidth:350},
-            1, "http://130.49.148.73:1030", "#RTWidgetStatus", "ru"
-          );
-        });
-      }
-    };
-
-    loadScript('https://code.jquery.com/jquery-2.2.4.min.js')
-      .then(() => loadScript('https://yandex.st/jquery/tmpl/1.0.0pre/jquery.tmpl.min.js'))
-      .then(() => loadScript('http://130.49.148.73:1030/media/static/js/external/status-widget.js'))
-      .then(initWidget)
-      .catch(console.error);
-  }, []);
-
 
 
   useEffect(() => {
@@ -566,10 +535,6 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Слушайте любимые треки в прямом эфире — 24 часа в сутки, 7 дней в неделю
             </p>
-          </div>
-
-          <div className="flex justify-center mb-10">
-            <div id="RTWidgetStatus"></div>
           </div>
 
           <div className="max-w-3xl mx-auto mb-12">
