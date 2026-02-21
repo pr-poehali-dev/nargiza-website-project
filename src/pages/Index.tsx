@@ -17,13 +17,6 @@ interface YouTubeVideo {
   publishedAt: string;
 }
 
-interface Track {
-  id: string;
-  title: string;
-  artist: string;
-  cover: string;
-  url: string;
-}
 
 interface NewsArticle {
   title: string;
@@ -51,12 +44,9 @@ const Index = () => {
   }, [language, t]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
-  const [tracks, setTracks] = useState<Track[]>([]);
-
   const [visitorStats, setVisitorStats] = useState({ total: 0, last24h: 0 });
   const [animatedStats, setAnimatedStats] = useState({ total: 0, last24h: 0 });
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
-  const [isLoadingTracks, setIsLoadingTracks] = useState(true);
 
   const [streamUrlCopied, setStreamUrlCopied] = useState(false);
   const [forumMessages, setForumMessages] = useState<{id: number; author_name: string; content: string; created_at: string; topic_id: number; topic_title: string}[]>([]);
@@ -80,77 +70,7 @@ const Index = () => {
     fetchVideos();
   }, []);
 
-  useEffect(() => {
-    const fetchTracks = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/3b9d2cc1-ed66-4169-bad3-770a54d857b1?artistId=9639626&maxResults=6');
-        const data = await response.json();
-        console.log('Tracks loaded:', data);
-        
-        if (data.tracks && data.tracks.length > 0) {
-          setTracks(data.tracks);
-        }
-      } catch (error) {
-        console.error('Error fetching tracks:', error);
-        setTracks([
-          {
-            id: '145171227',
-            title: 'Новый трек 1',
-            artist: 'NARGIZA',
-            cover: 'https://avatars.yandex.net/get-music-content/12345/cover.400x400.jpg',
-            url: 'https://music.yandex.ru/album/145171/track/145171227'
-          },
-          {
-            id: '145171239',
-            title: 'Новый трек 2',
-            artist: 'NARGIZA',
-            cover: 'https://avatars.yandex.net/get-music-content/12346/cover.400x400.jpg',
-            url: 'https://music.yandex.ru/album/145171/track/145171239'
-          },
-          {
-            id: '145171238',
-            title: 'Новый трек 3',
-            artist: 'NARGIZA',
-            cover: 'https://avatars.yandex.net/get-music-content/12347/cover.400x400.jpg',
-            url: 'https://music.yandex.ru/album/145171/track/145171238'
-          },
-          {
-            id: '145171233',
-            title: 'Новый трек 4',
-            artist: 'NARGIZA',
-            cover: 'https://avatars.yandex.net/get-music-content/12348/cover.400x400.jpg',
-            url: 'https://music.yandex.ru/album/145171/track/145171233'
-          },
-          {
-            id: '145171235',
-            title: 'Новый трек 5',
-            artist: 'NARGIZA',
-            cover: 'https://avatars.yandex.net/get-music-content/12349/cover.400x400.jpg',
-            url: 'https://music.yandex.ru/album/145171/track/145171235'
-          },
-          {
-            id: '145171232',
-            title: 'Новый трек 6',
-            artist: 'NARGIZA',
-            cover: 'https://avatars.yandex.net/get-music-content/12350/cover.400x400.jpg',
-            url: 'https://music.yandex.ru/album/145171/track/145171232'
-          }
-        ]);
-      } finally {
-        setIsLoadingTracks(false);
-      }
-    };
-    
-    fetchTracks();
-    
-    const interval = setInterval(() => {
-      fetchTracks();
-    }, 60 * 60 * 1000);
-    
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+
 
 
 
@@ -728,69 +648,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-24 px-6 bg-gradient-to-b from-background via-primary/5 to-background">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h3 className="text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {t('tracks.title')}
-            </h3>
-            <p className="text-lg text-muted-foreground">{t('tracks.subtitle')}</p>
-          </div>
-          
-          {isLoadingTracks ? (
-            <div className="text-center text-muted-foreground py-12 animate-pulse">
-              <Icon name="Loader2" size={32} className="animate-spin mx-auto mb-2" />
-              Загрузка треков...
-            </div>
-          ) : (
-            <div className="max-w-2xl mx-auto space-y-3">
-              {tracks.map((track, index) => (
-                <div
-                  key={track.id}
-                  className="block group animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <Card className="overflow-hidden hover:shadow-xl transition-all hover:scale-[1.02] border-l-4 border-l-primary/50 hover:border-l-primary">
-                    <div className="flex items-center gap-4 p-4">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
-                        <Icon name="Music" size={20} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-lg mb-1 truncate group-hover:text-primary transition-colors">
-                          {track.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground flex items-center gap-2">
-                          <Icon name="Mic2" size={14} className="flex-shrink-0" />
-                          {track.artist}
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Icon name="Play" size={20} className="text-primary" />
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          )}
 
-          <div className="text-center mt-12">
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="gap-2"
-              asChild
-            >
-              <a href="https://music.yandex.ru/artist/9639626" target="_blank" rel="noopener noreferrer">
-                <Icon name="Music" size={20} />
-                {t('tracks.listen')}
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
 
 
 

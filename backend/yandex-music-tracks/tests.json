@@ -1,25 +1,11 @@
 {
   "tests": [
     {
-      "name": "Fetch tracks with default parameters",
+      "name": "Returns 410 when disabled",
       "method": "GET",
       "path": "/",
-      "expectedStatus": 200,
-      "expectedBody": {
-        "tracks": "array",
-        "lastUpdate": "string"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Fetch tracks with custom artistId",
-      "method": "GET",
-      "path": "/?artistId=9639626&maxResults=3",
-      "expectedStatus": 200,
-      "expectedBody": {
-        "tracks": "array",
-        "lastUpdate": "string"
-      },
+      "expectedStatus": 410,
+      "expectedBody": {"error": "disabled"},
       "bodyMatcher": "partial"
     },
     {
