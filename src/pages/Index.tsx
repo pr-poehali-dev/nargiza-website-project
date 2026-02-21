@@ -537,45 +537,13 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto mb-12">
-            <Card className="border-2 border-primary/20 bg-card/50 backdrop-blur-sm overflow-hidden">
-              <CardContent className="p-0">
-                <div className="px-6 py-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/10 flex items-center gap-3">
-                  <Icon name="Megaphone" size={20} className="text-primary" />
-                  <h4 className="text-lg font-bold">Объявление</h4>
-                </div>
-                <div className="p-6 md:p-8 space-y-4 text-muted-foreground leading-relaxed">
-                  <p>
-                    Друзья, я уже сообщала что запущено <span className="text-foreground font-semibold">Радио NARGIZA</span>. В данный момент оно работает в тестовом режиме и мы постепенно заполняем его песнями и музыкой.
-                  </p>
-                  <p>
-                    Я хочу сообщить, что мы выпустили <span className="text-foreground font-semibold">собственное приложение для Android</span>, которое можно скачать по ссылке внизу из Google Play. Приложение официальное и очень простое — скачиваете, устанавливаете, запускаете — и всё играет и поёт!
-                  </p>
-                  <div className="bg-primary/5 border border-primary/10 rounded-xl p-5 space-y-3">
-                    <div className="flex items-start gap-3">
-                      <Icon name="Music" size={18} className="text-primary mt-0.5 shrink-0" />
-                      <p>В <span className="font-medium text-foreground">тестовом режиме</span> играет только музыка, в <span className="font-medium text-foreground">обычном</span> — только песни.</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Icon name="ListMusic" size={18} className="text-primary mt-0.5 shrink-0" />
-                      <p>Любой пользователь может выбрать в приложении любую песню и <span className="font-medium text-foreground">заказать её в эфир</span> — она зазвучит сразу после окончания звучащей в эфире песни.</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Icon name="Sparkles" size={18} className="text-primary mt-0.5 shrink-0" />
-                      <p>Можно публиковать самые свежие песни и музыку в разных вариантах. Мне как исполнителю это очень удобно.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-6 md:px-8 pb-6 md:pb-8">
-                  <Button className="w-full sm:w-auto gap-3 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity text-sm px-8 py-6" asChild>
-                    <a href="https://play.google.com/store/apps/details?id=center.streaming.radio.nargiza" target="_blank" rel="noopener noreferrer">
-                      <Icon name="Smartphone" size={20} />
-                      Скачать из Google Play
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="flex justify-center mb-12">
+            <Button className="gap-3 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity text-sm px-8 py-6" asChild>
+              <a href="https://play.google.com/store/apps/details?id=center.streaming.radio.nargiza" target="_blank" rel="noopener noreferrer">
+                <Icon name="Smartphone" size={20} />
+                Скачать из Google Play
+              </a>
+            </Button>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
