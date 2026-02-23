@@ -397,19 +397,33 @@ const Index = () => {
           <div className="animate-fade-in">
             <h3 className="text-5xl md:text-6xl font-black mb-16 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{t('about.title')}</h3>
             
-            <div className="space-y-8 text-center max-w-3xl mx-auto">
-              <p className="text-xl text-foreground/90 leading-relaxed font-light">
-                {t('about.p1')}
-              </p>
-              <p className="text-xl text-foreground/90 leading-relaxed font-light">
-                {t('about.p2')}
-              </p>
-              <p className="text-xl text-foreground/90 leading-relaxed font-light">
-                {t('about.p3')}
-              </p>
-              <p className="text-xl text-foreground/90 leading-relaxed font-light">
-                {t('about.p4')}
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-8 text-left">
+                <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                  {t('about.p1')}
+                </p>
+                <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                  {t('about.p2')}
+                </p>
+                <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                  {t('about.p3')}
+                </p>
+                <p className="text-xl text-foreground/90 leading-relaxed font-light">
+                  {t('about.p4')}
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-br from-primary to-secondary rounded-2xl blur-sm opacity-60"></div>
+                  <img
+                    src="https://cdn.poehali.dev/projects/a9e35507-579e-4dde-8893-13e0af328e24/bucket/2c72b6f6-f3c8-4002-ac75-92388068a97d.jpg"
+                    alt="Nargiza"
+                    className="relative rounded-2xl w-full max-w-sm object-cover shadow-2xl"
+                    style={{ aspectRatio: '3/4', objectPosition: 'top' }}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-4 mt-16 justify-center">
