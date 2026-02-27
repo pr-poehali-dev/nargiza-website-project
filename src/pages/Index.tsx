@@ -431,7 +431,7 @@ const Index = () => {
               <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-sm p-6 flex flex-col gap-4 hover:border-primary/40 transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-yellow-400/10 flex items-center justify-center">
-                    <Icon name="Music2" size={20} className="text-yellow-400" />
+                    <img src="https://music.yandex.ru/favicon.ico" alt="Яндекс Музыка" className="w-6 h-6 rounded" />
                   </div>
                   <span className="font-semibold text-foreground">Яндекс Музыка</span>
                 </div>
@@ -447,7 +447,15 @@ const Index = () => {
               <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-sm p-6 flex flex-col gap-4 hover:border-primary/40 transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center">
-                    <Icon name="Music2" size={20} className="text-pink-400" />
+                    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id="appleGrad" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stopColor="#fc5c7d"/>
+                          <stop offset="100%" stopColor="#6a3093"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M23 17.5C23 20.538 20.538 23 17.5 23S12 20.538 12 17.5 14.462 12 17.5 12 23 14.462 23 17.5zM9 3v11.26A5.5 5.5 0 1 0 11 19V8h8V3H9z" fill="url(#appleGrad)"/>
+                    </svg>
                   </div>
                   <span className="font-semibold text-foreground">Apple Music</span>
                 </div>
@@ -471,7 +479,9 @@ const Index = () => {
               <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-sm p-6 flex flex-col gap-4 hover:border-primary/40 transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-                    <Icon name="Music2" size={20} className="text-green-400" />
+                    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#1DB954" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.516 17.314a.75.75 0 0 1-1.031.25c-2.824-1.725-6.376-2.115-10.563-1.159a.75.75 0 1 1-.334-1.463c4.579-1.045 8.507-.595 11.678 1.341a.75.75 0 0 1 .25 1.031zm1.471-3.27a.937.937 0 0 1-1.288.308c-3.232-1.987-8.159-2.563-11.982-1.403a.937.937 0 1 1-.544-1.794c4.37-1.325 9.8-.683 13.506 1.6a.937.937 0 0 1 .308 1.289zm.126-3.409C15.314 8.348 9.279 8.15 5.91 9.187a1.124 1.124 0 1 1-.653-2.152c3.894-1.183 10.374-.954 14.47 1.587a1.124 1.124 0 0 1-1.014 2.013z"/>
+                    </svg>
                   </div>
                   <span className="font-semibold text-foreground">Spotify</span>
                 </div>
