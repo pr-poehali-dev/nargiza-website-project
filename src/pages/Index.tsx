@@ -426,31 +426,70 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-16 justify-center">
-              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
-                <a href="https://music.yandex.ru/artist/9639626?utm_source=web&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
-                  <Icon name="Music" size={20} />
-                  Яндекс Музыка
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
-                <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
-                  <Icon name="Music" size={20} />
-                  Apple Music
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
-                <a href="https://open.spotify.com/artist/7anXMqM1b8Sf3ML56oMCrb?si=2imEDzF2TpGXOVVp_N6zAA" target="_blank" rel="noopener noreferrer">
-                  <Icon name="Music" size={20} />
-                  Spotify 1
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
-                <a href="https://open.spotify.com/artist/3wPSkHORNinwtcyYWvSWoe?si=j_-DnDBiQdGt9iAeZdttCA" target="_blank" rel="noopener noreferrer">
-                  <Icon name="Music" size={20} />
-                  Spotify 2
-                </a>
-              </Button>
+            <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {/* Яндекс Музыка */}
+              <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-sm p-6 flex flex-col gap-4 hover:border-primary/40 transition-all duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-yellow-400/10 flex items-center justify-center">
+                    <Icon name="Music2" size={20} className="text-yellow-400" />
+                  </div>
+                  <span className="font-semibold text-foreground">Яндекс Музыка</span>
+                </div>
+                <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform w-full" asChild>
+                  <a href="https://music.yandex.ru/artist/9639626?utm_source=web&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
+                    <Icon name="ExternalLink" size={15} />
+                    Открыть
+                  </a>
+                </Button>
+              </div>
+
+              {/* Apple Music */}
+              <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-sm p-6 flex flex-col gap-4 hover:border-primary/40 transition-all duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center">
+                    <Icon name="Music2" size={20} className="text-pink-400" />
+                  </div>
+                  <span className="font-semibold text-foreground">Apple Music</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform w-full" asChild>
+                    <a href="https://music.apple.com/tr/artist/nargiza/1720377821" target="_blank" rel="noopener noreferrer">
+                      <Icon name="ExternalLink" size={15} />
+                      Профиль 1
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform w-full" asChild>
+                    <a href="https://music.apple.com/tr/artist/nargiza/1879560173" target="_blank" rel="noopener noreferrer">
+                      <Icon name="ExternalLink" size={15} />
+                      Профиль 2
+                    </a>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Spotify */}
+              <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-sm p-6 flex flex-col gap-4 hover:border-primary/40 transition-all duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
+                    <Icon name="Music2" size={20} className="text-green-400" />
+                  </div>
+                  <span className="font-semibold text-foreground">Spotify</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform w-full" asChild>
+                    <a href="https://open.spotify.com/artist/7anXMqM1b8Sf3ML56oMCrb?si=2imEDzF2TpGXOVVp_N6zAA" target="_blank" rel="noopener noreferrer">
+                      <Icon name="ExternalLink" size={15} />
+                      Профиль 1
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform w-full" asChild>
+                    <a href="https://open.spotify.com/artist/3wPSkHORNinwtcyYWvSWoe?si=j_-DnDBiQdGt9iAeZdttCA" target="_blank" rel="noopener noreferrer">
+                      <Icon name="ExternalLink" size={15} />
+                      Профиль 2
+                    </a>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
