@@ -51,7 +51,7 @@ const Index = () => {
   const [streamUrlCopied, setStreamUrlCopied] = useState(false);
   const [forumMessages, setForumMessages] = useState<{id: number; author_name: string; content: string; created_at: string; topic_id: number; topic_title: string}[]>([]);
 
-  const [telegramSubscribers, setTelegramSubscribers] = useState<number | null>(null);
+
 
 
 
@@ -110,26 +110,7 @@ const Index = () => {
     fetchForumLatest();
   }, []);
 
-  useEffect(() => {
-    const fetchTelegramStats = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/552e2e24-011c-4cad-9e44-60eccfbc41b7?chatId=-1002321956226');
-        const data = await response.json();
-        console.log('Telegram stats response:', data);
-        if (data.subscribers && data.subscribers > 0) {
-          setTelegramSubscribers(data.subscribers);
-        }
-      } catch (error) {
-        console.error('Error fetching Telegram stats:', error);
-      }
-    };
 
-    fetchTelegramStats();
-    const interval = setInterval(() => {
-      fetchTelegramStats();
-    }, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const duration = 2000;
@@ -617,15 +598,7 @@ const Index = () => {
                   <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
                     Эксклюзивный контент, новости и общение с фанатами
                   </p>
-                  {telegramSubscribers !== null && (
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                      <Icon name="Users" size={20} className="text-primary" />
-                      <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                        {telegramSubscribers.toLocaleString('ru-RU')}
-                      </span>
-                      <span className="text-lg text-muted-foreground">подписчиков</span>
-                    </div>
-                  )}
+
                   <div className="inline-flex items-center gap-3 text-lg font-semibold text-primary group-hover:gap-5 transition-all">
                     <span>Открыть Telegram</span>
                     <Icon name="ArrowRight" size={24} className="group-hover:translate-x-1 transition-transform" />
