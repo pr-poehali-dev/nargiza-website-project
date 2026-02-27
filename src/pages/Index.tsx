@@ -442,7 +442,13 @@ const Index = () => {
               <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
                 <a href="https://open.spotify.com/artist/7anXMqM1b8Sf3ML56oMCrb?si=2imEDzF2TpGXOVVp_N6zAA" target="_blank" rel="noopener noreferrer">
                   <Icon name="Music" size={20} />
-                  Spotify
+                  Spotify 1
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" className="gap-2 hover:scale-105 transition-transform" asChild>
+                <a href="https://open.spotify.com/artist/3wPSkHORNinwtcyYWvSWoe?si=j_-DnDBiQdGt9iAeZdttCA" target="_blank" rel="noopener noreferrer">
+                  <Icon name="Music" size={20} />
+                  Spotify 2
                 </a>
               </Button>
             </div>
