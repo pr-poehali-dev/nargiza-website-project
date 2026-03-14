@@ -199,7 +199,7 @@ const Index = () => {
                 Форум
               </button>
               <a
-                href="http://130.49.148.73:1030/api/startpage/1/"
+                href="http://radionargiza.ru:1030/api/startpage/1/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-medium transition-colors hover:text-primary text-muted-foreground flex items-center gap-1"
@@ -283,7 +283,7 @@ const Index = () => {
                 Форум
               </button>
               <a
-                href="http://130.49.148.73:1030/api/startpage/1/"
+                href="http://radionargiza.ru:1030/api/startpage/1/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-left text-lg font-medium transition-colors hover:text-primary py-2 text-muted-foreground flex items-center gap-2"
@@ -358,7 +358,7 @@ const Index = () => {
           </div>
           <div className="mt-10">
             <a
-              href="http://130.49.148.73:1030/api/startpage/1/"
+              href="http://radionargiza.ru:1030/api/startpage/1/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary/20 border border-primary/40 text-white font-semibold text-lg hover:bg-primary/40 transition-all duration-300 hover:scale-105 backdrop-blur-sm drop-shadow-2xl"
